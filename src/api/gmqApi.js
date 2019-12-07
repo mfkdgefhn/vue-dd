@@ -3,12 +3,12 @@
  * @Author: anan
  * @Date: 2019-10-15 10:00:39
  * @LastEditors: anan
- * @LastEditTime: 2019-11-20 15:40:09
+ * @LastEditTime: 2019-12-06 17:26:52
  */
 import request from '@/utils/request'
 
-var url = 'http://10.10.1.41:443'
-// var url = ''
+var url = 'http://10.10.1.41:443' // 测试环境
+// var url = '' // 生产环境
 
 // 'http://10.10.1.41/Q/p.do?o=zjxs'
 

@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 17:16:04
  * @LastEditors: anan
- * @LastEditTime: 2019-11-20 15:24:41
+ * @LastEditTime: 2019-12-07 11:52:47
  -->
 <template>
   <div class="data-analysis">
@@ -16,9 +16,11 @@
       <el-col :span="10" class="echarts-row-col" style="height:100%">
         <el-col :style="'height:'+(screenHeight*0.66*0.40)+'px;'">
           <el-card :body-style="bodyStyle1" shadow="hover" style="height:100%;">
-            <!--  <div slot="header" class="clearfix"> -->
             <span class="card-span">店铺排名TOP20</span>
-            <!-- </div>-->
+            <el-tooltip class="tips" effect="light" placement="bottom">
+              <div slot="content" v-html="tips1" />
+              <i class="el-icon-chat-dot-square" />
+            </el-tooltip>
             <div>
               <span class="table-header-index">序号</span>
               <span class="table-header-name">店名</span>
@@ -69,6 +71,7 @@
             </vue-seamless-scroll>
           </el-card>-->
         </el-col>
+        <!-- 省份排名 -->
         <el-col :style="'height:'+(screenHeight*0.66*0.54)+'px;'">
           <el-card :body-style="bodyStyle" shadow="hover">
             <bar-echarts1 :screen-height="screenHeight" :province-sale-m="provinceSaleM" />
@@ -156,10 +159,22 @@
       <el-col :span="12">
         <el-card :body-style="bodyStyle" shadow="hover">
           <span>会员复购</span>
-          <pie-echarts :screen-height="screenHeight" :vip-repeat-purchase="vipRepeatPurchase" />
+          <bar-echarts
+            :screen-height="screenHeight"
+            :vip-repeat-purchase="vipRepeatPurchase"
+            :loading="loading"
+          />
         </el-card>
       </el-col>
     </el-row>
+
+    <!-- <el-dialog title="提示" width="30%">
+      <span>这是一段信息</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button>取 消</el-button>
+        <el-button type="primary">确 定</el-button>
+      </span>
+    </el-dialog>-->
   </div>
 </template>
 
@@ -168,11 +183,13 @@
 // import Search from './search'
 import echarts from './echarts'
 
+import dayjs from 'dayjs'
+
 // import echartsWordCloud from './echarts-word-cloud' // 该组件有问题，明日查看
-// import barEcharts from './bar-echarts'
+import barEcharts from './bar-echarts'
 import barEcharts1 from './bar-echarts1'
 import lineEcharts from './line-echarts'
-import pieEcharts from './pie-echarts'
+// import pieEcharts from './pie-echarts'
 
 import countTo from 'vue-count-to'
 
@@ -183,10 +200,10 @@ export default {
   components: {
     echarts,
     // echartsWordCloud,
-    // barEcharts,
+    barEcharts,
     barEcharts1,
     lineEcharts,
-    pieEcharts,
+    // pieEcharts,
     countTo
   },
   data() {
@@ -203,16 +220,18 @@ export default {
       screenHeight: window.innerHeight,
       echartsRowTop: 'height: 66%;',
       echartsRowBottom: 'height: 33%;',
-      listQuery: {},
       bigData: [],
-      duration: 2000,
+      duration: 1000,
       allQuota: 0,
       vipQuota: 0,
       vipSaleRate: 0,
       storeRankingM: [],
       provinceSaleM: [],
       yearOnYear: [],
-      vipRepeatPurchase: []
+      vipRepeatPurchase: [],
+      count: 0,
+      loading: false,
+      tips1: '<div>店铺排名TOP20 提示</div><div>当月零售额度排名前20位门店</div>'
     }
   },
   computed: {
@@ -225,6 +244,9 @@ export default {
     vipSaleRates() {
       return Math.round(this.vipSaleRate * 10000) / 100
     },
+    listQuery() {
+      return this.$store.getters.listQuery
+    },
     classOption() {
       return {
         step: 0.3, // 数值越大速度滚动越快
@@ -235,6 +257,31 @@ export default {
         singleHeight: 0, // 单步运动停止的高度(默认值0是无缝不停止的滚动) direction => 0/1
         singleWidth: 0 // 单步运动停止的宽度(默认值0是无缝不停止的滚动) direction => 2/3
         // waitTime: 1000 // 单步运动停止的时间(默认值1000ms)
+      }
+    }
+  },
+  watch: {
+    listQuery(val) {
+      console.log('查询条件变化 ', val)
+      this.loading = true
+      this.getBigData(val)
+    },
+    count(val) {
+      if (val === 6) {
+        const params = '' +
+          (this.listQuery.months ? '月份:' + this.listQuery.months : '') +
+          (this.listQuery.province ? ', 省份:' + this.listQuery.province : '') +
+          (this.listQuery.city ? ', 城市:' + this.listQuery.city : '')
+
+        this.$message({
+          message: params + ',  加载完成!!!',
+          center: true,
+          duration: 3000,
+          type: 'success'
+        })
+        console.log(val)
+
+        this.count = 0
       }
     }
   },
@@ -251,16 +298,19 @@ export default {
         }, 400)
       })()
     }
+    this.$store.dispatch('baseApi/setMonths', this.getMonths(0))
+
     // 获取看板数据
-    this.getBigData()
+    this.getBigData(this.listQuery)
     // 获取基础数据(如：年份....)
-    this.getBaseDate()
+    this.getBaseDate(this.listQuery)
   },
   methods: {
     getBigData(params) {
       // 地图数据
       getBigData(params).then(response => {
         this.bigData = response
+        ++this.count
       })
       // 看板
       getKBlsedM(params).then(response => {
@@ -273,20 +323,21 @@ export default {
           }
         })
         this.vipSaleRate = this.allQuota ? this.vipQuota / this.allQuota : 0
+        ++this.count
       })
       // 获取店仓排名
       getStoreRankingM(params).then(response => {
         this.storeRankingM = response.result
+        ++this.count
       })
       // 获取省份排行
       getProvinceSaleM(params).then(response => {
         // console.log(response)
         this.provinceSaleM = response
+        ++this.count
       })
       // 获取销量、数量同比
       getYearOnYear(params).then(response => {
-        // console.log(response)
-        // const yearOnYear = {}
         const arr = []
         response.forEach(element => {
           if (arr.length === 0) {
@@ -317,20 +368,25 @@ export default {
           }
         })
         this.yearOnYear = arr
+        ++this.count
       })
       // 获取会员复购
       getVipRepeatPurchase(params).then(response => {
         // console.log(response)
+        this.loading = false
         this.vipRepeatPurchase = response
+        ++this.count
       })
     },
-
     // 获取基础数据
-    getBaseDate() {
+    getBaseDate(params) {
       this.$store.dispatch('baseApi/getCustomer').then(() => { })
       this.$store.dispatch('baseApi/getStores').then(() => { })
       this.$store.dispatch('baseApi/getYear').then(() => { })
       this.$store.dispatch('baseApi/getSeason').then(() => { })
+    },
+    getMonths(count) {
+      return dayjs().add(count, 'month').format('YYYYMM')
     }
   }
 }
@@ -427,5 +483,11 @@ ul li span {
 .qty,
 .table-header-qty {
   width: 20%;
+}
+.tips {
+  float: right;
+  line-height: 40px;
+  margin-right: 10px;
+  font-size: 20px;
 }
 </style>

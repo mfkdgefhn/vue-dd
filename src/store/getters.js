@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2019-11-15 11:26:43
+ * @LastEditTime: 2019-11-23 09:13:55
  */
 const getters = {
   sidebar: state => state.app.sidebar,
@@ -14,6 +14,8 @@ const getters = {
   store: state => state.baseApi.store,
   customer: state => state.baseApi.customer,
   year: state => state.baseApi.year,
-  season: state => state.baseApi.season
+  season: state => state.baseApi.season,
+  months: state => state.baseApi.months,
+  listQuery: state => state.baseApi.listQuery
 }
 export default getters

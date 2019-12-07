@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2019-10-11 09:16:38
+ * @LastEditTime: 2019-12-05 15:10:35
  -->
 <template>
   <div class="navbar">
@@ -18,7 +18,7 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar" >
+          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar" />
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">

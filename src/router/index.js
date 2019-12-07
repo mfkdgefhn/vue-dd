@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2019-11-21 09:05:33
+ * @LastEditTime: 2019-12-06 17:27:15
  */
 
 import Vue from 'vue'
@@ -54,14 +54,13 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dataAnalysis',
-    children: [
-      {
-        path: 'dataAnalysis',
-        name: '大数据看板',
-        component: () => import('@/views/bigData/shoes/index'),
-        meta: { title: '大数据看板', icon: 'shoes' }
-      }
-    ]
+    // redirect: '/human'
+    children: [{
+      path: 'dataAnalysis',
+      name: '大数据看板',
+      component: () => import('@/views/bigData/shoes/index'),
+      meta: { title: '大数据看板', icon: 'shoes' }
+    }]
   },
   {
     path: '/Analysis',
@@ -89,6 +88,9 @@ export const constantRoutes = [
     }
     ]
   },
+
+  /* -------------------人力独立使用------------------------  */
+
   {
     path: '/human',
     component: Layout,
@@ -100,6 +102,9 @@ export const constantRoutes = [
       meta: { title: '人力(易天)', icon: 'shoes' }
     }]
   },
+
+  /* -------------------------------------------  */
+
   {
     path: '/baidu',
     component: Layout,
@@ -133,6 +138,19 @@ export const constantRoutes = [
       meta: { title: '看板', icon: 'shoes' }
     }]
   },
+  {
+    path: '/test',
+    component: Layout,
+    redirect: '/test/index',
+    children: [{
+      path: 'test',
+      name: '测试',
+      component: () => import('@/views/test/index'),
+      meta: { title: '测试', icon: 'shoes' }
+    }]
+  },
+
+  /* -------------------------------------------  */
   // {
   //   path: '/example',
   //   component: Layout,

@@ -3,30 +3,28 @@
  * @Author: anan
  * @Date: 2019-10-15 11:02:26
  * @LastEditors: anan
- * @LastEditTime: 2019-11-15 17:07:14
+ * @LastEditTime: 2019-12-07 14:38:30
  -->
 <template>
-  <div>
-    <div ref="pieEcharts" class="pie-echarts" :style="vStyle" />
-    <!-- @click="dialogVisible=true"  -->
-    <el-dialog :title="data.title" :visible.sync="dialogVisible" width="50%" background="#2c343c">
-      <!-- <span>{{ data.data }}</span> -->
-      <el-table :data="data.data" :row-style="tableRowStyle" :header-cell-style="tableHeaderColor">
-        <el-table-column property="name" label="名称" />
-        <el-table-column property="value" label="值" />
-      </el-table>
-    </el-dialog>
+  <div class="retail-analysis">
+    <div ref="pieEcharts" class="pie-echarts" style="width: 100%;height: 100%;" />
+    <prompt-box
+      :dialog-visible="dialogVisible"
+      :tips-data="tipsData"
+      :title="title"
+      @handleClose="handleClose"
+    />
   </div>
 </template>
 
 <script>
+import promptBox from '@/components/tips/prompt-box'
 
 export default {
+  components: {
+    promptBox
+  },
   props: {
-    screenHeight: {
-      type: Number,
-      default: 300
-    },
     data: {
       type: Object,
       default: () => { }
@@ -38,11 +36,18 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    tipsData: {
+      type: String,
+      default: ''
+    },
+    title: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
-      vStyle: 'width: 100%;height: 300px',
       dialogVisible: false
     }
   },
@@ -65,29 +70,31 @@ export default {
         })
       }
     },
-    screenHeight(val) {
-      // console.log(val)
-
-      this.vStyle = 'width: 100%;height: ' + (val * 0.3) + 'px'
-    },
+    // screenHeight(val) {
+    //   this.vStyle = 'width: 100%;height: ' + (val * 0.3) + 'px'
+    // },
     propsData(newValue, oldValue) {
-      console.log(1)
+      // console.log(window.innerHeight)
 
+      this.vStyle = 'width: 100%;height: ' + (window.innerHeight * 0.3) + 'px'
       this.drawLine()
     }
   },
   mounted() {
-    this.drawLine()
+    // this.drawLine()
+    console.log(window.innerHeight)
   },
   methods: {
+    handleClose(parmas) {
+      this.dialogVisible = false
+    },
     drawLine() {
       // 初始化
       const myChart = this.$echarts.init(this.$refs.pieEcharts)
-
       var option = {
         // 图形根据color进行循环选择
         // color: ['#B6C335', '#FBCE0F', '#E87C24', '#28727B', '#C0232A', '#9BCA62', '#F3A43B', '#D7504C', '#61C0DE'],
-        color: ['#B6C335', 'orange', 'yellow', 'green', '#75BFDF', '#94D8F6', '#3F48CC', '#E6444A', '#D7864E', '#D441D7'],
+        color: ['#B6C335', 'orange', '#E87C24', 'green', '#94D8F6', '#75BFDF', '#3F48CC', '#E6444A', '#D7864E', '#D441D7'],
         // 背景颜色
         // backgroundColor: '#2c343c',
         // backgroundColor: '#1972c6',
@@ -137,6 +144,17 @@ export default {
           color: '#04BEFF',
           right: '5%',
           feature: {
+            myTool1: {
+              show: true,
+              title: '提示',
+              iconStyle: {
+                borderColor: '#04BEFF'
+              },
+              onclick: () => {
+                this.dialogVisible = true
+              },
+              icon: 'path://M432.45,595.444c0,2.177-4.661,6.82-11.305,6.82c-6.475,0-11.306-4.567-11.306-6.82s4.852-6.812,11.306-6.812C427.841,588.632,432.452,593.191,432.45,595.444L432.45,595.444z M421.155,589.876c-3.009,0-5.448,2.495-5.448,5.572s2.439,5.572,5.448,5.572c3.01,0,5.449-2.495,5.449-5.572C426.604,592.371,424.165,589.876,421.155,589.876L421.155,589.876z M421.146,591.891c-1.916,0-3.47,1.589-3.47,3.549c0,1.959,1.554,3.548,3.47,3.548s3.469-1.589,3.469-3.548C424.614,593.479,423.062,591.891,421.146,591.891L421.146,591.891zM421.146,591.891'
+            },
             dataView: {
               iconStyle: {
                 borderColor: '#04BEFF'
@@ -205,3 +223,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.retail-analysis {
+  height: 100%;
+}
+</style>

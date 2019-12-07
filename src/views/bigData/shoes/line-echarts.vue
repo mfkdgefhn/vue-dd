@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-11 14:53:41
  * @LastEditors: anan
- * @LastEditTime: 2019-11-20 14:50:06
+ * @LastEditTime: 2019-11-26 16:26:54
  -->
 <template>
   <div class="line-echarts">
@@ -42,6 +42,9 @@ export default {
     },
     yearOnYear(val) {
       if (val.length > 0) {
+        this.echartsData.legend = []
+        this.echartsData.xAxis = []
+        this.echartsData.series = []
         val.forEach((arr, index) => {
           this.echartsData.legend.push(arr.year)
           if (index === 0) this.echartsData.xAxis = arr.monthday
@@ -82,7 +85,8 @@ export default {
     drawLine() {
       const myChart = this.$echarts.init(this.$refs.barEcharts)
       var lineOption = {
-        color: this.echartsData.color, // ['#3398DB', '#895145'],
+        // color: this.echartsData.color, // ['#3398DB', '#895145'],
+        color: ['#3398DB', '#895145'],
         tooltip: {
           trigger: 'axis',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
@@ -118,6 +122,11 @@ export default {
                 const texts = Math.round(value / 10000)
                 // console.log(value, index)
                 return texts + '万'
+              }
+            },
+            splitLine: {
+              lineStyle: {
+                color: 'rgba(128, 128, 128, 0.3)'
               }
             }
           }

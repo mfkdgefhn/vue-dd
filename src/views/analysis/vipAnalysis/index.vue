@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-15 10:23:32
  * @LastEditors: anan
- * @LastEditTime: 2019-11-15 11:14:44
+ * @LastEditTime: 2019-12-07 15:24:18
  -->
 <template>
   <div class="retail-analysis">
@@ -12,34 +12,57 @@
       <search :loading="loading" @getAnalysis="getAnalysis" />
     </el-card>
 
-    <div v-if="loadingCon" class="content-div">
+    <!-- 展示内容 -->
+    <div v-if="loadingCon" class="el-row-class">
       <!-- 饼图开始 -->
-      <el-row :gutter="10">
+      <el-row :gutter="10" style="height:40%">
         <!-- 折扣率 -->
-        <el-col :lg="12" :md="12" :sm="12" :xs="24">
-          <el-card shadow="hover">
-            <pie-echarts :screen-height="screenHeight" :data="discountRate" :loading="loading" />
+        <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
+          <el-card shadow="hover" class="el-card-class">
+            <pie-echarts
+              :data="discountRate"
+              :tips-data="tipsData"
+              :title="title"
+              :loading="loading"
+              class="pie-class"
+            />
           </el-card>
         </el-col>
         <!-- 单笔金额 -->
-        <el-col :lg="12" :md="12" :sm="12" :xs="24">
-          <el-card shadow="hover">
-            <pie-echarts :screen-height="screenHeight" :data="singleSum" :loading="loading" />
+        <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
+          <el-card shadow="hover" class="el-card-class">
+            <pie-echarts
+              :data="singleSum"
+              :tips-data="tipsData"
+              :title="title"
+              :loading="loading"
+              class="pie-class"
+            />
           </el-card>
         </el-col>
+      </el-row>
+      <el-row :gutter="10" style="height:40%">
         <!-- 会员积分 -->
-        <el-col :lg="12" :md="12" :sm="12" :xs="24">
-          <el-card shadow="hover">
-            <pie-echarts :screen-height="screenHeight" :data="membershipScore" :loading="loading" />
+        <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
+          <el-card shadow="hover" class="el-card-class">
+            <pie-echarts
+              :data="membershipScore"
+              :tips-data="tipsData"
+              :title="title"
+              :loading="loading"
+              class="pie-class"
+            />
           </el-card>
         </el-col>
         <!-- 商品类别 -->
-        <el-col :lg="12" :md="12" :sm="12" :xs="24">
-          <el-card shadow="hover">
+        <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
+          <el-card shadow="hover" class="el-card-class">
             <pie-echarts
-              :screen-height="screenHeight"
               :data="CommodityCategory"
+              :tips-data="tipsData"
+              :title="title"
               :loading="loading"
+              class="pie-class"
             />
           </el-card>
         </el-col>
@@ -61,7 +84,6 @@ export default {
   },
   data() {
     return {
-      screenHeight: window.innerHeight,
       // 加载动画
       loading: false,
       loadingCon: false,
@@ -100,8 +122,17 @@ export default {
       CommodityCategory: {
         title: '商品类别',
         data: []
-      }
-
+      },
+      // 提示信息
+      title: '根据查询条件进行查询数据(该报表只查询会员数据)',
+      tipsData: '<div style="font-weight:900;">折扣率：</div>' +
+        '<div style="font-size:14px;line-height:20px;">以会员折扣比例为维度</div>' +
+        '<div style="font-weight:900;">单笔金额：</div>' +
+        '<div style="font-size:14px;line-height:20px;">以单笔金额为维度</div>' +
+        '<div style="font-weight:900;">会员积分：</div>' +
+        '<div style="font-size:14px;line-height:20px;">以会员积分为维度</div>' +
+        '<div style="font-weight:900;">商品类别：</div>' +
+        '<div style="font-size:14px;line-height:20px;">以商品类别为维度</div>'
     }
   },
   watch: {
@@ -118,16 +149,6 @@ export default {
     }
   },
   mounted() {
-    const that = this
-    window.onresize = () => {
-      return (() => {
-        that.screenHeight = window.innerHeight
-        that.timer = true
-        setTimeout(() => {
-          that.timer = false
-        }, 400)
-      })()
-    }
     this.getProductType()
   },
   methods: {
@@ -185,33 +206,18 @@ export default {
 }
 </script>
 
-<style scoped>
-.el-card {
-  margin: 10px;
-}
-.content-div {
-  margin-left: 10px;
-  margin-right: 10px;
+<style >
+.retail-analysis {
+  height: 100%;
 }
 .el-row {
-  margin: 10px 0 10px 0;
+  margin-bottom: 10px;
 }
 .el-row:last-child {
   margin-bottom: 0;
 }
 .el-col {
-  margin-bottom: 10px;
   border-radius: 4px;
-}
-.bg-purple-dark {
-  background: #99a9bf;
-}
-.bg-purple {
-  /* background: #242640; */
-  background: #ccc;
-}
-.bg-purple-light {
-  background: #e5e9f2;
 }
 .grid-content {
   border-radius: 4px;
@@ -219,6 +225,25 @@ export default {
 }
 .row-bg {
   padding: 10px 0;
-  background-color: #f9fafc;
+}
+.el-row-class {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.el-col-class {
+  margin-top: 10px;
+  height: 100%;
+}
+.el-row-class {
+  height: 100%;
+}
+.el-card-class {
+  height: 100%;
+}
+.el-card-class .el-card__body {
+  height: 100%;
+}
+.pie-class {
+  height: 100%;
 }
 </style>

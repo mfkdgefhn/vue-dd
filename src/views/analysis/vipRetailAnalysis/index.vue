@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-15 10:23:32
  * @LastEditors: anan
- * @LastEditTime: 2019-11-15 11:15:00
+ * @LastEditTime: 2019-12-07 15:25:16
  -->
 <template>
   <div class="retail-analysis">
@@ -11,31 +11,59 @@
     <el-card shadow="hover" class="crad">
       <search :loading="loading" @getAnalysis="getAnalysis" />
     </el-card>
-    <div v-if="loadingCon" class="content-div">
+
+    <!-- 展示内容 -->
+    <div v-if="loadingCon" class="el-row-class">
       <!-- 饼图开始 -->
-      <el-row :gutter="10">
+      <el-row :gutter="10" style="height:40%">
         <!-- 次数 -->
-        <el-col :lg="12" :md="12" :sm="12" :xs="24">
-          <el-card shadow="hover">
-            <pie-echarts :screen-height="screenHeight" :data="frequencyType" :loading="loading" />
+        <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
+          <el-card shadow="hover" class="el-card-class">
+            <pie-echarts
+              :data="frequencyType"
+              :tips-data="tipsData"
+              :title="title"
+              :loading="loading"
+              class="pie-class"
+            />
           </el-card>
         </el-col>
         <!-- 件数 -->
-        <el-col :lg="12" :md="12" :sm="12" :xs="24">
-          <el-card shadow="hover">
-            <pie-echarts :screen-height="screenHeight" :data="numberType" :loading="loading" />
+        <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
+          <el-card shadow="hover" class="el-card-class">
+            <pie-echarts
+              :data="numberType"
+              :tips-data="tipsData"
+              :title="title"
+              :loading="loading"
+              class="pie-class"
+            />
           </el-card>
         </el-col>
+      </el-row>
+      <el-row :gutter="10" style="height:40%">
         <!-- 金额 -->
-        <el-col :lg="12" :md="12" :sm="12" :xs="24">
-          <el-card shadow="hover">
-            <pie-echarts :screen-height="screenHeight" :data="montyType" :loading="loading" />
+        <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
+          <el-card shadow="hover" class="el-card-class">
+            <pie-echarts
+              :data="montyType"
+              :tips-data="tipsData"
+              :title="title"
+              :loading="loading"
+              class="pie-class"
+            />
           </el-card>
         </el-col>
         <!-- 周期 -->
-        <el-col :lg="12" :md="12" :sm="12" :xs="24">
-          <el-card shadow="hover">
-            <pie-echarts :screen-height="screenHeight" :data="cycleType" :loading="loading" />
+        <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
+          <el-card shadow="hover" class="el-card-class">
+            <pie-echarts
+              :data="cycleType"
+              :tips-data="tipsData"
+              :title="title"
+              :loading="loading"
+              class="pie-class"
+            />
           </el-card>
         </el-col>
       </el-row>
@@ -100,8 +128,17 @@ export default {
           // { value: Math.round(1000 * (Math.random())), name: '7-9' },
           // { value: Math.round(1000 * (Math.random())), name: '大于10' }
         ]
-      }
-
+      },
+      // 提示信息
+      title: '根据查询条件进行查询数据(该报表只查询会员数据)',
+      tipsData: '<div style="font-weight:900;">次数：</div>' +
+        '<div style="font-size:14px;line-height:20px;">全部会员购买次数</div>' +
+        '<div style="font-weight:900;">件数：</div>' +
+        '<div style="font-size:14px;line-height:20px;">全部会员购买件数</div>' +
+        '<div style="font-weight:900;">金额：</div>' +
+        '<div style="font-size:14px;line-height:20px;">全部会员购买金额</div>' +
+        '<div style="font-weight:900;">周期：</div>' +
+        '<div style="font-size:14px;font-weight:500;line-height:20px;">会员购买周期，该图时间段为1年内(当天往前365天内)有购买过的总会员数所购买的时间周期(该饼图与查询参数无关)</div>'
     }
   },
   watch: {
@@ -169,33 +206,18 @@ export default {
 }
 </script>
 
-<style scoped>
-.el-card {
-  margin: 10px;
-}
-.content-div {
-  margin-left: 10px;
-  margin-right: 10px;
+<style >
+.retail-analysis {
+  height: 100%;
 }
 .el-row {
-  margin: 10px 0 10px 0;
+  margin-bottom: 10px;
 }
 .el-row:last-child {
   margin-bottom: 0;
 }
 .el-col {
-  margin-bottom: 10px;
   border-radius: 4px;
-}
-.bg-purple-dark {
-  background: #99a9bf;
-}
-.bg-purple {
-  /* background: #242640; */
-  background: #ccc;
-}
-.bg-purple-light {
-  background: #e5e9f2;
 }
 .grid-content {
   border-radius: 4px;
@@ -203,6 +225,25 @@ export default {
 }
 .row-bg {
   padding: 10px 0;
-  background-color: #f9fafc;
+}
+.el-row-class {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.el-col-class {
+  margin-top: 10px;
+  height: 100%;
+}
+.el-row-class {
+  height: 100%;
+}
+.el-card-class {
+  height: 100%;
+}
+.el-card-class .el-card__body {
+  height: 100%;
+}
+.pie-class {
+  height: 100%;
 }
 </style>

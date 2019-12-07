@@ -3,14 +3,14 @@
  * @Author: anan
  * @Date: 2019-10-15 10:23:32
  * @LastEditors: anan
- * @LastEditTime: 2019-11-07 17:41:43
+ * @LastEditTime: 2019-12-05 16:46:32
  -->
 <template>
   <div class="retail-analysis">
     <!-- 搜索 -->
-    <el-card shadow="hover" class="crad">
+    <!-- <el-card shadow="hover" class="crad">
       <search :loading="loading" @getAnalysis="getAnalysis" />
-    </el-card>
+    </el-card>-->
 
     <!-- 展示内容 -->
     <div class="content-div">
@@ -115,13 +115,13 @@ import wordCloudChart from './word-cloud-chart'
 import pieEcharts from './pieEcharts'
 // import echartsPie from '@/components/public/pieEcharts'
 
-import Search from '@/components/public/search'
+// import Search from '@/components/public/search'
 import { getHumanCount, getSexProportion, getAgeProportion, getRegionProportion, getReasonsForLeavingProportion, getEducationProportion, getWorkingYearsProportion } from '@/api/gmqApi' //
 
 export default {
   // 组件
   components: {
-    Search, echartsPie, countTo, echartsMap, wordCloudChart, pieEcharts
+    echartsPie, countTo, echartsMap, wordCloudChart, pieEcharts
   },
   data() {
     return {
@@ -167,6 +167,7 @@ export default {
       })()
     }
     this.getInit()
+    this.getAnalysis()
   },
   // 方法
   methods: {

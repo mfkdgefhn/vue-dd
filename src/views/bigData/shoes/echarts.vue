@@ -1,13 +1,12 @@
 <!--
- * @Description: 说明
+ * @Description: 地图
  * @Author: anan
  * @Date: 2019-09-28 15:18:15
  * @LastEditors: anan
- * @LastEditTime: 2019-11-19 11:29:45
+ * @LastEditTime: 2019-11-26 13:36:21
  -->
 <template>
   <div id="echarts" ref="echartsMap">
-    <!-- <el-button type="primary" class="left">主要按钮</el-button> -->
     <div ref="myChartMap" :style="vStyle" />
   </div>
 </template>
@@ -18,10 +17,12 @@ import 'echarts/map/js/china.js' // 引入中国地图数据
 import cityMap from '@/assets/geoJson/china-main-city/china-main-city-map.js' // 引入区县地图
 // import china from 'echarts/map/js/china.js' // 引入中国地图数据
 
-import { getProvinceData, getCityData } from '@/api/gmqApi'
+// import { getProvinceData, getCityData } from '@/api/gmqApi'
 
 import { getProvince } from '@/utils/map.js' // getCity
 import echarts from 'echarts'
+
+import dayjs from 'dayjs' // 时间格式
 
 export default {
   props: {
@@ -44,6 +45,7 @@ export default {
         '广西', '海南', '四川', '贵州', '云南', '西藏', '陕西', '甘肃', '青海',
         '宁夏', '新疆', '北京', '天津', '重庆', '香港', '澳门', '台湾'],
       genJson: {},
+      directlyCity: ['北京', '上海', '重庆', '天津'],
       cityMap: {
         '北京市': '110100',
         '天津市': '120100',
@@ -400,92 +402,78 @@ export default {
   computed: {
     propsData() {
       return this.bigData
+    },
+    listQuery() {
+      return this.$store.getters.listQuery
     }
   },
-
   watch: {
     // 根据父组件传进来的值，自动设置高度
     screenHeight(val) {
       this.vStyle = 'width: auto;height: ' + (val * 0.2) + 'px'
     },
+
+    // 只有一个省份的话，则下钻到省份地图
+
+    // 进行判断 地图分为全国->省份数据、省份->城市数据、城市->区县数据，
+    // 当查询条件为只有日期，则显示全国,
+    // 有省份，则显示城市，
+    // 有城市，则显示区县
     propsData(new_value, old_value) {
-      // 只有一个省份的话，则下钻到省份地图
-      // console.log(new_value.length)
+      const myChart = this.$echarts.init(this.$refs.myChartMap)
+      myChart.off('click')
+      // 对数据最大值与最小值进行设置
+      this.setMaxMin(new_value)
 
-      if (new_value.length === 1) {
-        console.log(new_value)
-
-        const provinceIndex = this.provincesText.findIndex(x => {
-          return new_value[0].pname === x
-        })
-        console.log(provinceIndex)
-        console.log(this.provinces[provinceIndex])
-        console.log(new_value[0].pname)
-        console.log(new_value[0].name)
-
-        this.getProvinceMapOpt(this.provinces[provinceIndex], new_value[0].pname)
-
-        const myChart = this.$echarts.init(this.$refs.myChartMap)
-        // 点击事件
-        myChart.on('click', (param) => {
-          const provinceIndex = this.provincesText.findIndex(x => {
-            return param.name === x
-          })
-          var provinceAlphabet = '' // 省拼音
-          var provinceTextsAlphabet = '' // 省中文
-
-          if (provinceIndex !== -1) { // 省
-            provinceAlphabet = this.provinces[provinceIndex]
-            provinceTextsAlphabet = this.provincesText[provinceIndex]
-            // 重新渲染各省份地图
-            this.getProvinceMapOpt(provinceAlphabet, provinceTextsAlphabet)
-          } else { // 市
-            this.getCityMapOpt(param.name)
+      if (this.listQuery.city) { // 全市
+        this.rendering(new_value, 'district')
+        console.log(cityMap)
+        var cityName = ''
+        // this.listQuery.city从别的组件点击得到的是两个字的城市，在cityName中是找不到的，只能先把city找到先
+        for (const key in cityMap) {
+          if (key.substring(0, 2) === this.listQuery.city.substring(0, 2)) {
+            cityName = key
           }
-        })
-        // 右键事件取消
-        const canvas = this.$refs.echartsMap
-        canvas.oncontextmenu = () => { return false }
-
-        // 加入自定义右键事件
-        myChart.on('contextmenu', (params) => {
-          getProvince(this.provinces[provinceIndex], this.genJson)
-          echarts.registerMap(this.provinces[provinceIndex], this.genJson)//, s.data
-
-          this.getProvinceMapOpt(this.provinces[provinceIndex], new_value[0].pname)
-
-          // this.genJson = require('@/assets/geoJson/china.json')
-          // echarts.registerMap('china', this.genJson)
-          // this.showChinaMap()
-        })
-
-        // echarts根据框架比例自动刷新
-        window.addEventListener('resize', () => { myChart.resize() })
-      } else {
-        var arr = []
-        new_value.forEach(value => {
-          var obj = {}
-          this.provincesText.forEach(provinces => {
-            if (value.pname === provinces.substring(0, 2)) {
-              obj.name = provinces
-            }
-          })
-          if (parseFloat(value.qty) < this.min) {
-            this.min = parseFloat(value.qty)
+        }
+        if (cityMap[cityName]) {
+          // 获取高级json
+          this.genJson = require('@/assets/geoJson/china-main-city/' + cityMap[cityName] + '.json')
+          echarts.registerMap(cityName, this.genJson) //, s.data
+          const option = this.getMapOpt(cityName)
+          // 渲染地图数据
+          if (option && typeof option === 'object') {
+            myChart.setOption(option)
           }
-          if (parseFloat(value.qty) > this.max) {
-            this.max = parseFloat(value.qty)
-          }
-          obj.value = value.qty
-          arr.push(obj)
+        }
+      } else if (this.listQuery.province) { // 全省
+        this.rendering(new_value, 'city')
+        const index = this.provincesText.findIndex(x => {
+          return this.listQuery.province === x
         })
-        this.countryData = arr
-        this.opentionDate = arr
-        this.drawLine()
+        var provinceCode = this.provinces[index] // 拼音
+        var province = this.provincesText[index] // 中文
+        // 渲染数据
+        // 获取省json
+        getProvince(provinceCode, this.genJson)
+        // 切换到省地图
+        echarts.registerMap(provinceCode, this.genJson)//, s.data
+        // 配置地图
+        const option = this.getMapOpt(province)
+        // 渲染地图数据
+        if (option && typeof option === 'object') {
+          myChart.setOption(option)
+        }
+      } else { // 全国
+        this.rendering(new_value, 'provinces')
+        // 获取地图数据
+        const option = this.getMapOpt()
+        // 绘制图表
+        if (option && typeof option === 'object') {
+          myChart.setOption(option)
+        }
       }
+      this.drawLine()
     }
-  },
-  mounted() {
   },
   methods: {
     // 设置地图参数
@@ -496,38 +484,44 @@ export default {
         // 鼠标移到图里面的浮动提示框
         tooltip: {
           // formatter: '{a} <br/>{b} <br/>{c} <br/>{d}' // {a}（系列名称），{b}（区域名称），{c}（合并数值）, {d}（无）
-          // formatter: (params) => {
-          //   console.log(params)
-          //   return params
-          // }
-
+          formatter: (params) => {
+            if (params.data) {
+              return params.data.name + '(' + this.listQuery.months + ')<br /> 双数：' + params.data.value + '<br /> 金额：' + params.data.totAmtActual
+            }
+            return params.name + '(' + this.listQuery.months + ')<br /> 双数：' + 0 + '<br /> 金额：' + 0
+          }
         },
         toolbox: {
           // orient: 'vertical',
-          right: '3%',
+          left: '3%',
           top: '3%',
           itemSize: 40,
           itemGap: 25,
           feature: {
             myTool1: {
               show: true,
-              title: '上一月',
-              icon: 'path://M432.45,595.444c0,2.177-4.661,6.82-11.305,6.82c-6.475,0-11.306-4.567-11.306-6.82s4.852-6.812,11.306-6.812C427.841,588.632,432.452,593.191,432.45,595.444L432.45,595.444z M421.155,589.876c-3.009,0-5.448,2.495-5.448,5.572s2.439,5.572,5.448,5.572c3.01,0,5.449-2.495,5.449-5.572C426.604,592.371,424.165,589.876,421.155,589.876L421.155,589.876z M421.146,591.891c-1.916,0-3.47,1.589-3.47,3.549c0,1.959,1.554,3.548,3.47,3.548s3.469-1.589,3.469-3.548C424.614,593.479,423.062,591.891,421.146,591.891L421.146,591.891zM421.146,591.891',
+              title: '上月',
+              icon: 'image://data:image/png;base64,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',
               onclick: () => {
-                alert('myToolHandler1')
+                const listQuery = this.$store.getters.listQuery
+                let months = dayjs(listQuery.months, 'YYYYMM').add(-1, 'month').format('YYYYMM')
+                if (months < '201801') months = '201801'
+                this.$store.dispatch('baseApi/setMonths', months)
               }
             },
             myTool2: {
               show: true,
-              title: '下一月',
-              icon: 'image://http://echarts.baidu.com/images/favicon.png',
+              title: '下月',
+              icon: 'image://data:image/png;base64,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',
               onclick: () => {
-                alert('myToolHandler2')
+                const listQuery = this.$store.getters.listQuery
+                listQuery.months = dayjs(listQuery.months, 'YYYYMM').add(1, 'month').format('YYYYMM')
+                if (listQuery.months > dayjs().format('YYYYMM')) listQuery.months = dayjs().format('YYYYMM')
+                this.$store.dispatch('baseApi/setMonths', listQuery.months)
               }
             }
           }
         },
-
         visualMap: [{ // 区域组件
           type: 'continuous', // 连续型 continuous 连续型  piecewise 分段型
           min: this.min,
@@ -593,7 +587,7 @@ export default {
             coordinateSystem: 'geo' // 对应上方配置
           },
           {
-            name: '启动次数', // 浮动框的标题
+            name: '双数', // 浮动框的标题
             type: 'map',
             geoIndex: 0,
             data: this.opentionDate
@@ -604,115 +598,42 @@ export default {
     },
     // 初始化用到的方法
     drawLine() {
-      var that = this
-      // 基于准备好的dom，初始化echarts实例
-      const myChart = that.$echarts.init(that.$refs.myChartMap)
-      // 获取地图数据
-      const option = that.getMapOpt()
-      // 绘制图表
-      if (option && typeof option === 'object') {
-        myChart.setOption(option)
-      }
-      // 点击事件
-      myChart.on('click', (param) => {
-        const provinceIndex = that.provincesText.findIndex(x => {
-          return param.name === x
-        })
-        var provinceAlphabet = '' // 省拼音
-        var provinceTextsAlphabet = '' // 省中文
-
-        if (provinceIndex !== -1) { // 省
-          provinceAlphabet = that.provinces[provinceIndex]
-          provinceTextsAlphabet = that.provincesText[provinceIndex]
-          // 重新渲染各省份地图
-          that.getProvinceMapOpt(provinceAlphabet, provinceTextsAlphabet)
-        } else { // 市
-          that.getCityMapOpt(param.name)
-        }
-      })
       // 右键事件取消
       const canvas = this.$refs.echartsMap
       canvas.oncontextmenu = () => { return false }
-
+      // 基于准备好的dom，初始化echarts实例
+      const myChart = this.$echarts.init(this.$refs.myChartMap)
+      myChart.off('click')
+      myChart.on('click', (params) => {
+        if (this.listQuery.city) {
+          console.log(params.name)
+        } else if (this.listQuery.province) {
+          this.$store.dispatch('baseApi/setCity', params.name)
+        } else {
+          let cout = 0
+          this.directlyCity.forEach(element => {
+            if (params.name.substring(0, 2) === element) {
+              ++cout
+            }
+          })
+          if (cout > 0) {
+            this.$store.dispatch('baseApi/setProvinceCity', params.name)
+          } else {
+            this.$store.dispatch('baseApi/setProvince', params.name)
+          }
+        }
+      })
       // 加入自定义右键事件
       myChart.on('contextmenu', (params) => {
-        that.genJson = require('@/assets/geoJson/china.json')
-        echarts.registerMap('china', that.genJson)
-        that.showChinaMap()
+        this.genJson = require('@/assets/geoJson/china.json')
+        echarts.registerMap('china', this.genJson)
+        // this.showChinaMap()
+        this.$store.dispatch('baseApi/resetListQuery')
       })
-
       // echarts根据框架比例自动刷新
       window.addEventListener('resize', () => { myChart.resize() })
     },
 
-    // 显示中国地图
-    showChinaMap() {
-      this.opentionDate = this.countryData
-      this.setMaxMin(this.countryData)
-      const option = this.getMapOpt()
-      const myChart = this.$echarts.init(this.$refs.myChartMap)
-      myChart.setOption(option, true)
-    },
-
-    // 下钻到省地图
-    /**
-     * provinceAlphabet 省代码
-     * provinceTextsAlphabet 省中文
-     */
-    getProvinceMapOpt(provinceAlphabet, provinceTextsAlphabet) {
-      console.log(provinceAlphabet, provinceTextsAlphabet)
-
-      // axios.get('echarts/map/js/province/' + provinceAlphabet + '.js').then((s) => {  //如果要与后端互动的话，需要加入该句请求
-      const myChart = this.$echarts.init(this.$refs.myChartMap)
-      // 获取VIP数据
-      console.log(provinceTextsAlphabet.substring(0, 2))
-      var job = {}
-      job.provinceName = provinceTextsAlphabet.substring(0, 2)
-
-      getProvinceData(job).then(response => {
-        // console.log(response)
-        // 获取接口数据
-        var arrData = response.result
-        this.opentionDate = arrData
-
-        // 对数据最大值与最小值进行设置
-        this.setMaxMin(arrData)
-
-        // 获取省json
-        getProvince(provinceAlphabet, this.genJson)
-        // 切换到省地图
-        echarts.registerMap(provinceAlphabet, this.genJson)//, s.data
-        // 配置地图
-        const option = this.getMapOpt(provinceTextsAlphabet)
-        // 渲染地图数据
-        myChart.setOption(option)
-      })
-    },
-
-    // 下钻到市级地图
-    getCityMapOpt(cityName) {
-      console.log(cityName, cityMap[cityName])
-      // 拿到ref
-      const myChart = this.$echarts.init(this.$refs.myChartMap)
-      if (cityMap[cityName]) {
-        // 获取高级json
-        this.genJson = require('@/assets/geoJson/china-main-city/' + cityMap[cityName] + '.json')
-        // 获取请求参数
-        var job = {}
-        job.cityName = cityName.substring(0, 2)
-        // 获取市级数据
-        getCityData(job).then(response => {
-          var arrData = response.result
-          this.opentionDate = arrData
-          // 对数据最大值与最小值进行设置
-
-          this.setMaxMin(arrData)
-          echarts.registerMap(cityName, this.genJson) //, s.data
-          const option = this.getMapOpt(cityName)
-          myChart.setOption(option)
-        })
-      }
-    },
     // 设置地图最大最小值
     setMaxMin(arr) {
       this.min = 0
@@ -722,8 +643,34 @@ export default {
         if (parseFloat(data.value) > this.max) this.max = parseFloat(data.value)
       })
       if (this.max === 0) this.max = 100
+    },
+    rendering(val, type) {
+      var arr = []
+      if (type === 'provinces') {
+        val.forEach(value => {
+          var obj = {}
+          this.provincesText.forEach(provinces => {
+            if (value.province === provinces.substring(0, 2)) {
+              obj.name = provinces
+            }
+          })
+          obj.value = value.value
+          obj.totAmtActual = value.totAmtActual
+          arr.push(obj)
+        })
+        this.countryData = arr
+        this.opentionDate = arr
+      } else if (type === 'city' || type === 'district') {
+        val.forEach(value => {
+          var obj = {}
+          obj.name = value[type]
+          obj.value = value.value
+          obj.totAmtActual = value.totAmtActual
+          arr.push(obj)
+        })
+        this.opentionDate = arr
+      }
     }
-
   }
 
 }

@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-11 14:53:41
  * @LastEditors: anan
- * @LastEditTime: 2019-11-20 15:39:02
+ * @LastEditTime: 2019-11-26 10:52:16
  -->
 <template>
   <div class="pie-echarts">
@@ -37,15 +37,20 @@ export default {
       this.vStyle = 'width: auto;height: ' + (val * 0.2) + 'px'
     },
     vipRepeatPurchase(val) {
+      this.data = {
+        legend: [],
+        series: []
+      }
       if (val.length > 0) {
-        val.forEach(element => {
-          if (this.data.legend.length < 6) { this.data.legend.push(element.customername) }
-          this.data.series.push({
-            value: element.fgl,
-            name: element.customername
-          })
-        })
-        console.log(this.data)
+        console.log(this.$store.getters.listQuery)
+        if (this.$store.getters.listQuery.city) {
+          this.rendering(val, 'district')
+        } else if (this.$store.getters.listQuery.province) {
+          this.rendering(val, 'city')
+        } else {
+          this.rendering(val, 'province')
+        }
+        // console.log(this.data)
         this.drawLine()
       }
     }
@@ -53,6 +58,15 @@ export default {
   mounted() {
   },
   methods: {
+    rendering(data, str) {
+      data.forEach(element => {
+        if (this.data.legend.length < 6) { this.data.legend.push(element[str]) }
+        this.data.series.push({
+          value: element.fgl,
+          name: element[str]
+        })
+      })
+    },
     drawLine() {
       const myChart = this.$echarts.init(this.$refs.pieEcharts)
       var pieOption = {
@@ -84,7 +98,7 @@ export default {
         series: [
           {
             name: '访问来源',
-            type: 'pie',
+            type: 'line',
             radius: '55%',
             center: ['50%', '60%'],
             data: this.data.series,

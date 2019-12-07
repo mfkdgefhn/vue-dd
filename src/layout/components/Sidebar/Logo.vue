@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2019-10-11 09:17:55
+ * @LastEditTime: 2019-12-02 17:30:20
  -->
 <template>
   <div class="sidebar-logo-container" :class="{'collapse':collapse}">
@@ -31,7 +31,7 @@ export default {
   },
   data() {
     return {
-      title: '纸鹤视界',
+      title: '零售分析BI',
       logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
     }
   }

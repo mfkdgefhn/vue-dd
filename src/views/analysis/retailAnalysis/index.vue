@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-15 10:23:32
  * @LastEditors: anan
- * @LastEditTime: 2019-11-15 17:33:29
+ * @LastEditTime: 2019-12-07 15:24:30
  -->
 <template>
   <div class="retail-analysis">
@@ -13,31 +13,57 @@
     </el-card>
 
     <!-- 展示内容 -->
-    <div v-if="loadingCon" class="content-div">
+    <div v-if="loadingCon" class="el-row-class">
       <!-- 饼图开始 -->
-      <el-row :gutter="10">
+      <el-row :gutter="10" style="height:40%">
         <!-- 时段 -->
-        <el-col :lg="12" :md="12" :sm="12" :xs="24">
-          <el-card shadow="hover">
-            <pie-echarts :screen-height="screenHeight" :data="retailInterval" :loading="loading" />
+        <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
+          <el-card shadow="hover" class="el-card-class">
+            <pie-echarts
+              :data="retailInterval"
+              :tips-data="tipsData"
+              :title="title"
+              :loading="loading"
+              class="pie-class"
+            />
           </el-card>
         </el-col>
         <!-- 商品风格 -->
-        <el-col :lg="12" :md="12" :sm="12" :xs="24">
-          <el-card shadow="hover">
-            <pie-echarts :screen-height="screenHeight" :data="productStyle" :loading="loading" />
+        <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
+          <el-card shadow="hover" class="el-card-class">
+            <pie-echarts
+              :data="productStyle"
+              :tips-data="tipsData"
+              :title="title"
+              :loading="loading"
+              class="pie-class"
+            />
           </el-card>
         </el-col>
+      </el-row>
+      <el-row :gutter="10" style="height:40%">
         <!-- 是否会员 -->
-        <el-col :lg="12" :md="12" :sm="12" :xs="24">
-          <el-card shadow="hover">
-            <pie-echarts :screen-height="screenHeight" :data="vipProportion" :loading="loading" />
+        <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
+          <el-card shadow="hover" class="el-card-class">
+            <pie-echarts
+              :data="vipProportion"
+              :tips-data="tipsData"
+              :title="title"
+              :loading="loading"
+              class="pie-class"
+            />
           </el-card>
         </el-col>
         <!-- 码段 -->
-        <el-col :lg="12" :md="12" :sm="12" :xs="24">
-          <el-card shadow="hover">
-            <pie-echarts :screen-height="screenHeight" :data="codeSegment" :loading="loading" />
+        <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
+          <el-card shadow="hover" class="el-card-class">
+            <pie-echarts
+              :data="codeSegment"
+              :tips-data="tipsData"
+              :title="title"
+              :loading="loading"
+              class="pie-class"
+            />
           </el-card>
         </el-col>
       </el-row>
@@ -59,7 +85,6 @@ export default {
   data() {
     return {
       showLoad: false,
-      screenHeight: window.innerHeight,
       // 加载动画
       loading: false,
       loadingCon: false,
@@ -68,18 +93,6 @@ export default {
       retailInterval: {
         title: '时段零售',
         data: [
-          // { value: Math.round(1000 * (Math.random())), name: '0-1' },
-          // { value: Math.round(1000 * (Math.random())), name: '2-3' },
-          // { value: Math.round(1000 * (Math.random())), name: '4-5' },
-          // { value: Math.round(1000 * (Math.random())), name: '6-7' },
-          // { value: Math.round(1000 * (Math.random())), name: '8-9' },
-          // { value: Math.round(1000 * (Math.random())), name: '10-11' },
-          // { value: Math.round(1000 * (Math.random())), name: '12-13' },
-          // { value: Math.round(1000 * (Math.random())), name: '14-15' },
-          // { value: Math.round(1000 * (Math.random())), name: '16-17' },
-          // { value: Math.round(1000 * (Math.random())), name: '18-19' },
-          // { value: Math.round(1000 * (Math.random())), name: '20-21' },
-          // { value: Math.round(1000 * (Math.random())), name: '22-23' }
         ]
       },
       // 商品风格
@@ -91,23 +104,25 @@ export default {
       vipProportion: {
         title: '会员占比',
         data: [
-          // { value: Math.round(1000 * (Math.random())), name: '是' },
-          // { value: Math.round(1000 * (Math.random())), name: '否' }
         ]
       },
       // 码段
       codeSegment: {
         title: '码段',
         data: [
-          // { value: Math.round(1000 * (Math.random())), name: '34码' },
-          // { value: Math.round(1000 * (Math.random())), name: '35码' },
-          // { value: Math.round(1000 * (Math.random())), name: '36码' },
-          // { value: Math.round(1000 * (Math.random())), name: '37码' },
-          // { value: Math.round(1000 * (Math.random())), name: '38码' },
-          // { value: Math.round(1000 * (Math.random())), name: '39码' },
-          // { value: Math.round(1000 * (Math.random())), name: '40码' }
+
         ]
-      }
+      },
+      // 提示信息
+      title: '根据查询条件进行查询数据',
+      tipsData: '<div style="font-weight:900;">时段零售：</div>' +
+        '<div style="font-size:14px;line-height:20px;">以两小时为维度，如0-1为例，时间为00:00-01:59，以此类推,没有零售的时段将不显示</div>' +
+        '<div style="font-weight:900;">商品风格：</div>' +
+        '<div style="font-size:14px;line-height:20px;">以商品风格为维度</div>' +
+        '<div style="font-weight:900;">会员占比：</div>' +
+        '<div style="font-size:14px;line-height:20px;">以会员为维度</div>' +
+        '<div style="font-weight:900;">码段：</div>' +
+        '<div style="font-size:14px;line-height:20px;">以商品尺码为维度</div>'
     }
   },
   watch: {
@@ -126,18 +141,6 @@ export default {
   created() {
   },
   mounted() {
-    // console.log(this.$store.getters.customer)
-    // console.log(this.$store.getters.store)
-    const that = this
-    window.onresize = () => {
-      return (() => {
-        that.screenHeight = window.innerHeight
-        that.timer = true
-        setTimeout(() => {
-          that.timer = false
-        }, 400)
-      })()
-    }
   },
   methods: {
     // 获取数据
@@ -148,7 +151,7 @@ export default {
       // 获取时段数据
       getIntervalAnalysis(params).then(response => {
         var arrData = response.result
-        console.log(arrData)
+        // console.log(arrData)
 
         var arr = []
         arrData.forEach(val => {
@@ -212,24 +215,18 @@ export default {
 }
 </script>
 
-<style scoped>
-.el-card {
-  margin: 10px;
+<style >
+.retail-analysis {
+  height: 100%;
 }
-.content-div {
-  margin: 10px;
+.el-row {
+  margin-bottom: 10px;
 }
-.bg-purple-dark {
-  background: #99a9bf;
+.el-row:last-child {
+  margin-bottom: 0;
 }
-.bg-purple {
-  /* background: #242640; */
-  /* background: #2c343c; */
-  /* background: #1972c6; */
-  background: #ccc;
-}
-.bg-purple-light {
-  background: #e5e9f2;
+.el-col {
+  border-radius: 4px;
 }
 .grid-content {
   border-radius: 4px;
@@ -237,6 +234,25 @@ export default {
 }
 .row-bg {
   padding: 10px 0;
-  background-color: #f9fafc;
+}
+.el-row-class {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.el-col-class {
+  margin-top: 10px;
+  height: 100%;
+}
+.el-row-class {
+  height: 100%;
+}
+.el-card-class {
+  height: 100%;
+}
+.el-card-class .el-card__body {
+  height: 100%;
+}
+.pie-class {
+  height: 100%;
 }
 </style>

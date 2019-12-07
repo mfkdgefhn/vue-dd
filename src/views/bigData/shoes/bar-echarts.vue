@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-11 13:20:03
  * @LastEditors: anan
- * @LastEditTime: 2019-10-12 11:39:04
+ * @LastEditTime: 2019-11-26 13:48:28
  -->
 <template>
   <div class="bar-echarts">
@@ -17,70 +17,161 @@ export default {
     screenHeight: {
       type: Number,
       default: 0
+    },
+    vipRepeatPurchase: {
+      type: Array,
+      default: () => []
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      vStyle: 'width: 100%;height: 300px'
+      vStyle: 'width: auto;height: 200px',
+      data: {
+        legend: [],
+        series: []
+      },
+      directlyCity: ['北京', '上海', '重庆', '天津']
     }
   },
   watch: {
+    loading(bool) {
+      const myChart = this.$echarts.init(this.$refs.barEcharts)
+      if (bool) {
+        myChart.showLoading({
+          text: '加载中',
+          // color: '#3398DB',
+          textColor: '#3398DB',
+          // backgroundColor: '#000',
+          // maskColor: 'rgba(255, 255, 255, 0.8)',
+          zlevel: 0
+        })
+      } else {
+        myChart.hideLoading()
+      }
+    },
     screenHeight(val) {
-      this.vStyle = 'width: 100%;height: ' + (val * 0.3) + 'px'
+      this.vStyle = 'width: auto;height: ' + (val * 0.2) + 'px'
+    },
+    vipRepeatPurchase(val) {
+      this.data = {
+        legend: [],
+        series: []
+      }
+      if (val.length > 0) {
+        if (this.$store.getters.listQuery.city) {
+          this.rendering(val, 'district')
+        } else if (this.$store.getters.listQuery.province) {
+          this.rendering(val, 'city')
+        } else {
+          this.rendering(val, 'province')
+        }
+        // console.log(this.data)
+        this.drawLine()
+      }
     }
   },
   mounted() {
-    this.drawLine()
+    // this.drawLine()
   },
   methods: {
+    rendering(data, str) {
+      data.forEach(element => {
+        this.data.legend.push(element[str].substring(0, 2))
+        this.data.series.push(element.fgl)
+        // {value: element.fgl,
+        // name: element[str]}
+      })
+    },
     drawLine() {
       const myChart = this.$echarts.init(this.$refs.barEcharts)
-      var barOption = {
-        // title: {
-        //   text: '世界人口总量',
-        //   subtext: '数据来自网络'
-        // },
+      myChart.off('click')
+      myChart.on('click', (params) => {
+        const listQuery = this.$store.getters.listQuery
+        if (!listQuery.province) {
+          let cout = 0
+          this.directlyCity.forEach(element => {
+            if (params.name.substring(0, 2) === element) {
+              ++cout
+            }
+          })
+          if (cout > 0) {
+            this.$store.dispatch('baseApi/setProvinceCity', params.name)
+          } else {
+            this.$store.dispatch('baseApi/setProvince', params.name)
+          }
+          // this.$store.dispatch('baseApi/setProvince', params.name)
+        } else if (!listQuery.city) {
+          this.$store.dispatch('baseApi/setCity', params.name)
+        } else {
+          // console.log('进入区县')
+        }
+      })
+
+      var option = {
+        color: ['#C33531', '#EFE42A', '#64BD3D', '#EE9201', '#29AAE3', '#B74AE5', '#0AAF9F', '#E89589', '#16A085', '#4A235A', '#C39BD3 ', '#F9E79F', '#BA4A00', '#ECF0F1', '#616A6B', '#EAF2F8', '#4A235A', '#3498DB', '#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'],
         tooltip: {
           trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
+          axisPointer: { // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
           }
         },
-        legend: {
-          data: ['2011年', '2012年'],
-          textStyle: {
-            color: '#ccc'
+        dataZoom: [
+          {
+            type: 'inside',
+            minValueSpan: 3,
+            maxValueSpan: 6
           }
-        },
+        ],
         grid: {
           left: '3%',
           right: '4%',
           bottom: '3%',
-          containLabel: true
+          containLabel: true,
+          borderColor: 'rgba(128, 128, 128, 0.5)'
         },
-        xAxis: {
-          type: 'value',
-          boundaryGap: [0, 0.01]
-        },
-        yAxis: {
-          type: 'category',
-          data: ['巴西', '印尼', '美国', '印度', '中国', '世界人口(万)']
-        },
+        xAxis: [
+          {
+            type: 'category',
+            data: this.data.legend,
+            axisTick: {
+              alignWithLabel: true
+            },
+            textStyle: {
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            splitLine: {
+              lineStyle: {
+                color: 'rgba(128, 128, 128, 0.3)'
+              }
+            }
+          }
+        ],
         series: [
           {
-            name: '2011年',
+            name: '复购率',
             type: 'bar',
-            data: [18203, 23489, 29034, 104970, 131744, 630230],
+            barWidth: '60%',
+            data: this.data.series,
+            textStyle: {
+              color: '#ccc'
+            },
             label: {
-              show: true
-            }
-          },
-          {
-            name: '2012年',
-            type: 'bar',
-            data: [19325, 23438, 31000, 121594, 134141, 681807],
-            label: {
-              show: true
+              show: true,
+              position: 'top',
+              formatter: '{@score} % '
+            },
+            itemStyle: {
+              color: (params) => {
+                return option.color[params.dataIndex]
+              }
             }
           }
         ],
@@ -88,9 +179,7 @@ export default {
           color: '#ccc'
         }
       }
-
-      myChart.setOption(barOption)
-
+      myChart.setOption(option)
       window.addEventListener('resize', () => { myChart.resize() })
     }
   }

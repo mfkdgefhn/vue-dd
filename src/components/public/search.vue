@@ -185,8 +185,9 @@ export default {
                   resolve(areas)
                 })
               }
-            }, 500)
+            }, 200)
           }
+          resolve()
         }
       },
       listQuery: {

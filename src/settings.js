@@ -3,11 +3,11 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2019-09-27 16:29:32
+ * @LastEditTime: 2019-12-02 17:25:17
  */
 module.exports = {
 
-  title: '纸鹤视界',
+  title: '零售分析BI',
 
   /**
    * @type {boolean} true | false

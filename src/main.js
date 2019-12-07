@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2019-11-21 09:05:00
+ * @LastEditTime: 2019-11-22 15:01:51
  */
 import Vue from 'vue'
 
@@ -28,7 +28,7 @@ import 'echarts-wordcloud' // 词云图
 
 import BaiduMap from 'vue-baidu-map' // 百度地图
 
-import AMap from 'vue-amap'
+import AMap from 'vue-amap' // 高德地图
 
 import 'xe-utils'
 import VXETable from 'vxe-table'

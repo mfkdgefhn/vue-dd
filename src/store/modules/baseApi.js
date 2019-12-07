@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2019-11-21 10:19:52
+ * @LastEditTime: 2019-11-26 13:37:46
  */
 
 import { getProductstyle, getCustomer, getStore, getStores, getYear, getSeason } from '@/api/gmqApi'
@@ -14,7 +14,11 @@ const state = {
   stores: [],
   customer: [],
   year: [],
-  season: []
+  season: [],
+  months: '111',
+  listQuery: {
+
+  }
 }
 
 const mutations = {
@@ -38,6 +42,29 @@ const mutations = {
   },
   SET_SEASON: (state, season) => {
     state.season = season
+  },
+  SET_MONTHS: (state, months) => {
+    state.listQuery.months = months
+    state.listQuery = Object.assign({}, state.listQuery)
+  },
+  SET_PROVINCE: (state, province) => {
+    state.listQuery.province = province
+    state.listQuery = Object.assign({}, state.listQuery)
+  },
+  SET_CITY: (state, city) => {
+    state.listQuery.city = city
+    state.listQuery = Object.assign({}, state.listQuery)
+  },
+  SET_PROVINCE_CITY: (state, city) => {
+    state.listQuery.city = city
+    state.listQuery.province = city
+    state.listQuery = Object.assign({}, state.listQuery)
+  },
+  RESET_LISTQUERY: (state) => {
+    state.listQuery = {
+      months: state.listQuery.months
+    }
+    state.listQuery = Object.assign({}, state.listQuery)
   }
 }
 
@@ -157,6 +184,47 @@ const actions = {
           reject(error)
         })
       }
+    })
+  },
+  setMonths({ commit }, count) {
+    return new Promise((resolve, reject) => {
+      if (count) {
+        commit('SET_MONTHS', count)
+        resolve()
+      } else {
+        resolve()
+      }
+    })
+  },
+  setProvince({ commit }, count) {
+    return new Promise((resolve, reject) => {
+      commit('SET_PROVINCE', count)
+      resolve()
+    })
+  },
+  setCity({ commit }, count) {
+    return new Promise((resolve, reject) => {
+      commit('SET_CITY', count)
+      resolve()
+    })
+  },
+  setProvinceCity({ commit }, count) {
+    return new Promise((resolve, reject) => {
+      commit('SET_PROVINCE_CITY', count)
+      resolve()
+    })
+  },
+  setmonthstest({ commit }, count) {
+    return new Promise((resolve, reject) => {
+      commit('SET_MONTHS1', count)
+      resolve()
+    })
+  },
+  // 重置listQuery
+  resetListQuery({ commit }) {
+    return new Promise((resolve, reject) => {
+      commit('RESET_LISTQUERY')
+      resolve()
     })
   }
 

@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-15 11:02:26
  * @LastEditors: anan
- * @LastEditTime: 2019-11-07 17:35:33
+ * @LastEditTime: 2019-12-06 15:39:05
  -->
 <template>
   <div ref="pieEcharts" class="pie-echarts" style="width: 100%;height: 100%;" />
@@ -33,13 +33,11 @@ export default {
   },
   watch: {
     propsData(newValue, oldValue) {
-      console.log(1)
-
       this.drawLine()
     }
   },
   mounted() {
-    this.drawLine()
+    // this.drawLine()
   },
   methods: {
     drawLine() {
