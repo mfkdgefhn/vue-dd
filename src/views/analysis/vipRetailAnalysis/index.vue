@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-15 10:23:32
  * @LastEditors: anan
- * @LastEditTime: 2019-12-07 15:25:16
+ * @LastEditTime: 2019-12-07 17:07:37
  -->
 <template>
   <div class="retail-analysis">
@@ -138,7 +138,7 @@ export default {
         '<div style="font-weight:900;">金额：</div>' +
         '<div style="font-size:14px;line-height:20px;">全部会员购买金额</div>' +
         '<div style="font-weight:900;">周期：</div>' +
-        '<div style="font-size:14px;font-weight:500;line-height:20px;">会员购买周期，该图时间段为1年内(当天往前365天内)有购买过的总会员数所购买的时间周期(该饼图与查询参数无关)</div>'
+        '<div style="font-size:14px;font-weight:500;line-height:20px;">会员购买周期，该图时间段为1年内(当天往前365天内)有购买过的总会员，两次购买的最短时间(该饼图与查询参数无关)</div>'
     }
   },
   watch: {
