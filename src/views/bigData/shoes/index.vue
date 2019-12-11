@@ -3,90 +3,64 @@
  * @Author: anan
  * @Date: 2019-09-27 17:16:04
  * @LastEditors: anan
- * @LastEditTime: 2019-12-07 11:52:47
+ * @LastEditTime: 2019-12-10 17:55:36
  -->
 <template>
   <div class="data-analysis">
-    <!-- <el-card shadow="hover" class="crad">
-      <search />
-    </el-card>-->
-
-    <el-row :gutter="10">
+    <el-row :gutter="10" style="height:70%;">
       <!---->
       <el-col :span="10" class="echarts-row-col" style="height:100%">
-        <el-col :style="'height:'+(screenHeight*0.66*0.40)+'px;'">
-          <el-card :body-style="bodyStyle1" shadow="hover" style="height:100%;">
-            <span class="card-span">店铺排名TOP20</span>
-            <el-tooltip class="tips" effect="light" placement="bottom">
-              <div slot="content" v-html="tips1" />
-              <i class="el-icon-chat-dot-square" />
-            </el-tooltip>
-            <div>
-              <span class="table-header-index">序号</span>
-              <span class="table-header-name">店名</span>
-              <span class="table-header-totAmtActual">销售额</span>
-              <span class="table-header-qty">数量</span>
-            </div>
-            <vue-seamless-scroll
-              :class-option="classOption"
-              :data="storeRankingM"
-              class="seamless-warp"
-            >
-              <ul class="item">
-                <li v-for="item in storeRankingM" :key="item.index">
-                  <span class="index" v-text="item.rns" />
-                  <span class="name" v-text="item.name" />
-                  <span class="totAmtActual" v-text="item.totAmtActual" />
-                  <span class="qty" v-text="item.qty" />
-                </li>
-              </ul>
-            </vue-seamless-scroll>
-          </el-card>
-          <!-- <el-card :body-style="bodyStyle1" shadow="hover" style="height:100%;">
-            <vxe-table
-              ref="xTable"
-              border
-              highlight-hover-row
-              highlight-current-row
-              height="300"
-              :data="tableData"
-            >
-              <vxe-table-column
-                v-for="(config, index) in tableColumn"
-                :key="index"
-                v-bind="config"
-              />
-            </vxe-table>
-          </el-card>-->
-          <!-- <el-card :body-style="bodyStyle1" shadow="hover" style="height:100%;width:100%">
-            <vue-seamless-scroll
-              :class-option="classOption"
-              :data="storeRankingM"
-              class="seamless-warp"
-            >
-              <el-table ref="table" :data="storeRankingM" style="width: 100%">
-                <el-table-column prop="rns" label="序号" width="80" />
-                <el-table-column prop="name" label="姓名" />
-              </el-table>
-            </vue-seamless-scroll>
-          </el-card>-->
-        </el-col>
+        <!-- 店铺排名TOP20 -->
+        <el-row style="height:50%;">
+          <el-col style="height:100%">
+            <el-card :body-style="bodyStyle1" shadow="hover" style="height:100%;">
+              <span class="card-span">店铺排名TOP20</span>
+              <el-tooltip class="tips" effect="light" placement="bottom">
+                <div slot="content" v-html="tips1" />
+                <i class="el-icon-chat-dot-square" />
+              </el-tooltip>
+              <div>
+                <span class="table-header-index">序号</span>
+                <span class="table-header-name">店名</span>
+                <span class="table-header-totAmtActual">销售额</span>
+                <span class="table-header-qty">数量</span>
+              </div>
+              <vue-seamless-scroll
+                :class-option="classOption"
+                :data="storeRankingM"
+                class="seamless-warp"
+              >
+                <ul class="item">
+                  <li v-for="item in storeRankingM" :key="item.index">
+                    <span class="index" v-text="item.rns" />
+                    <span class="name" v-text="item.name" />
+                    <span class="totAmtActual" v-text="item.totAmtActual" />
+                    <span class="qty" v-text="item.qty" />
+                  </li>
+                </ul>
+              </vue-seamless-scroll>
+            </el-card>
+          </el-col>
+        </el-row>
+
         <!-- 省份排名 -->
-        <el-col :style="'height:'+(screenHeight*0.66*0.54)+'px;'">
-          <el-card :body-style="bodyStyle" shadow="hover">
-            <bar-echarts1 :screen-height="screenHeight" :province-sale-m="provinceSaleM" />
-          </el-card>
-        </el-col>
+        <el-row style="height:50%;">
+          <el-col style="height:100%;margin-top:5px;">
+            <el-card :body-style="{ height:'100%',padding:'10px' }" shadow="hover">
+              <bar-echarts1
+                :body-style="bodyStyle"
+                :province-sale-m="provinceSaleM"
+                style="height:100%;"
+              />
+            </el-card>
+          </el-col>
+        </el-row>
       </el-col>
 
       <el-col :span="14" class="echarts-row-col" style="height:100%">
-        <el-row :gutter="10" :style="'height:'+(screenHeight*0.66*0.16)+'px;'">
-          <el-col :span="8">
-            <el-card
-              :body-style="bodyStyle"
-              shadow="hover"
-              style="height:100px; text-align: center;"
-            >
+        <el-row :gutter="10" style="height:20%">
+          <el-col :span="8" style="height:100%;padding-bottom:10px;">
+            <el-card :body-style="bodyStyle" shadow="hover" :style="cardRetail">
               <span class="monty">零售额度</span>
               <count-to
                 :start-val="0"
@@ -98,12 +72,8 @@
             </el-card>
           </el-col>
 
-          <el-col :span="8">
-            <el-card
-              :body-style="bodyStyle"
-              shadow="hover"
-              style="height:100px; text-align: center;"
-            >
+          <el-col :span="8" style="height:100%;padding-bottom:10px;">
+            <el-card :body-style="bodyStyle" shadow="hover" :style="cardRetail">
               <span class="monty">会员零售额度</span>
               <count-to
                 :start-val="0"
@@ -115,72 +85,40 @@
             </el-card>
           </el-col>
 
-          <el-col :span="8">
-            <el-card
-              :body-style="bodyStyle"
-              shadow="hover"
-              style="height:100px; text-align: center;"
-            >
+          <el-col :span="8" style="height:100%;padding-bottom:10px;">
+            <el-card :body-style="bodyStyle" shadow="hover" :style="cardRetail">
               <span class="monty">会员占比</span>
               <span class="max">{{ vipSaleRates }} %</span>
             </el-card>
           </el-col>
         </el-row>
+
         <!-- 地图 -->
-        <el-row :gutter="10" :style="'height:'+(screenHeight*0.66*0.78)+'px;'">
+        <el-row :gutter="10" style="height:80%;">
           <el-col :span="24" style="height:100%">
-            <echarts :big-data="bigData" :style="'height:'+(screenHeight*0.66*0.78)+'px;'" />
+            <echarts :big-data="bigData" style="height:100%" />
           </el-col>
         </el-row>
       </el-col>
-
-      <!-- <el-col :span="7" class="echarts-row-col" style="height:100%">
-        <el-col :style="'height:'+(screenHeight*0.66*0.40)+'px;'">
-          <el-card :body-style="bodyStyle" shadow="hover" style="height:100%;">
-            <span>城市销售分布</span>
-          </el-card>
-        </el-col>
-        <el-col :style="'height:'+(screenHeight*0.66*0.54)+'px;'">
-          <el-card :body-style="bodyStyle" shadow="hover" style="height:100%;">
-            <span>销售员业绩TOP10</span>
-            <bar-echarts :screen-height="screenHeight" />
-          </el-card>
-        </el-col>
-      </el-col>-->
     </el-row>
 
-    <el-row :gutter="10" :style="echartsRowBottom">
-      <el-col :span="12">
-        <el-card :body-style="bodyStyle" shadow="hover">
-          <span>销量/数量同比</span>
-          <line-echarts :screen-height="screenHeight" :year-on-year="yearOnYear" />
+    <el-row :gutter="10" style="height:30%;padding-top:10px;">
+      <el-col :span="12" style="height:98%">
+        <el-card :body-style="{ height:'100%',padding:'10px' }" shadow="hover">
+          <line-echarts :year-on-year="yearOnYear" />
         </el-card>
       </el-col>
-      <el-col :span="12">
-        <el-card :body-style="bodyStyle" shadow="hover">
-          <span>会员复购</span>
-          <bar-echarts
-            :screen-height="screenHeight"
-            :vip-repeat-purchase="vipRepeatPurchase"
-            :loading="loading"
-          />
+      <el-col :span="12" style="height:98%">
+        <el-card :body-style="{ height:'100%',padding:'10px' }" shadow="hover">
+          <bar-echarts :vip-repeat-purchase="vipRepeatPurchase" :loading="loading" />
         </el-card>
       </el-col>
     </el-row>
-
-    <!-- <el-dialog title="提示" width="30%">
-      <span>这是一段信息</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button>取 消</el-button>
-        <el-button type="primary">确 定</el-button>
-      </span>
-    </el-dialog>-->
   </div>
 </template>
 
 <script>
 
-// import Search from './search'
 import echarts from './echarts'
 
 import dayjs from 'dayjs'
@@ -199,27 +137,23 @@ export default {
   name: 'DataAnalysis',
   components: {
     echarts,
-    // echartsWordCloud,
     barEcharts,
     barEcharts1,
     lineEcharts,
-    // pieEcharts,
     countTo
   },
   data() {
     return {
       bodyStyle: {
         background: '#242640',
-        border: '1px #242640 solid'
+        border: '1px #242640 solid',
+        padding: '5px'
       },
       bodyStyle1: {
         background: '#242640',
         border: '1px #242640 solid',
         padding: '5px'
       },
-      screenHeight: window.innerHeight,
-      echartsRowTop: 'height: 66%;',
-      echartsRowBottom: 'height: 33%;',
       bigData: [],
       duration: 1000,
       allQuota: 0,
@@ -231,7 +165,8 @@ export default {
       vipRepeatPurchase: [],
       count: 0,
       loading: false,
-      tips1: '<div>店铺排名TOP20 提示</div><div>当月零售额度排名前20位门店</div>'
+      tips1: '<div>店铺排名TOP20 提示</div><div>当月零售额度排名前20位门店</div>',
+      cardRetail: 'height:100%; text-align: center;'
     }
   },
   computed: {
@@ -262,8 +197,8 @@ export default {
   },
   watch: {
     listQuery(val) {
-      console.log('查询条件变化 ', val)
       this.loading = true
+      debugger
       this.getBigData(val)
     },
     count(val) {
@@ -279,7 +214,6 @@ export default {
           duration: 3000,
           type: 'success'
         })
-        console.log(val)
 
         this.count = 0
       }
@@ -289,9 +223,7 @@ export default {
     const that = this
     window.onresize = () => {
       return (() => {
-        that.screenHeight = window.innerHeight
-        that.echartsRowTop = 'height:' + (that.screenHeight * 0.66) + 'px;'
-        that.echartsRowBottom = 'height:' + (that.screenHeight * 0.33) + 'px;'
+        that.cardRetail = 'height:100%; text-align: center;line-height:' + parseInt(window.innerHeight / 25) + 'px;'
         that.timer = true
         setTimeout(() => {
           that.timer = false
@@ -400,22 +332,25 @@ export default {
   padding-left: 0.3125rem;
   padding-right: 0.3125rem;
 }
+/*
 .el-col {
   margin-top: 0.3125rem;
 }
+ */
 .el-card {
   border: 0px;
   background: #242640;
   color: #cccccc;
+  height: 100%;
 }
 .monty {
   display: block;
-  margin: 5px 5px;
-  font-size: 1rem;
+  margin: 0.3125rem 0.3125rem;
+  font-size: 1.2rem;
   color: #cccccc;
 }
 .monty:hover {
-  font-size: 1.125rem;
+  font-size: 1.4rem;
   color: #0095d9;
 }
 .el-card .max {
@@ -445,14 +380,15 @@ ul li span {
   color: #ccc;
 }
 .card-span {
-  line-height: 40px;
+  line-height: 2.5rem;
   margin: 0.625rem;
+  font-size: 1rem;
 }
 .index,
 .name,
 .totAmtActual,
 .qty {
-  line-height: 40px;
+  line-height: 2.5rem;
   display: inline-block;
   text-align: center;
 }
@@ -464,6 +400,7 @@ ul li span {
   text-align: center;
   line-height: 1.875rem;
   color: #ccc;
+  font-size: 1rem;
 }
 .table-header-index {
   margin-left: 10px;

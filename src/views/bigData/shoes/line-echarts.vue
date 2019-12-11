@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-11 14:53:41
  * @LastEditors: anan
- * @LastEditTime: 2019-11-26 16:26:54
+ * @LastEditTime: 2019-12-10 17:23:13
  -->
 <template>
   <div class="line-echarts">
@@ -14,10 +14,6 @@
 <script>
 export default {
   props: {
-    screenHeight: {
-      type: Number,
-      default: 0
-    },
     yearOnYear: {
       type: Array,
       default: () => []
@@ -25,7 +21,7 @@ export default {
   },
   data() {
     return {
-      vStyle: 'width: auto;height: 200px',
+      vStyle: 'width: auto;height: 100%;',
       echartsData: {
         legend: [],
         xAxis: [],
@@ -37,9 +33,6 @@ export default {
     }
   },
   watch: {
-    screenHeight(val) {
-      this.vStyle = 'width: auto;height: ' + (val * 0.2) + 'px'
-    },
     yearOnYear(val) {
       if (val.length > 0) {
         this.echartsData.legend = []
@@ -60,7 +53,6 @@ export default {
             },
             data: arr.tot
           })
-
           const r = Math.floor(Math.random() * 255)
           const g = Math.floor(Math.random() * 255)
           const b = Math.floor(Math.random() * 255)
@@ -85,6 +77,12 @@ export default {
     drawLine() {
       const myChart = this.$echarts.init(this.$refs.barEcharts)
       var lineOption = {
+        title: {
+          text: '销量/数量同比',
+          textStyle: {
+            color: '#00B4FF'
+          }
+        },
         // color: this.echartsData.color, // ['#3398DB', '#895145'],
         color: ['#3398DB', '#895145'],
         tooltip: {

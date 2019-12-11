@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-11 13:20:03
  * @LastEditors: anan
- * @LastEditTime: 2019-11-26 13:48:28
+ * @LastEditTime: 2019-12-10 17:27:28
  -->
 <template>
   <div class="bar-echarts">
@@ -14,10 +14,6 @@
 <script>
 export default {
   props: {
-    screenHeight: {
-      type: Number,
-      default: 0
-    },
     vipRepeatPurchase: {
       type: Array,
       default: () => []
@@ -29,7 +25,7 @@ export default {
   },
   data() {
     return {
-      vStyle: 'width: auto;height: 200px',
+      vStyle: 'width: auto;height: 100%',
       data: {
         legend: [],
         series: []
@@ -112,6 +108,12 @@ export default {
       })
 
       var option = {
+        title: {
+          text: '会员复购',
+          textStyle: {
+            color: '#00B4FF'
+          }
+        },
         color: ['#C33531', '#EFE42A', '#64BD3D', '#EE9201', '#29AAE3', '#B74AE5', '#0AAF9F', '#E89589', '#16A085', '#4A235A', '#C39BD3 ', '#F9E79F', '#BA4A00', '#ECF0F1', '#616A6B', '#EAF2F8', '#4A235A', '#3498DB', '#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'],
         tooltip: {
           trigger: 'axis',

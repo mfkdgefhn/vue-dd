@@ -3,21 +3,22 @@
  * @Author: anan
  * @Date: 2019-10-11 13:20:03
  * @LastEditors: anan
- * @LastEditTime: 2019-12-07 13:53:36
+ * @LastEditTime: 2019-12-10 17:27:41
  -->
 <template>
-  <div class="bar-echarts">
+  <div class="bar-echarts1">
     <div ref="barEcharts" :style="vStyle" />
-    <prompt-box :dialog-visible="dialogVisible" :data="data" @handleClose="handleClose" />
+    <!-- <prompt-box :dialog-visible="dialogVisible" :data="data" @handleClose="handleClose" /> -->
   </div>
 </template>
 
 <script>
-import promptBox from '@/components/tips/prompt-box'
+// import promptBox from '@/components/tips/prompt-box'
 
 export default {
+
+  // promptBox
   components: {
-    promptBox
   },
   props: {
     screenHeight: {
@@ -31,7 +32,7 @@ export default {
   },
   data() {
     return {
-      vStyle: 'width: 100%;height: 300px',
+      vStyle: 'width: auto;height: 100%',
       barDate: {},
       directlyCity: ['北京', '上海', '重庆', '天津'],
       dialogVisible: false,
@@ -40,9 +41,6 @@ export default {
     }
   },
   watch: {
-    screenHeight(val) {
-      this.vStyle = 'width: 100%;height: ' + (val * 0.3) + 'px'
-    },
     provinceSaleM(val) {
       if (val.length > 0) {
         const xAxis = []
@@ -234,4 +232,7 @@ export default {
 </script>
 
 <style scoped>
+.bar-echarts1 {
+  height: 100%;
+}
 </style>

@@ -1,92 +1,130 @@
 <!--
  * @Description: 说明
  * @Author: anan
- * @Date: 2019-10-15 10:23:32
+ * @Date: 2019-09-27 17:16:04
  * @LastEditors: anan
- * @LastEditTime: 2019-11-18 13:12:32
+ * @LastEditTime: 2019-12-09 09:21:42
  -->
 <template>
-  <div class="retail-analysis">
-    <!-- 展示内容 -->
-    <div class="content-div">
-      <!-- 第一行 -->
-      <el-row :gutter="10" class="one-row">
-        <el-col :span="8" style="height:100%;">
-          <el-row style="height:50%;">
-            <el-card shadow="hover" style="height:100%;">
-              <div class="suspension">店铺排名TOP20</div>
-              <echarts-pie :data="data" />
-            </el-card>
-          </el-row>
-          <el-row style="height:50%;">
-            <el-card shadow="hover" style="height:100%;">
-              <div class="suspension">店铺排名TOP20</div>
-              <echarts-pie :data="data" />
-            </el-card>
-          </el-row>
-        </el-col>
+  <div class="data-analysis">
+    <!-- <el-card shadow="hover" class="crad">
+      <search />
+    </el-card>-->
 
-        <el-col :span="16" style="height:100%;">
-          <el-row style="height:20%;" :gutter="10">
-            <el-col :span="8" style="height:100%;">
-              <el-card shadow="hover" style="height:100%;">
-                <span>在职人数</span>
-                <count-to
-                  :start-val="startVal"
-                  :end-val="parseInt(humanCount.zzzsl)"
-                  :duration="duration"
-                  class="max"
-                />
-              </el-card>
-            </el-col>
-            <el-col :span="8" style="height:100%;">
-              <el-card shadow="hover" style="height:100%;">
-                <span>入职人数</span>
-                <count-to
-                  :start-val="startVal"
-                  :end-val="parseInt(humanCount.rzsl)"
-                  :duration="duration"
-                  class="max"
-                />
-              </el-card>
-            </el-col>
-            <el-col :span="8" style="height:100%;">
-              <el-card shadow="hover" style="height:100%;">
-                <span>离职人数</span>
-                <count-to
-                  :start-val="startVal"
-                  :end-val="parseInt(humanCount.lzsl)"
-                  :duration="duration"
-                  class="max"
-                />
-              </el-card>
-            </el-col>
-          </el-row>
-
-          <!-- 地图 -->
-          <el-row :gutter="10" :style="'height:'+(screenHeight*0.66*0.78)+'px;'">
-            <el-col :span="24" style="height:100%">
-              <echarts :big-data="bigData" :style="'height:'+(screenHeight*0.66*0.78)+'px;'" />
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
-
-      <el-row :gutter="10" class="two-row">
-        <el-col :span="12">
-          <el-card :body-style="bodyStyle" shadow="hover">
-            <span>TOP3城市销售趋势</span>
-            <line-echarts :screen-height="screenHeight" />
+    <el-row :gutter="10">
+      <!---->
+      <el-col :span="10" class="echarts-row-col" style="height:100%">
+        <el-col :style="'height:'+(screenHeight*0.66*0.40)+'px;'">
+          <el-card :body-style="bodyStyle1" shadow="hover" style="height:100%;">
+            <span class="card-span">店铺排名TOP20</span>
+            <el-tooltip class="tips" effect="light" placement="bottom">
+              <div slot="content" v-html="tips1" />
+              <i class="el-icon-chat-dot-square" />
+            </el-tooltip>
+            <div>
+              <span class="table-header-index">序号</span>
+              <span class="table-header-name">店名</span>
+              <span class="table-header-totAmtActual">销售额</span>
+              <span class="table-header-qty">数量</span>
+            </div>
+            <vue-seamless-scroll
+              :class-option="classOption"
+              :data="storeRankingM"
+              class="seamless-warp"
+            >
+              <ul class="item">
+                <li v-for="item in storeRankingM" :key="item.index">
+                  <span class="index" v-text="item.rns" />
+                  <span class="name" v-text="item.name" />
+                  <span class="totAmtActual" v-text="item.totAmtActual" />
+                  <span class="qty" v-text="item.qty" />
+                </li>
+              </ul>
+            </vue-seamless-scroll>
           </el-card>
         </el-col>
-        <el-col :span="12">
+        <!-- 省份排名 -->
+        <el-col :style="'height:'+(screenHeight*0.66*0.54)+'px;'">
           <el-card :body-style="bodyStyle" shadow="hover">
-            <span>各规模客户状态数</span>
-            <pie-echarts :screen-height="screenHeight" />
+            <bar-echarts1 :screen-height="screenHeight" :province-sale-m="provinceSaleM" />
           </el-card>
         </el-col>
-      </el-row>
-    </div>
+      </el-col>
+
+      <el-col :span="14" class="echarts-row-col" style="height:100%">
+        <el-row :gutter="10" :style="'height:'+(screenHeight*0.66*0.16)+'px;'">
+          <el-col :span="8">
+            <el-card
+              :body-style="bodyStyle"
+              shadow="hover"
+              style="height:100px; text-align: center;"
+            >
+              <span class="monty">零售额度</span>
+              <count-to
+                :start-val="0"
+                :end-val="allQuotas"
+                :duration="duration"
+                class="max"
+                suffix="万"
+              />
+            </el-card>
+          </el-col>
+
+          <el-col :span="8">
+            <el-card
+              :body-style="bodyStyle"
+              shadow="hover"
+              style="height:100px; text-align: center;"
+            >
+              <span class="monty">会员零售额度</span>
+              <count-to
+                :start-val="0"
+                :end-val="vipQuotas"
+                :duration="duration"
+                class="max"
+                suffix="万"
+              />
+            </el-card>
+          </el-col>
+
+          <el-col :span="8">
+            <el-card
+              :body-style="bodyStyle"
+              shadow="hover"
+              style="height:100px; text-align: center;"
+            >
+              <span class="monty">会员占比</span>
+              <span class="max">{{ vipSaleRates }} %</span>
+            </el-card>
+          </el-col>
+        </el-row>
+        <!-- 地图 -->
+        <el-row :gutter="10" :style="'height:'+(screenHeight*0.66*0.78)+'px;'">
+          <el-col :span="24" style="height:100%">
+            <echarts :big-data="bigData" :style="'height:'+(screenHeight*0.66*0.78)+'px;'" />
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
+
+    <el-row :gutter="10" :style="echartsRowBottom">
+      <el-col :span="12">
+        <el-card :body-style="bodyStyle" shadow="hover">
+          <span>销量/数量同比</span>
+          <line-echarts :screen-height="screenHeight" :year-on-year="yearOnYear" />
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card :body-style="bodyStyle" shadow="hover">
+          <span>会员复购</span>
+          <bar-echarts
+            :screen-height="screenHeight"
+            :vip-repeat-purchase="vipRepeatPurchase"
+            :loading="loading"
+          />
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -95,25 +133,27 @@
 // import Search from './search'
 import echarts from './echarts'
 
+import dayjs from 'dayjs'
+
 // import echartsWordCloud from './echarts-word-cloud' // 该组件有问题，明日查看
-// import barEcharts from './bar-echarts'
-// import barEcharts1 from './bar-echarts1'
+import barEcharts from './bar-echarts'
+import barEcharts1 from './bar-echarts1'
 import lineEcharts from './line-echarts'
-import pieEcharts from './pie-echarts'
+// import pieEcharts from './pie-echarts'
 
 import countTo from 'vue-count-to'
 
-import { getBigData, getKBlsedM, getStoreRankingM } from '@/api/gmqApi'
+import { getBigData, getKBlsedM, getStoreRankingM, getProvinceSaleM, getYearOnYear, getVipRepeatPurchase } from '@/api/gmqApi'
 
 export default {
-
   name: 'DataAnalysis',
   components: {
     echarts,
     // echartsWordCloud,
-    // barEcharts,
+    barEcharts,
+    barEcharts1,
     lineEcharts,
-    pieEcharts,
+    // pieEcharts,
     countTo
   },
   data() {
@@ -130,13 +170,18 @@ export default {
       screenHeight: window.innerHeight,
       echartsRowTop: 'height: 66%;',
       echartsRowBottom: 'height: 33%;',
-      listQuery: {},
       bigData: [],
-      duration: 2000,
+      duration: 1000,
       allQuota: 0,
       vipQuota: 0,
       vipSaleRate: 0,
-      storeRankingM: []
+      storeRankingM: [],
+      provinceSaleM: [],
+      yearOnYear: [],
+      vipRepeatPurchase: [],
+      count: 0,
+      loading: false,
+      tips1: '<div>店铺排名TOP20 提示</div><div>当月零售额度排名前20位门店</div>'
     }
   },
   computed: {
@@ -148,6 +193,9 @@ export default {
     },
     vipSaleRates() {
       return Math.round(this.vipSaleRate * 10000) / 100
+    },
+    listQuery() {
+      return this.$store.getters.listQuery
     },
     classOption() {
       return {
@@ -162,6 +210,31 @@ export default {
       }
     }
   },
+  watch: {
+    listQuery(val) {
+      console.log('查询条件变化 ', val)
+      this.loading = true
+      this.getBigData(val)
+    },
+    count(val) {
+      if (val === 6) {
+        const params = '' +
+          (this.listQuery.months ? '月份:' + this.listQuery.months : '') +
+          (this.listQuery.province ? ', 省份:' + this.listQuery.province : '') +
+          (this.listQuery.city ? ', 城市:' + this.listQuery.city : '')
+
+        this.$message({
+          message: params + ',  加载完成!!!',
+          center: true,
+          duration: 3000,
+          type: 'success'
+        })
+        console.log(val)
+
+        this.count = 0
+      }
+    }
+  },
   mounted() {
     const that = this
     window.onresize = () => {
@@ -169,23 +242,25 @@ export default {
         that.screenHeight = window.innerHeight
         that.echartsRowTop = 'height:' + (that.screenHeight * 0.66) + 'px;'
         that.echartsRowBottom = 'height:' + (that.screenHeight * 0.33) + 'px;'
-        // console.log(that.echartsRowTop)
         that.timer = true
         setTimeout(() => {
           that.timer = false
         }, 400)
       })()
     }
+    this.$store.dispatch('baseApi/setMonths', this.getMonths(0))
+
     // 获取看板数据
-    this.getBigData()
+    this.getBigData(this.listQuery)
     // 获取基础数据(如：年份....)
-    this.getBaseDate()
+    this.getBaseDate(this.listQuery)
   },
   methods: {
     getBigData(params) {
       // 地图数据
       getBigData(params).then(response => {
         this.bigData = response
+        ++this.count
       })
       // 看板
       getKBlsedM(params).then(response => {
@@ -198,17 +273,70 @@ export default {
           }
         })
         this.vipSaleRate = this.allQuota ? this.vipQuota / this.allQuota : 0
+        ++this.count
       })
+      // 获取店仓排名
       getStoreRankingM(params).then(response => {
         this.storeRankingM = response.result
+        ++this.count
+      })
+      // 获取省份排行
+      getProvinceSaleM(params).then(response => {
+        // console.log(response)
+        this.provinceSaleM = response
+        ++this.count
+      })
+      // 获取销量、数量同比
+      getYearOnYear(params).then(response => {
+        const arr = []
+        response.forEach(element => {
+          if (arr.length === 0) {
+            arr.push({
+              'year': element.year,
+              'billdate': [element.billdate],
+              'tot': [element.totAmtActual],
+              'monthday': [element.monthday]
+            })
+          } else {
+            let isTrue = -1
+            arr.forEach((array, index) => {
+              if (element.year === array.year) {
+                isTrue = index
+                arr[index].billdate.push(element.billdate)
+                arr[index].tot.push(element.totAmtActual)
+                arr[index].monthday.push(element.monthday)
+              }
+            })
+            if (isTrue === -1) {
+              arr.push({
+                'year': element.year,
+                'billdate': [element.billdate],
+                'tot': [element.totAmtActual],
+                'monthday': [element.monthday]
+              })
+            }
+          }
+        })
+        this.yearOnYear = arr
+        ++this.count
+      })
+      // 获取会员复购
+      getVipRepeatPurchase(params).then(response => {
+        // console.log(response)
+        this.loading = false
+        this.vipRepeatPurchase = response
+        ++this.count
       })
     },
     // 获取基础数据
-    getBaseDate() {
+    getBaseDate(params) {
       this.$store.dispatch('baseApi/getCustomer').then(() => { })
       this.$store.dispatch('baseApi/getStores').then(() => { })
       this.$store.dispatch('baseApi/getYear').then(() => { })
       this.$store.dispatch('baseApi/getSeason').then(() => { })
+    },
+    getMonths(count) {
+      return dayjs().add(count, 'month').format('YYYYMM')
     }
   }
 }
@@ -218,7 +346,9 @@ export default {
 .data-analysis {
   height: 100%;
   background: #191b2b;
-  margin: 0.3125rem, 0.3125rem;
+  padding-top: 0.3125rem;
+  padding-left: 0.3125rem;
+  padding-right: 0.3125rem;
 }
 .el-col {
   margin-top: 0.3125rem;
@@ -240,18 +370,74 @@ export default {
 }
 .el-card .max {
   font-size: 1.8rem;
+  font-weight: 900;
 }
 .el-card .max:hover {
   font-size: 2rem;
   color: #0095d9;
 }
 .seamless-warp {
-  height: 12.5rem;
+  height: 100%;
   overflow: hidden;
 }
 .item {
   list-style: none;
   padding-inline-start: 0.625rem;
   margin: 0;
+}
+span {
+  color: #00b4ff;
+}
+ul li:hover {
+  background: #46485a;
+}
+ul li span {
+  color: #ccc;
+}
+.card-span {
+  line-height: 40px;
+  margin: 0.625rem;
+}
+.index,
+.name,
+.totAmtActual,
+.qty {
+  line-height: 40px;
+  display: inline-block;
+  text-align: center;
+}
+.table-header-index,
+.table-header-name,
+.table-header-totAmtActual,
+.table-header-qty {
+  display: inline-block;
+  text-align: center;
+  line-height: 1.875rem;
+  color: #ccc;
+}
+.table-header-index {
+  margin-left: 10px;
+}
+.index,
+.table-header-index {
+  width: 10%;
+}
+.name,
+.table-header-name {
+  width: 40%;
+}
+.totAmtActual,
+.table-header-totAmtActual {
+  width: 20%;
+}
+.qty,
+.table-header-qty {
+  width: 20%;
+}
+.tips {
+  float: right;
+  line-height: 40px;
+  margin-right: 10px;
+  font-size: 20px;
 }
 </style>
