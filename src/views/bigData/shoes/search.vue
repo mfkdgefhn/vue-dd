@@ -92,7 +92,6 @@ export default {
     // 搜索栏回车事件
     handleFilter() {
       console.log('回车搜索事件')
-      console.log(this.listQuery)
     },
     // 刷新事件
     refresh() {

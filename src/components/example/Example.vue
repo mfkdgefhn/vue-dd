@@ -159,9 +159,6 @@ export default {
     },
     // 搜索栏回车事件
     handleFilter() {
-      console.log('回车搜索事件')
-      console.log(this.listQuery)
-
       this.$emit('getAnalysis', this.listQuery)
     },
     // 刷新事件
@@ -190,10 +187,8 @@ export default {
       }
     },
     handleSelect(item) {
-      console.log(item)
     },
     showMessage() {
-      console.log('显示信息')
       this.dialogVisible = true
     },
     handleClose(done) {

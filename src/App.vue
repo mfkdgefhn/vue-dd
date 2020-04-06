@@ -7,7 +7,7 @@
  -->
 
 <template>
-  <div id="app" style="height:100%;">
+  <div id="app">
     <router-view />
   </div>
 </template>
@@ -51,6 +51,6 @@ export default {
 
 <style>
 #app {
-  background-color: #191b2b;
+  background-color: #eff5fe;
 }
 </style>

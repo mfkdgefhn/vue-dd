@@ -427,7 +427,6 @@ export default {
 
       if (this.listQuery.city) { // 全市
         this.rendering(new_value, 'district')
-        console.log(cityMap)
         var cityName = ''
         // this.listQuery.city从别的组件点击得到的是两个字的城市，在cityName中是找不到的，只能先把city找到先
         for (const key in cityMap) {

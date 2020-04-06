@@ -26,7 +26,6 @@ const fileParams = argv.filter((val, index) => {
 const folderName = fileParams[0] ? fileParams[0] : 'folderName' // 文件夹名
 const componentName = fileParams[1] ? fileParams[1] : 'componentName' // 生成的文件名
 const ByComponentName = fileParams[2] ? fileParams[2] : 'Example' // 被生成的组件名
-console.log(componentName, folderName)
 
 const encoding = 'utf8'
 // 复制一份example.vue到page文件夹的folderName文件夹下，重命名为componentName

@@ -11,7 +11,7 @@
     <!--地图模块-->
     <label>
       地址：
-      <input v-model="keyword">
+      <input v-model="keyword" />
     </label>
     <p />
     <!-- getPoint方法，给地图加点击事件，点击地图获取所需要的信息，-->
@@ -112,15 +112,6 @@ export default {
       geocoder.getLocation(e.point, rs => {
         this.add.site = rs.address
         // 地址描述(string)=
-        // console.log(rs.address);    //这里打印可以看到里面的详细地址信息，可以根据需求选择想要的
-        // console.log(rs.addressComponents);//结构化的地址描述(object)
-        // console.log(rs.addressComponents.province); //省
-        // console.log(rs.addressComponents.city); //城市
-        // console.log(rs.addressComponents.district); //区县
-        // console.log(rs.addressComponents.street); //街道
-        // console.log(rs.addressComponents.streetNumber); //门牌号
-        // console.log(rs.surroundingPois); //附近的POI点(array)
-        // console.log(rs.business); //商圈字段，代表此点所属的商圈(string)
       })
     },
     infoWindowClose() {

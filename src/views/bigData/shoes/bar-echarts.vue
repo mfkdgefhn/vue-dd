@@ -2,8 +2,8 @@
  * @Description: 说明
  * @Author: anan
  * @Date: 2019-10-11 13:20:03
- * @LastEditors: anan
- * @LastEditTime: 2019-12-10 17:27:28
+ * @LastEditors  : anan
+ * @LastEditTime : 2020-01-12 14:06:27
  -->
 <template>
   <div class="bar-echarts">
@@ -65,7 +65,6 @@ export default {
         } else {
           this.rendering(val, 'province')
         }
-        // console.log(this.data)
         this.drawLine()
       }
     }

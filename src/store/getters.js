@@ -16,6 +16,10 @@ const getters = {
   year: state => state.baseApi.year,
   season: state => state.baseApi.season,
   months: state => state.baseApi.months,
-  listQuery: state => state.baseApi.listQuery
+  listQuery: state => state.baseApi.listQuery,
+  top30: state => state.table.top30,
+  storeDayAvg: state => state.table.storeDayAvg,
+  retailShare: state => state.table.retailShare,
+  inSaleStorage: state => state.table.inSaleStorage
 }
 export default getters

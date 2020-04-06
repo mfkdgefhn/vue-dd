@@ -32,7 +32,6 @@ export default {
       }
     },
     rowClassName({ row, rowIndex }) {
-      console.log(row, rowIndex)
       return 'row-style'
     }
   }

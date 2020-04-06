@@ -118,7 +118,6 @@ export default {
             axisLabel: {
               formatter: (value, index) => {
                 const texts = Math.round(value / 10000)
-                // console.log(value, index)
                 return texts + '万'
               }
             },

@@ -42,7 +42,6 @@ export default {
         series: []
       }
       if (val.length > 0) {
-        console.log(this.$store.getters.listQuery)
         if (this.$store.getters.listQuery.city) {
           this.rendering(val, 'district')
         } else if (this.$store.getters.listQuery.province) {
@@ -50,7 +49,6 @@ export default {
         } else {
           this.rendering(val, 'province')
         }
-        // console.log(this.data)
         this.drawLine()
       }
     }

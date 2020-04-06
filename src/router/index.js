@@ -2,8 +2,8 @@
  * @Description: 路由js
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
- * @LastEditors: anan
- * @LastEditTime: 2019-12-11 10:54:24
+ * @LastEditors  : anan
+ * @LastEditTime : 2020-01-12 15:08:13
  */
 
 import Vue from 'vue'
@@ -50,7 +50,7 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-  /* -------------------人力独立使用------------------------  */
+  /* -------------------人力独立使用 begin ------------------------*/
   // {
   //   path: '/',
   //   component: Layout,
@@ -66,13 +66,13 @@ export const constantRoutes = [
   //     meta: { title: '人力(易天)', icon: 'shoes' }
   //   }]
   // },
-  /* -------------------------------------------  */
+  /* --------------------人力独立使用 end -----------------------  */
 
   {
     path: '/',
     component: Layout,
-    redirect: '/dataAnalysis',
-    // redirect: '/human',
+    redirect: '/sales',
+    // redirect: '/dataAnalysis',
     name: '数据看板',
     meta: {
       title: '数据分析', icon: 'shoes'
@@ -110,63 +110,117 @@ export const constantRoutes = [
       meta: { title: '会员购买分析', icon: 'shoes' }
     }]
   },
+
   {
-    path: '/human',
+    path: '/vip',
     component: Layout,
-    redirect: '/human/index',
+    redirect: '/vip/index',
     children: [{
       path: 'index',
-      name: '人力(易天)',
-      component: () => import('@/views/human/index'),
-      meta: { title: '人力(易天)', icon: 'shoes' }
+      name: '会员挖掘',
+      component: () => import('@/views/vip/index'),
+      meta: { title: '会员挖掘', icon: 'shoes' }
     }]
   },
 
-  /* -------------------------------------------  */
   {
-    path: '/baidu',
+    path: '/sales',
     component: Layout,
-    redirect: '/baidu/index',
-    children: [{
-      path: 'index',
-      name: '百度',
-      component: () => import('@/views/baidu/index'),
-      meta: { title: '百度', icon: 'shoes' }
-    }]
+    name: '销售分析',
+    meta: {
+      title: '销售分析', icon: 'shoes'
+    },
+    redirect: '/sales/layoutStructure',
+    children: [
+      {
+        path: 'top30',
+        name: '全国日销TOP30',
+        component: () => import('@/views/sales/top30/index'),
+        meta: { title: '全国日销TOP30', icon: 'shoes' }
+      }, {
+        path: 'storeDayAvg',
+        name: '系统客户日均单店',
+        component: () => import('@/views/sales/storeDayAvg/index'),
+        meta: { title: '系统客户日均单店', icon: 'shoes' }
+      }, {
+        path: 'retailShare',
+        name: '零售占比',
+        component: () => import('@/views/sales/retailShare/index'),
+        meta: { title: '零售占比', icon: 'shoes' }
+      }, {
+        path: 'inSaleStorage',
+        name: '进销存',
+        component: () => import('@/views/sales/inSaleStorage/index'),
+        meta: { title: '进销存', icon: 'shoes' }
+      }, {
+        path: 'layoutStructure',
+        name: '版面结构',
+        component: () => import('@/views/sales/layoutStructure/index'),
+        meta: { title: '版面结构', icon: 'shoes' }
+      }
+    ]
   },
-  {
-    path: '/gaode',
-    component: Layout,
-    redirect: '/gaode/index',
-    children: [{
-      path: 'index',
-      name: '高德',
-      component: () => import('@/views/gaode/index'),
-      meta: { title: '高德', icon: 'shoes' }
-    }]
-  },
-  {
-    path: '/map',
-    component: Layout,
-    redirect: '/map/china',
-    children: [{
-      path: 'china',
-      name: '看板',
-      component: () => import('@/views/map/index'),
-      meta: { title: '看板', icon: 'shoes' }
-    }]
-  },
-  {
-    path: '/test',
-    component: Layout,
-    redirect: '/test/index',
-    children: [{
-      path: 'test',
-      name: '测试',
-      component: () => import('@/views/test/index'),
-      meta: { title: '测试', icon: 'shoes' }
-    }]
-  },
+
+  /* -----------------测试时注释掉-----begin---------------------  */
+
+  // {
+  //   path: '/human',
+  //   component: Layout,
+  //   redirect: '/human/index',
+  //   children: [{
+  //     path: 'index',
+  //     name: '人力(易天)',
+  //     component: () => import('@/views/human/index'),
+  //     meta: { title: '人力(易天)', icon: 'shoes' }
+  //   }]
+  // },
+
+  // {
+  //   path: '/baidu',
+  //   component: Layout,
+  //   redirect: '/baidu/index',
+  //   children: [{
+  //     path: 'index',
+  //     name: '百度',
+  //     component: () => import('@/views/baidu/index'),
+  //     meta: { title: '百度', icon: 'shoes' }
+  //   }]
+  // },
+  // {
+  //   path: '/gaode',
+  //   component: Layout,
+  //   redirect: '/gaode/index',
+  //   children: [{
+  //     path: 'index',
+  //     name: '高德',
+  //     component: () => import('@/views/gaode/index'),
+  //     meta: { title: '高德', icon: 'shoes' }
+  //   }]
+  // },
+  // {
+  //   path: '/map',
+  //   component: Layout,
+  //   redirect: '/map/china',
+  //   children: [{
+  //     path: 'china',
+  //     name: '看板',
+  //     component: () => import('@/views/map/index'),
+  //     meta: { title: '看板', icon: 'shoes' }
+  //   }]
+  // },
+  // {
+  //   path: '/test',
+  //   component: Layout,
+  //   redirect: '/test/index',
+  //   children: [{
+  //     path: 'test',
+  //     name: '测试',
+  //     component: () => import('@/views/test/index'),
+  //     meta: { title: '测试', icon: 'shoes' }
+  //   }]
+  // },
+
+  /* -----------------测试时注释掉-----end---------------------  */
 
   /* -------------------------------------------  */
   // {
@@ -272,6 +326,25 @@ export const constantRoutes = [
   //     }
   //   ]
   // },
+
+  {
+    path: '/table',
+    component: Layout,
+    redirect: '/table/complex-table',
+    name: 'Table',
+    meta: {
+      title: 'Table',
+      icon: 'table'
+    },
+    children: [
+      {
+        path: 'complex-table',
+        component: () => import('@/views/table/complex-table'),
+        name: 'ComplexTable',
+        meta: { title: 'Complex Table' }
+      }
+    ]
+  },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

@@ -2,8 +2,8 @@
  * @Description: 说明
  * @Author: anan
  * @Date: 2019-10-15 10:23:32
- * @LastEditors: anan
- * @LastEditTime: 2019-12-07 15:24:30
+ * @LastEditors  : anan
+ * @LastEditTime : 2020-01-12 14:50:07
  -->
 <template>
   <div class="retail-analysis">
@@ -15,17 +15,19 @@
     <!-- 展示内容 -->
     <div v-if="loadingCon" class="el-row-class">
       <!-- 饼图开始 -->
-      <el-row :gutter="10" style="height:40%">
+      <el-row :gutter="10">
         <!-- 时段 -->
         <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
           <el-card shadow="hover" class="el-card-class">
             <pie-echarts
               :data="retailInterval"
               :tips-data="tipsData"
-              :title="title"
+              :title="retailInterval.title"
               :loading="loading"
               class="pie-class"
+              style="height:300px;"
             />
+            <!-- :title="title" -->
           </el-card>
         </el-col>
         <!-- 商品风格 -->
@@ -34,23 +36,25 @@
             <pie-echarts
               :data="productStyle"
               :tips-data="tipsData"
-              :title="title"
+              :title="productStyle.title"
               :loading="loading"
               class="pie-class"
+              style="height:300px;"
             />
           </el-card>
         </el-col>
       </el-row>
-      <el-row :gutter="10" style="height:40%">
+      <el-row :gutter="10">
         <!-- 是否会员 -->
         <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
           <el-card shadow="hover" class="el-card-class">
             <pie-echarts
               :data="vipProportion"
               :tips-data="tipsData"
-              :title="title"
+              :title="vipProportion.title"
               :loading="loading"
               class="pie-class"
+              style="height:300px;"
             />
           </el-card>
         </el-col>
@@ -60,9 +64,10 @@
             <pie-echarts
               :data="codeSegment"
               :tips-data="tipsData"
-              :title="title"
+              :title="codeSegment.title"
               :loading="loading"
               class="pie-class"
+              style="height:300px;"
             />
           </el-card>
         </el-col>
@@ -87,13 +92,12 @@ export default {
       showLoad: false,
       // 加载动画
       loading: false,
-      loadingCon: false,
+      loadingCon: true,
       loadCount: 0,
       // 时段零售
       retailInterval: {
         title: '时段零售',
-        data: [
-        ]
+        data: []
       },
       // 商品风格
       productStyle: {
@@ -103,15 +107,12 @@ export default {
       // 会员占比
       vipProportion: {
         title: '会员占比',
-        data: [
-        ]
+        data: []
       },
       // 码段
       codeSegment: {
         title: '码段',
-        data: [
-
-        ]
+        data: []
       },
       // 提示信息
       title: '根据查询条件进行查询数据',
@@ -141,8 +142,12 @@ export default {
   created() {
   },
   mounted() {
+    // this.init()
   },
   methods: {
+    init() {
+      this.loadingCon = true
+    },
     // 获取数据
     getAnalysis(params) {
       this.loadingCon = true
@@ -151,7 +156,6 @@ export default {
       // 获取时段数据
       getIntervalAnalysis(params).then(response => {
         var arrData = response.result
-        // console.log(arrData)
 
         var arr = []
         arrData.forEach(val => {
@@ -216,9 +220,6 @@ export default {
 </script>
 
 <style >
-.retail-analysis {
-  height: 100%;
-}
 .el-row {
   margin-bottom: 10px;
 }
@@ -241,18 +242,5 @@ export default {
 }
 .el-col-class {
   margin-top: 10px;
-  height: 100%;
-}
-.el-row-class {
-  height: 100%;
-}
-.el-card-class {
-  height: 100%;
-}
-.el-card-class .el-card__body {
-  height: 100%;
-}
-.pie-class {
-  height: 100%;
 }
 </style>

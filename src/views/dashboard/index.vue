@@ -25,7 +25,6 @@ export default {
   },
   methods: {
     text() {
-      console.log('111')
       getCustomer().then(response => {
         console.log(response.result)
       })

@@ -2,18 +2,18 @@
  * @Description: 说明
  * @Author: anan
  * @Date: 2019-09-27 17:16:04
- * @LastEditors: anan
- * @LastEditTime: 2019-12-10 17:55:36
+ * @LastEditors  : anan
+ * @LastEditTime : 2020-01-12 14:07:13
  -->
 <template>
   <div class="data-analysis">
-    <el-row :gutter="10" style="height:70%;">
+    <el-row :gutter="10" style="700px;">
       <!---->
-      <el-col :span="10" class="echarts-row-col" style="height:100%">
+      <el-col :span="10" class="echarts-row-col">
         <!-- 店铺排名TOP20 -->
-        <el-row style="height:50%;">
-          <el-col style="height:100%">
-            <el-card :body-style="bodyStyle1" shadow="hover" style="height:100%;">
+        <el-row>
+          <el-col>
+            <el-card :body-style="bodyStyle1" shadow="hover">
               <span class="card-span">店铺排名TOP20</span>
               <el-tooltip class="tips" effect="light" placement="bottom">
                 <div slot="content" v-html="tips1" />
@@ -44,22 +44,22 @@
         </el-row>
 
         <!-- 省份排名 -->
-        <el-row style="height:50%;">
-          <el-col style="height:100%;margin-top:5px;">
-            <el-card :body-style="{ height:'100%',padding:'10px' }" shadow="hover">
+        <el-row>
+          <el-col style="margin-top:5px;">
+            <el-card :body-style="{ padding:'10px' }" shadow="hover">
               <bar-echarts1
                 :body-style="bodyStyle"
                 :province-sale-m="provinceSaleM"
-                style="height:100%;"
+                style="height:300px;"
               />
             </el-card>
           </el-col>
         </el-row>
       </el-col>
 
-      <el-col :span="14" class="echarts-row-col" style="height:100%">
-        <el-row :gutter="10" style="height:20%">
-          <el-col :span="8" style="height:100%;padding-bottom:10px;">
+      <el-col :span="14" class="echarts-row-col">
+        <el-row :gutter="10">
+          <el-col :span="8" style="padding-bottom:10px;">
             <el-card :body-style="bodyStyle" shadow="hover" :style="cardRetail">
               <span class="monty">零售额度</span>
               <count-to
@@ -72,7 +72,7 @@
             </el-card>
           </el-col>
 
-          <el-col :span="8" style="height:100%;padding-bottom:10px;">
+          <el-col :span="8" style="padding-bottom:10px;">
             <el-card :body-style="bodyStyle" shadow="hover" :style="cardRetail">
               <span class="monty">会员零售额度</span>
               <count-to
@@ -85,7 +85,7 @@
             </el-card>
           </el-col>
 
-          <el-col :span="8" style="height:100%;padding-bottom:10px;">
+          <el-col :span="8" style="padding-bottom:10px;">
             <el-card :body-style="bodyStyle" shadow="hover" :style="cardRetail">
               <span class="monty">会员占比</span>
               <span class="max">{{ vipSaleRates }} %</span>
@@ -94,22 +94,22 @@
         </el-row>
 
         <!-- 地图 -->
-        <el-row :gutter="10" style="height:80%;">
-          <el-col :span="24" style="height:100%">
-            <echarts :big-data="bigData" style="height:100%" />
+        <el-row :gutter="10">
+          <el-col :span="24">
+            <echarts :big-data="bigData" style="height:620px" />
           </el-col>
         </el-row>
       </el-col>
     </el-row>
 
-    <el-row :gutter="10" style="height:30%;padding-top:10px;">
-      <el-col :span="12" style="height:98%">
-        <el-card :body-style="{ height:'100%',padding:'10px' }" shadow="hover">
+    <el-row :gutter="10" style="padding-top:10px;">
+      <el-col :span="12">
+        <el-card :body-style="{ height:'300px',padding:'10px' }" shadow="hover">
           <line-echarts :year-on-year="yearOnYear" />
         </el-card>
       </el-col>
-      <el-col :span="12" style="height:98%">
-        <el-card :body-style="{ height:'100%',padding:'10px' }" shadow="hover">
+      <el-col :span="12">
+        <el-card :body-style="{ height:'300px',padding:'10px' }" shadow="hover">
           <bar-echarts :vip-repeat-purchase="vipRepeatPurchase" :loading="loading" />
         </el-card>
       </el-col>
@@ -166,7 +166,7 @@ export default {
       count: 0,
       loading: false,
       tips1: '<div>店铺排名TOP20 提示</div><div>当月零售额度排名前20位门店</div>',
-      cardRetail: 'height:100%; text-align: center;'
+      cardRetail: 'text-align: center;'
     }
   },
   computed: {
@@ -198,7 +198,7 @@ export default {
   watch: {
     listQuery(val) {
       this.loading = true
-      debugger
+      // debugger
       this.getBigData(val)
     },
     count(val) {
@@ -264,7 +264,6 @@ export default {
       })
       // 获取省份排行
       getProvinceSaleM(params).then(response => {
-        // console.log(response)
         this.provinceSaleM = response
         ++this.count
       })
@@ -304,7 +303,6 @@ export default {
       })
       // 获取会员复购
       getVipRepeatPurchase(params).then(response => {
-        // console.log(response)
         this.loading = false
         this.vipRepeatPurchase = response
         ++this.count
@@ -326,7 +324,6 @@ export default {
 
 <style scoped>
 .data-analysis {
-  height: 100%;
   background: #191b2b;
   padding-top: 0.3125rem;
   padding-left: 0.3125rem;
@@ -362,7 +359,7 @@ export default {
   color: #0095d9;
 }
 .seamless-warp {
-  height: 100%;
+  height: 300px;
   overflow: hidden;
 }
 .item {

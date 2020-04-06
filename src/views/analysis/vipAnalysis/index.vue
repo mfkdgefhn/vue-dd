@@ -2,8 +2,8 @@
  * @Description: 说明
  * @Author: anan
  * @Date: 2019-10-15 10:23:32
- * @LastEditors: anan
- * @LastEditTime: 2019-12-07 15:24:18
+ * @LastEditors  : anan
+ * @LastEditTime : 2020-01-12 14:58:38
  -->
 <template>
   <div class="retail-analysis">
@@ -15,16 +15,17 @@
     <!-- 展示内容 -->
     <div v-if="loadingCon" class="el-row-class">
       <!-- 饼图开始 -->
-      <el-row :gutter="10" style="height:40%">
+      <el-row :gutter="10">
         <!-- 折扣率 -->
         <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
           <el-card shadow="hover" class="el-card-class">
             <pie-echarts
               :data="discountRate"
               :tips-data="tipsData"
-              :title="title"
+              :title="discountRate.title"
               :loading="loading"
               class="pie-class"
+              style="height:300px"
             />
           </el-card>
         </el-col>
@@ -34,23 +35,25 @@
             <pie-echarts
               :data="singleSum"
               :tips-data="tipsData"
-              :title="title"
+              :title="singleSum.title"
               :loading="loading"
               class="pie-class"
+              style="height:300px"
             />
           </el-card>
         </el-col>
       </el-row>
-      <el-row :gutter="10" style="height:40%">
+      <el-row :gutter="10">
         <!-- 会员积分 -->
         <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
           <el-card shadow="hover" class="el-card-class">
             <pie-echarts
               :data="membershipScore"
               :tips-data="tipsData"
-              :title="title"
+              :title="membershipScore.title"
               :loading="loading"
               class="pie-class"
+              style="height:300px"
             />
           </el-card>
         </el-col>
@@ -60,9 +63,10 @@
             <pie-echarts
               :data="CommodityCategory"
               :tips-data="tipsData"
-              :title="title"
+              :title="CommodityCategory.title"
               :loading="loading"
               class="pie-class"
+              style="height:300px"
             />
           </el-card>
         </el-col>
@@ -86,37 +90,22 @@ export default {
     return {
       // 加载动画
       loading: false,
-      loadingCon: false,
+      loadingCon: true,
       loadCount: 0,
       // 折扣率
       discountRate: {
         title: '折扣率',
-        data: [
-          // { value: Math.round(1000 * (Math.random())), name: '小于3折' },
-          // { value: Math.round(1000 * (Math.random())), name: '3-5折' },
-          // { value: Math.round(1000 * (Math.random())), name: '5-7折' },
-          // { value: Math.round(1000 * (Math.random())), name: '大于7折' }
-        ]
+        data: []
       },
       // 单笔金额
       singleSum: {
         title: '单笔金额',
-        data: [
-          // { value: Math.round(1000 * (Math.random())), name: '小于100￥' },
-          // { value: Math.round(1000 * (Math.random())), name: '100-149￥' },
-          // { value: Math.round(1000 * (Math.random())), name: '150-200￥' },
-          // { value: Math.round(1000 * (Math.random())), name: '大于200￥' }
-        ]
+        data: []
       },
       // 会员积分
       membershipScore: {
         title: '会员积分',
-        data: [
-          // { value: Math.round(1000 * (Math.random())), name: '小于1K' },
-          // { value: Math.round(1000 * (Math.random())), name: '1K-2K' },
-          // { value: Math.round(1000 * (Math.random())), name: '2K-3K' },
-          // { value: Math.round(1000 * (Math.random())), name: '大于3K' }
-        ]
+        data: []
       },
       // 商品类别
       CommodityCategory: {
@@ -149,7 +138,7 @@ export default {
     }
   },
   mounted() {
-    this.getProductType()
+    // this.getProductType()
   },
   methods: {
     // 获取款号类型
@@ -207,9 +196,6 @@ export default {
 </script>
 
 <style >
-.retail-analysis {
-  height: 100%;
-}
 .el-row {
   margin-bottom: 10px;
 }
@@ -232,18 +218,9 @@ export default {
 }
 .el-col-class {
   margin-top: 10px;
-  height: 100%;
-}
-.el-row-class {
-  height: 100%;
-}
-.el-card-class {
-  height: 100%;
-}
-.el-card-class .el-card__body {
-  height: 100%;
 }
 .pie-class {
-  height: 100%;
+  color: #04beff;
+  font-weight: 900;
 }
 </style>

@@ -2,8 +2,8 @@
  * @Description: 说明
  * @Author: anan
  * @Date: 2019-10-15 10:23:32
- * @LastEditors: anan
- * @LastEditTime: 2019-12-07 17:07:37
+ * @LastEditors  : anan
+ * @LastEditTime : 2020-01-12 14:51:54
  -->
 <template>
   <div class="retail-analysis">
@@ -15,16 +15,17 @@
     <!-- 展示内容 -->
     <div v-if="loadingCon" class="el-row-class">
       <!-- 饼图开始 -->
-      <el-row :gutter="10" style="height:40%">
+      <el-row :gutter="10">
         <!-- 次数 -->
         <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
           <el-card shadow="hover" class="el-card-class">
             <pie-echarts
               :data="frequencyType"
               :tips-data="tipsData"
-              :title="title"
+              :title="frequencyType.title"
               :loading="loading"
               class="pie-class"
+              style="height:300px"
             />
           </el-card>
         </el-col>
@@ -34,23 +35,25 @@
             <pie-echarts
               :data="numberType"
               :tips-data="tipsData"
-              :title="title"
+              :title="numberType.title"
               :loading="loading"
               class="pie-class"
+              style="height:300px"
             />
           </el-card>
         </el-col>
       </el-row>
-      <el-row :gutter="10" style="height:40%">
+      <el-row :gutter="10">
         <!-- 金额 -->
         <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
           <el-card shadow="hover" class="el-card-class">
             <pie-echarts
               :data="montyType"
               :tips-data="tipsData"
-              :title="title"
+              :title="montyType.title"
               :loading="loading"
               class="pie-class"
+              style="height:300px"
             />
           </el-card>
         </el-col>
@@ -60,9 +63,10 @@
             <pie-echarts
               :data="cycleType"
               :tips-data="tipsData"
-              :title="title"
+              :title="cycleType.title"
               :loading="loading"
               class="pie-class"
+              style="height:300px"
             />
           </el-card>
         </el-col>
@@ -87,7 +91,7 @@ export default {
       screenHeight: window.innerHeight,
       // 加载动画
       loading: false,
-      loadingCon: false,
+      loadingCon: true,
       loadCount: 0,
       // 次数
       frequencyType: {
@@ -207,9 +211,6 @@ export default {
 </script>
 
 <style >
-.retail-analysis {
-  height: 100%;
-}
 .el-row {
   margin-bottom: 10px;
 }
@@ -232,18 +233,5 @@ export default {
 }
 .el-col-class {
   margin-top: 10px;
-  height: 100%;
-}
-.el-row-class {
-  height: 100%;
-}
-.el-card-class {
-  height: 100%;
-}
-.el-card-class .el-card__body {
-  height: 100%;
-}
-.pie-class {
-  height: 100%;
 }
 </style>

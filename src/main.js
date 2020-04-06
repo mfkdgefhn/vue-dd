@@ -16,6 +16,11 @@ import locale from 'element-ui/lib/locale/lang/zh-CN' // lang i18n
 
 import '@/styles/index.scss' // global css
 
+// 导入时间插件momentjs
+import moment from 'moment'
+Vue.prototype.$moment = moment // 赋值使用
+moment.locale('zh-cn') // 需要汉化
+
 import App from './App'
 import store from './store'
 import router from './router'
@@ -61,10 +66,10 @@ AMap.initAMapApiLoader({
  * Currently MockJs will be used in the production environment,
  * please remove it before going online! ! !
  */
-// import { mockXHR } from '../mock'
-// if (process.env.NODE_ENV === 'production') {
-//   mockXHR()
-// }
+import { mockXHR } from '../mock'
+if (process.env.NODE_ENV !== 'production') {
+  mockXHR()
+}
 
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })

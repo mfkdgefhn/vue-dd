@@ -49,7 +49,6 @@ export default {
           init(o) {
             // o 是高德地图定位插件实例
             o.getCurrentPosition((status, result) => {
-              // console.log(result)
               if (result && result.position) {
                 self.lng = result.position.lng
                 self.lat = result.position.lat
@@ -84,8 +83,6 @@ export default {
         }
       })
         .then(response => {
-          // console.log(response)
-
           console.log(response['data'][0]['body']['pois'])
         })
         .catch(error => {

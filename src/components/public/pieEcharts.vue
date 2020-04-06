@@ -2,12 +2,12 @@
  * @Description: 说明
  * @Author: anan
  * @Date: 2019-10-15 11:02:26
- * @LastEditors: anan
- * @LastEditTime: 2019-12-07 14:38:30
+ * @LastEditors  : anan
+ * @LastEditTime : 2020-01-12 14:48:19
  -->
 <template>
   <div class="retail-analysis">
-    <div ref="pieEcharts" class="pie-echarts" style="width: 100%;height: 100%;" />
+    <div ref="pieEcharts" class="pie-echarts" style="width: 100%;height: 100%;">{{ title }}</div>
     <prompt-box
       :dialog-visible="dialogVisible"
       :tips-data="tipsData"
@@ -70,19 +70,15 @@ export default {
         })
       }
     },
-    // screenHeight(val) {
-    //   this.vStyle = 'width: 100%;height: ' + (val * 0.3) + 'px'
-    // },
     propsData(newValue, oldValue) {
-      // console.log(window.innerHeight)
-
       this.vStyle = 'width: 100%;height: ' + (window.innerHeight * 0.3) + 'px'
       this.drawLine()
+    },
+    titleData(newValue, oldValue) {
     }
   },
   mounted() {
     // this.drawLine()
-    console.log(window.innerHeight)
   },
   methods: {
     handleClose(parmas) {
@@ -114,7 +110,6 @@ export default {
           trigger: 'item',
           formatter: '{a} <br/>{b} : {c}  ({d}%)',
           // formatter: (parmas) => {
-          //   console.log(parmas)
           //   return parmas
           // },
           textStyle: {

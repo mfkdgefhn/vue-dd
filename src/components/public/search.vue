@@ -244,12 +244,9 @@ export default {
     },
     // 搜索栏回车事件
     handleFilter() {
-      // console.log('回车搜索事件')
-      // console.log(this.listQuery)
 
       var data = Object.assign({}, this.listQuery)
       this.handle(data)
-      // console.log(data)
       this.$emit('getAnalysis', data)
     },
     handle(data) {
@@ -307,7 +304,6 @@ export default {
       }
     },
     showMessage() {
-      // console.log('显示信息')
       this.dialogVisible = true
     },
     handleClose(done) {

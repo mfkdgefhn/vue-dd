@@ -2,13 +2,15 @@
  * @Description: 说明
  * @Author: anan
  * @Date: 2019-10-15 10:00:39
- * @LastEditors: anan
- * @LastEditTime: 2019-12-11 09:40:40
+ * @LastEditors  : anan
+ * @LastEditTime : 2020-01-12 14:59:05
  */
 import request from '@/utils/request'
 
-var url = 'http://10.10.1.41:443' // 测试环境
+// var url = 'http://10.10.1.41:443' // 测试环境
 // var url = '' // 生产环境
+
+var url = process.env.NODE_ENV === 'development' ? 'http://10.10.1.41:443' : ''
 
 // 'http://10.10.1.41/Q/p.do?o=zjxs'
 

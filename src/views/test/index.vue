@@ -32,6 +32,9 @@ export default {
       console.log('后' + newv)
     }
   },
+  mounted() {
+    this.$store.dispatch('baseApi/setMonths', '测试' + this.test1)
+  },
   methods: {
     test() {
       console.log('测试')

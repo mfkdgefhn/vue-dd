@@ -444,7 +444,6 @@ export default {
         tooltip: {
           // formatter: '{a} <br/>{b} <br/>{c} <br/>{d}' // {a}（系列名称），{b}（区域名称），{c}（合并数值）, {d}（无）
           // formatter: (params) => {
-          //   console.log(params)
           //   return params
           // }
 
@@ -608,7 +607,6 @@ export default {
       // axios.get('echarts/map/js/province/' + provinceAlphabet + '.js').then((s) => {  //如果要与后端互动的话，需要加入该句
       const myChart = this.$echarts.init(this.$refs.myChartMap)
       // 获取VIP数据
-      console.log(provinceTextsAlphabet.substring(0, 2))
       var job = {}
       job.provinceName = provinceTextsAlphabet.substring(0, 2)
       getProvinceData(job).then(response => {
@@ -631,7 +629,6 @@ export default {
 
     // 下钻到市级地图
     getCityMapOpt(cityName) {
-      console.log(cityName, cityMap[cityName])
       // 拿到ref
       const myChart = this.$echarts.init(this.$refs.myChartMap)
       if (cityMap[cityName]) {

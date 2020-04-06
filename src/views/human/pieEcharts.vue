@@ -65,7 +65,6 @@ export default {
           trigger: 'item',
           formatter: '{a} <br/>{b} : {c}  ({d}%)',
           // formatter: (parmas) => {
-          //   console.log(parmas)
           //   return parmas
           // },
           textStyle: {
