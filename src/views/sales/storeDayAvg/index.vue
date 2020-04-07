@@ -31,7 +31,7 @@
         <el-table-column :label="date" align="center">
           <el-table-column label="月累计老店日均" align="center">
             <el-table-column prop="oldYearDayAvg1" label="20年日均" align="center" />
-            <el-table-column prop="olgYearDayAvg2" label="19年日均" align="center" />
+            <el-table-column prop="oldYearDayAvg2" label="19年日均" align="center" />
             <el-table-column prop="oldDayAvgIncrease1" label="日均增长" align="center" />
           </el-table-column>
           <el-table-column label="当日老店日均" align="center">
