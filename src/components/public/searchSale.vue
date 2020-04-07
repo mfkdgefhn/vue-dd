@@ -2,7 +2,7 @@
   <div class="seach-length">
     <el-row :gutter="10">
       <!-- 时间查询 -->
-      <el-col :md="8" :sm="12" :xs="24">
+      <el-col :span="8">
         <el-date-picker
           v-model="listQuery.billdate"
           style="width: 100%; margin-bottom: 5px; font-size:12px;"
@@ -15,7 +15,7 @@
       </el-col>
 
       <!-- 搜索按钮 -->
-      <el-col :md="8" :sm="12" :xs="24">
+      <el-col :span="9">
         <el-button
           class="filter-item"
           type="primary"
@@ -159,6 +159,9 @@ export default {
   margin-left: 10px;
 }
 .el-row {
+  margin-bottom: 5px;
+}
+.filter-item {
   margin-bottom: 5px;
 }
 </style>

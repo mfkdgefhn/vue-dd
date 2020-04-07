@@ -1,84 +1,84 @@
 <template>
-  <div class="vip">
-    <!-- 搜索 -->
-    <el-card shadow="hover" class="crad">
-      <search-sale :loading="loading" @getAnalysis="getAnalysis" @handleDownload="handleDownload" />
-    </el-card>
-    <el-card v-if="page">
-      <el-button
-        type="primary"
-        :loading="loading"
-        @click="isThisYear = !isThisYear"
-      >{{ loading==='true'? '加载中' : title }}</el-button>
-      <!-- 表格 -->
-      <el-table
-        v-loading="loading"
-        element-loading-text="拼命加载中"
-        element-loading-spinner="el-icon-loading"
-        element-loading-background="rgba(0, 0, 0, 0.8)"
-        :data="table.tableData"
-        style="width: 100%"
-      >
-        <el-table-column prop="customer" label="经销商" align="center" />
-        <el-table-column prop="mid6" label="品名" align="center" />
-        <el-table-column prop="product" label="款" align="center" />
-        <el-table-column prop="sku" label="SKU" align="center" />
-        <el-table-column label="客户" align="center">
-          <el-table-column prop="wholesaleCustomer" label="批发" align="center" />
-        </el-table-column>
-        <el-table-column label="直营销售" align="center">
-          <el-table-column prop="cumulativeSales" label="累销" align="center" />
-          <el-table-column prop="lastWeek" label="上周" align="center" />
-          <el-table-column prop="thisWeek" label="本周" align="center" />
-          <el-table-column prop="quantityLoopRatio" label="量环比" align="center" />
-        </el-table-column>
-        <el-table-column prop="cumulativeGrossMargin" label="累计毛利率" align="center" />
-        <el-table-column prop="avgCost" label="均成本" align="center" />
-        <el-table-column label="均单价" align="center">
-          <el-table-column prop="allUnitPrice" label="总单价" align="center" />
-          <el-table-column prop="lastWeekUnitPrice" label="上周" align="center" />
-          <el-table-column prop="thisWeekUnitPrice" label="本周" align="center" />
-          <el-table-column prop="UnitPriceChange" label="单价变化" align="center" />
-        </el-table-column>
-        <el-table-column label="仓库" align="center">
-          <el-table-column prop="storageNum" label="数量" align="center" />
-        </el-table-column>
-        <el-table-column label="店铺" align="center">
-          <el-table-column prop="storeNum" label="数量" align="center" />
-        </el-table-column>
-        <el-table-column prop="soldOutRate" label="售罄率" align="center" />
-        <el-table-column prop="weekStorageSale" label="周存销" align="center" />
-      </el-table>
+  <div class="InSaleStorage">
+    <el-card :body-style="{ padding: '0px 0px 50px 0px' }">
+      <el-row class="menu-class">
+        <el-col>
+          <search-sale-new
+            :loading="loading"
+            :title="title"
+            @editTitle="editTitle"
+            @handleDownload="handleDownload"
+            @exportPdf="exportPdf"
+          />
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col>
+          <!-- 表格 -->
+          <el-table
+            id="pdfDom"
+            v-loading="loading"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(0, 0, 0, 0.8)"
+            :data="table.tableData"
+          >
+            <el-table-column prop="customer" label="经销商" align="center" />
+            <el-table-column prop="mid6" label="品名" align="center" />
+            <el-table-column prop="product" label="款" align="center" />
+            <el-table-column prop="sku" label="SKU" align="center" />
+            <el-table-column label="客户" align="center">
+              <el-table-column prop="wholesaleCustomer" label="批发" align="center" />
+            </el-table-column>
+            <el-table-column label="直营销售" align="center">
+              <el-table-column prop="cumulativeSales" label="累销" align="center" />
+              <el-table-column prop="lastWeek" label="上周" align="center" />
+              <el-table-column prop="thisWeek" label="本周" align="center" />
+              <el-table-column prop="quantityLoopRatio" label="量环比" align="center" />
+            </el-table-column>
+            <el-table-column prop="cumulativeGrossMargin" label="累计毛利率" align="center" />
+            <el-table-column prop="avgCost" label="均成本" align="center" />
+            <el-table-column label="均单价" align="center">
+              <el-table-column prop="allUnitPrice" label="总单价" align="center" />
+              <el-table-column prop="lastWeekUnitPrice" label="上周" align="center" />
+              <el-table-column prop="thisWeekUnitPrice" label="本周" align="center" />
+              <el-table-column prop="UnitPriceChange" label="单价变化" align="center" />
+            </el-table-column>
+            <el-table-column label="仓库" align="center">
+              <el-table-column prop="storageNum" label="数量" align="center" />
+            </el-table-column>
+            <el-table-column label="店铺" align="center">
+              <el-table-column prop="storeNum" label="数量" align="center" />
+            </el-table-column>
+            <el-table-column prop="soldOutRate" label="售罄率" align="center" />
+            <el-table-column prop="weekStorageSale" label="周存销" align="center" />
+          </el-table>
+        </el-col>
+      </el-row>
     </el-card>
   </div>
 </template>
 
 <script>
-import searchSale from '@/components/public/searchSale'
-import { getInSaleStorage } from '@/api/table'
+import searchSaleNew from '@/components/public/searchSaleNew'
+import { getLayoutStructure } from '@/api/table'
 import { parseTime } from '@/utils'
 import { getSeason } from '@/utils/times'
 
 export default {
   name: 'InSaleStorage',
   components: {
-    searchSale
+    searchSaleNew
   },
   data() {
     return {
       loading: false,
-      date: '',
       lastDate: this.$moment().add(-3, 'M').format('YYYYMMDD'),
       today: this.$moment().format('YYYYMMDD'),
       isThisYear: true,
-      page: false,
-      total: 0,
+      htmlTitle: 'pdf文件',
       table: {
-        title: '零售占比',
-        total: 0,
-        currentPage: 1, // 当前在第几页
-        pageSize: 10,
-        pageSizes: [10, 20, 30, 40],
         tableData: [],
         beiquSum: [{
           'area': '北区',
@@ -137,14 +137,22 @@ export default {
       }
     }
   },
+  created() {
+    this.getAnalysis()
+  },
   methods: {
+    exportPdf() {
+      this.getPdf(this.htmlTitle)
+    },
+    editTitle() {
+      this.isThisYear = !this.isThisYear
+      this.getAnalysis()
+    },
     getAnalysis(data) {
       this.loading = true
       this.table.tableData = []
-      this.date = '查询时间：' + data.date
-      getInSaleStorage(data).then(response => {
-        this.page = true
-        this.$store.dispatch('table/setInSaleStorage', response.data.items)
+      getLayoutStructure(data).then(response => {
+        this.$store.dispatch('table/setLayoutStructure', response.data.items)
         this.table.tableData = response.data.items
         this.loading = false
         this.$message({
@@ -152,9 +160,6 @@ export default {
           type: 'success'
         })
       })
-      // state.listQuery = Object.assign({}, state.listQuery)
-      // this.$store.dispatch('baseApi/getCustomer').then(() => { })
-      // this.$store.dispatch('baseApi/setMonths', this.getMonths(0))
     },
     // 导出
     handleDownload(str) {
@@ -163,7 +168,7 @@ export default {
         this.loading = false
         return
       }
-      str = (str === null) ? '' : str
+      str = (str === undefined) ? '' : str
       import('@/vendor/Export2Excel').then(excel => {
         // 设置Excel的表格第一行的标题
         const tHeader = ['经销商', '品名', '款', 'SKU', '客户批发',
@@ -179,7 +184,7 @@ export default {
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: this.table.title
+          filename: this.title
         })
         this.loading = false
       })
@@ -188,7 +193,7 @@ export default {
     formatJson(filterVal, str) {
       var data = []
       if (str === 'all') {
-        data = this.$store.getters.inSaleStorage
+        data = this.$store.getters.layoutStructure
       } else if (str === 'this') {
         data = this.table.tableData
       } else {
@@ -214,5 +219,8 @@ export default {
 }
 .tag-style {
   margin: 5px 5px;
+}
+.menu-class {
+  margin: 10px;
 }
 </style>

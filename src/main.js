@@ -21,6 +21,10 @@ import moment from 'moment'
 Vue.prototype.$moment = moment // 赋值使用
 moment.locale('zh-cn') // 需要汉化
 
+// 引入PDF插件
+import htmlToPdf from '@/utils/htmlToPdf'
+Vue.use(htmlToPdf)
+
 import App from './App'
 import store from './store'
 import router from './router'

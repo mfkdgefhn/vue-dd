@@ -1,129 +1,137 @@
 <template>
-  <div class="vip">
-    <!-- 搜索 -->
-    <el-card shadow="hover" class="crad">
-      <search-sale :loading="loading" @getAnalysis="getAnalysis" @handleDownload="handleDownload" />
-    </el-card>
+  <div class="InSaleStorage">
     <!-- 表格 -->
-    <el-card v-if="page">
-      <el-tag effect="dark" class="tag-style" size="medium" @click="isToday = !isToday">{{ title }}</el-tag>
-      <el-table
-        v-loading="loading"
-        element-loading-text="拼命加载中"
-        element-loading-spinner="el-icon-loading"
-        element-loading-background="rgba(0, 0, 0, 0.8)"
-        :data="table.tableData"
-        style="width: 100%"
-      >
-        <el-table-column prop="area" label="区域" align="center" />
-        <el-table-column prop="customer" label="经销商" align="center" />
-        <el-table-column prop="outGoodsCount" label="发货量" align="center" />
-        <el-table-column prop="surplusGoodsCount" label="余货量" align="center" />
-        <el-table-column prop="wholesaleCount" label="批发数量" align="center" />
-        <el-table-column prop="retailCount" label="零售数量" align="center" />
-        <el-table-column prop="unitPrice" label="整体单价" align="center" />
-        <el-table-column prop="wholeSaleRate" label="整体售罄率" align="center" />
-        <el-table-column prop="grossMarginRate" label="毛利率" align="center" />
-        <el-table-column prop="storage" label="仓库" align="center" />
-        <el-table-column prop="allStorage" label="总库存" align="center" />
-        <el-table-column prop="storeNum" label="铺店数" align="center" />
-        <el-table-column prop="storeStorage" label="单店存" align="center" />
-      </el-table>
+    <el-card :body-style="{ padding: '0px 0px 50px 0px' }">
+      <el-row class="menu-class">
+        <el-col>
+          <search-sale-new
+            :loading="loading"
+            :title="title"
+            @editTitle="editTitle"
+            @handleDownload="handleDownload"
+            @exportPdf="exportPdf"
+          />
+        </el-col>
+      </el-row>
 
-      <!-- 北区 汇总		647294 	3462 	137333 	257821 	255 	61%	64%	33850 	247731 	504 	424  -->
+      <el-row>
+        <el-col>
+          <el-table
+            id="pdfDom"
+            v-loading="loading"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(0, 0, 0, 0.8)"
+            :data="table.tableData"
+            style="width: 100%"
+          >
+            <el-table-column prop="area" label="区域" align="center" />
+            <el-table-column prop="customer" label="经销商" align="center" />
+            <el-table-column prop="outGoodsCount" label="发货量" align="center" />
+            <el-table-column prop="surplusGoodsCount" label="余货量" align="center" />
+            <el-table-column prop="wholesaleCount" label="批发数量" align="center" />
+            <el-table-column prop="retailCount" label="零售数量" align="center" />
+            <el-table-column prop="unitPrice" label="整体单价" align="center" />
+            <el-table-column prop="wholeSaleRate" label="整体售罄率" align="center" />
+            <el-table-column prop="grossMarginRate" label="毛利率" align="center" />
+            <el-table-column prop="storage" label="仓库" align="center" />
+            <el-table-column prop="allStorage" label="总库存" align="center" />
+            <el-table-column prop="storeNum" label="铺店数" align="center" />
+            <el-table-column prop="storeStorage" label="单店存" align="center" />
+          </el-table>
 
-      <el-table :data="table.beiquSum" :show-header="false" :row-style="{background:'yellow'}">
-        <el-table-column prop="area" label="区域" align="center" />
-        <el-table-column prop="customer" label="经销商" align="center" />
-        <el-table-column prop="outGoodsCount" label="发货量" align="center" />
-        <el-table-column prop="surplusGoodsCount" label="余货量" align="center" />
-        <el-table-column prop="wholesaleCount" label="批发数量" align="center" />
-        <el-table-column prop="retailCount" label="零售数量" align="center" />
-        <el-table-column prop="unitPrice" label="整体单价" align="center" />
-        <el-table-column prop="wholeSaleRate" label="整体售罄率" align="center" />
-        <el-table-column prop="grossMarginRate" label="毛利率" align="center" />
-        <el-table-column prop="storage" label="仓库" align="center" />
-        <el-table-column prop="allStorage" label="总库存" align="center" />
-        <el-table-column prop="storeNum" label="铺店数" align="center" />
-        <el-table-column prop="storeStorage" label="单店存" align="center" />
-      </el-table>
-      <el-table :data="table.tableData" style="width: 100%;">
-        <el-table-column prop="area" label="区域" align="center" />
-        <el-table-column prop="customer" label="经销商" align="center" />
-        <el-table-column prop="outGoodsCount" label="发货量" align="center" />
-        <el-table-column prop="surplusGoodsCount" label="余货量" align="center" />
-        <el-table-column prop="wholesaleCount" label="批发数量" align="center" />
-        <el-table-column prop="retailCount" label="零售数量" align="center" />
-        <el-table-column prop="unitPrice" label="整体单价" align="center" />
-        <el-table-column prop="wholeSaleRate" label="整体售罄率" align="center" />
-        <el-table-column prop="grossMarginRate" label="毛利率" align="center" />
-        <el-table-column prop="storage" label="仓库" align="center" />
-        <el-table-column prop="allStorage" label="总库存" align="center" />
-        <el-table-column prop="storeNum" label="铺店数" align="center" />
-        <el-table-column prop="storeStorage" label="单店存" align="center" />
-      </el-table>
-      <el-table :data="table.beiquSum" :show-header="false" :row-style="{background:'yellow'}">
-        <el-table-column prop="area" label="区域" align="center" />
-        <el-table-column prop="customer" label="经销商" align="center" />
-        <el-table-column prop="outGoodsCount" label="发货量" align="center" />
-        <el-table-column prop="surplusGoodsCount" label="余货量" align="center" />
-        <el-table-column prop="wholesaleCount" label="批发数量" align="center" />
-        <el-table-column prop="retailCount" label="零售数量" align="center" />
-        <el-table-column prop="unitPrice" label="整体单价" align="center" />
-        <el-table-column prop="wholeSaleRate" label="整体售罄率" align="center" />
-        <el-table-column prop="grossMarginRate" label="毛利率" align="center" />
-        <el-table-column prop="storage" label="仓库" align="center" />
-        <el-table-column prop="allStorage" label="总库存" align="center" />
-        <el-table-column prop="storeNum" label="铺店数" align="center" />
-        <el-table-column prop="storeStorage" label="单店存" align="center" />
-      </el-table>
-      <!-- 全国 -->
-      <el-table :data="table.countrySum" :show-header="false" :row-style="{background:'yellow'}">
-        <el-table-column prop="area" label="区域" align="center" />
-        <el-table-column prop="customer" label="经销商" align="center" />
-        <el-table-column prop="outGoodsCount" label="发货量" align="center" />
-        <el-table-column prop="surplusGoodsCount" label="余货量" align="center" />
-        <el-table-column prop="wholesaleCount" label="批发数量" align="center" />
-        <el-table-column prop="retailCount" label="零售数量" align="center" />
-        <el-table-column prop="unitPrice" label="整体单价" align="center" />
-        <el-table-column prop="wholeSaleRate" label="整体售罄率" align="center" />
-        <el-table-column prop="grossMarginRate" label="毛利率" align="center" />
-        <el-table-column prop="storage" label="仓库" align="center" />
-        <el-table-column prop="allStorage" label="总库存" align="center" />
-        <el-table-column prop="storeNum" label="铺店数" align="center" />
-        <el-table-column prop="storeStorage" label="单店存" align="center" />
-      </el-table>
+          <!-- 北区 汇总		647294 	3462 	137333 	257821 	255 	61%	64%	33850 	247731 	504 	424  -->
+
+          <el-table :data="table.beiquSum" :show-header="false" :row-style="{background:'yellow'}">
+            <el-table-column prop="area" label="区域" align="center" />
+            <el-table-column prop="customer" label="经销商" align="center" />
+            <el-table-column prop="outGoodsCount" label="发货量" align="center" />
+            <el-table-column prop="surplusGoodsCount" label="余货量" align="center" />
+            <el-table-column prop="wholesaleCount" label="批发数量" align="center" />
+            <el-table-column prop="retailCount" label="零售数量" align="center" />
+            <el-table-column prop="unitPrice" label="整体单价" align="center" />
+            <el-table-column prop="wholeSaleRate" label="整体售罄率" align="center" />
+            <el-table-column prop="grossMarginRate" label="毛利率" align="center" />
+            <el-table-column prop="storage" label="仓库" align="center" />
+            <el-table-column prop="allStorage" label="总库存" align="center" />
+            <el-table-column prop="storeNum" label="铺店数" align="center" />
+            <el-table-column prop="storeStorage" label="单店存" align="center" />
+          </el-table>
+          <el-table :data="table.tableData" style="width: 100%;">
+            <el-table-column prop="area" label="区域" align="center" />
+            <el-table-column prop="customer" label="经销商" align="center" />
+            <el-table-column prop="outGoodsCount" label="发货量" align="center" />
+            <el-table-column prop="surplusGoodsCount" label="余货量" align="center" />
+            <el-table-column prop="wholesaleCount" label="批发数量" align="center" />
+            <el-table-column prop="retailCount" label="零售数量" align="center" />
+            <el-table-column prop="unitPrice" label="整体单价" align="center" />
+            <el-table-column prop="wholeSaleRate" label="整体售罄率" align="center" />
+            <el-table-column prop="grossMarginRate" label="毛利率" align="center" />
+            <el-table-column prop="storage" label="仓库" align="center" />
+            <el-table-column prop="allStorage" label="总库存" align="center" />
+            <el-table-column prop="storeNum" label="铺店数" align="center" />
+            <el-table-column prop="storeStorage" label="单店存" align="center" />
+          </el-table>
+          <el-table :data="table.beiquSum" :show-header="false" :row-style="{background:'yellow'}">
+            <el-table-column prop="area" label="区域" align="center" />
+            <el-table-column prop="customer" label="经销商" align="center" />
+            <el-table-column prop="outGoodsCount" label="发货量" align="center" />
+            <el-table-column prop="surplusGoodsCount" label="余货量" align="center" />
+            <el-table-column prop="wholesaleCount" label="批发数量" align="center" />
+            <el-table-column prop="retailCount" label="零售数量" align="center" />
+            <el-table-column prop="unitPrice" label="整体单价" align="center" />
+            <el-table-column prop="wholeSaleRate" label="整体售罄率" align="center" />
+            <el-table-column prop="grossMarginRate" label="毛利率" align="center" />
+            <el-table-column prop="storage" label="仓库" align="center" />
+            <el-table-column prop="allStorage" label="总库存" align="center" />
+            <el-table-column prop="storeNum" label="铺店数" align="center" />
+            <el-table-column prop="storeStorage" label="单店存" align="center" />
+          </el-table>
+          <!-- 全国 -->
+          <el-table
+            :data="table.countrySum"
+            :show-header="false"
+            :row-style="{background:'yellow'}"
+          >
+            <el-table-column prop="area" label="区域" align="center" />
+            <el-table-column prop="customer" label="经销商" align="center" />
+            <el-table-column prop="outGoodsCount" label="发货量" align="center" />
+            <el-table-column prop="surplusGoodsCount" label="余货量" align="center" />
+            <el-table-column prop="wholesaleCount" label="批发数量" align="center" />
+            <el-table-column prop="retailCount" label="零售数量" align="center" />
+            <el-table-column prop="unitPrice" label="整体单价" align="center" />
+            <el-table-column prop="wholeSaleRate" label="整体售罄率" align="center" />
+            <el-table-column prop="grossMarginRate" label="毛利率" align="center" />
+            <el-table-column prop="storage" label="仓库" align="center" />
+            <el-table-column prop="allStorage" label="总库存" align="center" />
+            <el-table-column prop="storeNum" label="铺店数" align="center" />
+            <el-table-column prop="storeStorage" label="单店存" align="center" />
+          </el-table>
+        </el-col>
+      </el-row>
     </el-card>
   </div>
 </template>
 
 <script>
-import searchSale from '@/components/public/searchSale'
+import searchSaleNew from '@/components/public/searchSaleNew'
 import { getInSaleStorage } from '@/api/table'
 import { parseTime } from '@/utils'
 import { getSeason } from '@/utils/times'
-import { pagination } from '@/utils/array'
 
 export default {
   name: 'InSaleStorage',
   components: {
-    searchSale
+    searchSaleNew
   },
   data() {
     return {
       loading: false,
-      date: '',
       lastDate: this.$moment().add(-3, 'M').format('YYYYMMDD'),
       today: this.$moment().format('YYYYMMDD'),
-      isToday: true,
-      page: false,
-      total: 0,
+      isThisYear: true,
+      htmlTitle: 'pdf文件',
       table: {
-        title: '零售占比',
-        total: 0,
-        currentPage: 1, // 当前在第几页
-        pageSize: 10,
-        pageSizes: [10, 20, 30, 40],
         tableData: [],
         beiquSum: [{
           'area': '北区',
@@ -174,53 +182,48 @@ export default {
   },
   computed: {
     title() {
-      // `this` 指向 vm 实例
-      if (this.isToday) {
-        return this.$moment(this.today).year() + '年' + getSeason(this.today) + '进、销、存总况'
+      if (this.isThisYear) {
+        return this.$moment(this.today).year() + '年' + getSeason(this.today) + '版面结构'
       } else {
-        return this.$moment(this.lastDate).year() + '年' + getSeason(this.lastDate) + '进、销、存总况'
+        return this.$moment(this.lastDate).year() + '年' + getSeason(this.lastDate) + '版面结构'
       }
     }
   },
+  created() {
+    this.getAnalysis()
+  },
   methods: {
+    exportPdf() {
+      this.getPdf(this.htmlTitle)
+    },
+    editTitle() {
+      this.isThisYear = !this.isThisYear
+      this.getAnalysis()
+    },
     getAnalysis(data) {
       this.loading = true
       this.table.tableData = []
-      this.date = '查询时间：' + data.date
       getInSaleStorage(data).then(response => {
-        this.table.currentPage = 1
-        this.table.pageSize = 10
         this.$store.dispatch('table/setInSaleStorage', response.data.items)
-        this.page = true
-        this.table.total = response.data.items.length
-        this.table.tableData = pagination(1, this.table.pageSize, response.data.items)
+        this.table.tableData = response.data.items
         this.loading = false
         this.$message({
           message: '查询完成!!!',
           type: 'success'
         })
-        // 初始化 页大小、页数
       })
       // state.listQuery = Object.assign({}, state.listQuery)
       // this.$store.dispatch('baseApi/getCustomer').then(() => { })
       // this.$store.dispatch('baseApi/setMonths', this.getMonths(0))
     },
-    // 单页数量改变
-    handleSizeChange(val) {
-      this.table.pageSize = val
-      this.table.tableData = pagination(this.table.currentPage, this.table.pageSize, this.$store.getters.inSaleStorage)
-    },
-    // 页数改变
-    handleCurrentChange(val) {
-      this.table.currentPage = val
-      this.table.tableData = pagination(this.table.currentPage, this.table.pageSize, this.$store.getters.inSaleStorage)
-    },
     // 导出
     handleDownload(str) {
+      this.loading = true
       if (this.table.tableData.length === 0) {
+        this.loading = false
         return
       }
-      this.loading = true
+      str = (str === undefined) ? '' : str
       import('@/vendor/Export2Excel').then(excel => {
         // 设置Excel的表格第一行的标题
         const tHeader = ['区域', '经销商', '发货量', '余货量', '批发数量',
@@ -234,13 +237,21 @@ export default {
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: this.table.title
+          filename: this.title
         })
         this.loading = false
       })
     },
-    formatJson(filterVal) {
-      return this.table.tableData.map(v => filterVal.map(j => {
+    formatJson(filterVal, str) {
+      var data = []
+      if (str === 'all') {
+        data = this.$store.getters.inSaleStorage
+      } else if (str === 'this') {
+        data = this.table.tableData
+      } else {
+        return
+      }
+      return data.map(v => filterVal.map(j => {
         // 判断是否是时间字段
         if (j === 'timestamp') {
           return parseTime(v[j])
@@ -260,5 +271,8 @@ export default {
 }
 .tag-style {
   margin: 5px 5px;
+}
+.menu-class {
+  margin: 10px;
 }
 </style>

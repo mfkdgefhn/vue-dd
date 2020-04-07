@@ -1,11 +1,11 @@
 <template>
-  <div class="vip">
+  <div class="StoreDayAvg">
     <!-- 搜索 -->
     <el-card shadow="hover" class="crad">
       <search-sale :loading="loading" @getAnalysis="getAnalysis" @handleDownload="handleDownload" />
     </el-card>
 
-    <el-card v-if="page">
+    <el-card v-if="page" :body-style="{ padding: '0px 0px 50px 0px' }">
       <el-table
         v-loading="loading"
         element-loading-text="拼命加载中"
@@ -101,14 +101,14 @@ export default {
   methods: {
     getAnalysis(data) {
       this.loading = true
-      this.date = '查询时间：' + data.date
+      this.date = '查询时间：' + data.billdate
       getStoreDayAvg(data).then(response => {
         this.table.currentPage = 1
         this.table.pageSize = 10
-        this.$store.dispatch('table/setStoreDayAvg', response.data.items)
+        this.$store.dispatch('table/setStoreDayAvg', response)
         this.page = true
-        this.table.total = response.data.items.length
-        this.table.tableData = pagination(1, this.table.pageSize, response.data.items)
+        this.table.total = response.length
+        this.table.tableData = pagination(1, this.table.pageSize, response)
         this.loading = false
         this.$message({
           message: '查询完成!!!',
@@ -133,10 +133,12 @@ export default {
 
     // 导出
     handleDownload(str) {
+      this.loading = true
       if (this.table.tableData.length === 0) {
+        this.loading = false
         return
       }
-      this.loading = true
+      str = (str === undefined) ? '' : str
       import('@/vendor/Export2Excel').then(excel => {
         // 设置Excel的表格第一行的标题
         const tHeader = ['日均销额排名', '经销商', '当日店均销额', '当日店均销量', '当日店均单价',
@@ -146,7 +148,7 @@ export default {
         const filterVal = ['dayTop', 'customer', 'dayAvgSale', 'dayAvgSum', 'dayAvgPrice',
           'monStoreSum1', 'monStoreSum2', 'increase', 'oldYearDayAvg1', 'olgYearDayAvg2',
           'oldDayAvgIncrease1', 'oldDayAvg1', 'oldDayAvg2', 'oldDayAvgIncrease2']
-        const data = this.formatJson(filterVal)
+        const data = this.formatJson(filterVal, str)
         excel.export_json_to_excel({
           header: tHeader,
           data,
@@ -155,8 +157,16 @@ export default {
         this.loading = false
       })
     },
-    formatJson(filterVal) {
-      return this.table.tableData.map(v => filterVal.map(j => {
+    formatJson(filterVal, str) {
+      var data = []
+      if (str === 'all') {
+        data = this.$store.getters.storeDayAvg
+      } else if (str === 'this') {
+        data = this.table.tableData
+      } else {
+        return
+      }
+      return data.map(v => filterVal.map(j => {
         // 判断是否是时间字段
         if (j === 'timestamp') {
           return parseTime(v[j])

@@ -68,6 +68,30 @@ const inSaleStorage = Mock.mock({
   }]
 })
 
+const layoutStructure = Mock.mock({
+  'data|50': [{
+    'customer': '@cname(2,5)',
+    'mid6': '@integer(80, 200)',
+    'product': '@integer(10000000, 99999999)',
+    'sku': '@integer(10000000, 99999999)',
+    'wholesaleCustomer': '@integer(1000, 2000)',
+    'cumulativeSales': '@integer(80, 200)',
+    'lastWeek': '@float(60, 100, 2, 2)',
+    'thisWeek': '@float(60, 100, 2, 2)',
+    'quantityLoopRatio': '@integer(100, 200)',
+    'cumulativeGrossMargin': '@integer(200, 400)',
+    'avgCost': '@integer(100, 200)',
+    'allUnitPrice': '@integer(100, 200)',
+    'lastWeekUnitPrice': '@integer(100, 200)',
+    'thisWeekUnitPrice': '@integer(100, 200)',
+    'UnitPriceChange': '@integer(100, 200)',
+    'storageNum': '@integer(100, 200)',
+    'storeNum': '@integer(100, 200)',
+    'soldOutRate': '@integer(100, 200)',
+    'weekStorageSale': '@integer(100, 200)'
+  }]
+})
+
 export default [
   {
     url: '/table/getTop30',
@@ -116,6 +140,20 @@ export default [
     type: 'get',
     response: config => {
       const items = inSaleStorage.data
+      return {
+        code: 200,
+        data: {
+          total: items.length,
+          items: items
+        }
+      }
+    }
+  },
+  {
+    url: '/table/getLayoutStructure',
+    type: 'get',
+    response: config => {
+      const items = layoutStructure.data
       return {
         code: 200,
         data: {

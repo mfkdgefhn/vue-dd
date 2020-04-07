@@ -16,7 +16,7 @@ export function getTop30(params) {
 
 export function getStoreDayAvg(params) {
   return request({
-    url: '/table/getStoreDayAvg',
+    url: url + '/Q/r.do?o=xtkhrjdd',
     method: 'get',
     params
   })
@@ -37,6 +37,15 @@ export function getInSaleStorage(params) {
     params
   })
 }
+
+export function getLayoutStructure(params) {
+  return request({
+    url: '/table/getLayoutStructure',
+    method: 'get',
+    params
+  })
+}
+
 // export function getTop30(params) {
 //   return request({
 //     url: 'https://easy-mock.com/mock/5d0c221d15fc6012866760fe/example/getTop30',

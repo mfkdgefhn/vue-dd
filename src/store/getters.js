@@ -20,6 +20,8 @@ const getters = {
   top30: state => state.table.top30,
   storeDayAvg: state => state.table.storeDayAvg,
   retailShare: state => state.table.retailShare,
-  inSaleStorage: state => state.table.inSaleStorage
+  inSaleStorage: state => state.table.inSaleStorage,
+  layoutStructure: state => state.table.layoutStructure
+
 }
 export default getters

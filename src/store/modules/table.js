@@ -10,7 +10,8 @@ const state = {
   top30: [], // 全国日销TOP30 全部数据
   storeDayAvg: [], // 系统客户日均单店
   retailShare: [], // 冬季零售占比
-  inSaleStorage: [] // 进销存
+  inSaleStorage: [], // 进销存
+  layoutStructure: []
 }
 
 const mutations = {
@@ -26,6 +27,9 @@ const mutations = {
   },
   SET_IN_SALE_STORAGE: (state, inSaleStorage) => {
     state.inSaleStorage = inSaleStorage
+  },
+  SET_LAYOUT_STRUCTURE: (state, layoutStructure) => {
+    state.layoutStructure = layoutStructure
   }
 }
 
@@ -35,16 +39,16 @@ const actions = {
     commit('SET_TOP30', data)
   },
   setStoreDayAvg({ commit }, data) {
-    // commit('SET_TOP30', Object.assign({}, data))
     commit('SET_STORE_DAY_AVG', data)
   },
   setRetailShare({ commit }, data) {
-    // commit('SET_TOP30', Object.assign({}, data))
     commit('SET_RETAIL_SHARE', data)
   },
   setInSaleStorage({ commit }, data) {
-    // commit('SET_TOP30', Object.assign({}, data))
     commit('SET_IN_SALE_STORAGE', data)
+  },
+  setLayoutStructure({ commit }, data) {
+    commit('SET_LAYOUT_STRUCTURE', data)
   }
 }
 

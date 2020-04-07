@@ -61,3 +61,25 @@ export function getSeason(date) {
   }
   return season
 }
+
+export function getSeasonNew(date) {
+  var j = moment(date).format('Q')
+  var season = ''
+  switch (j) {
+    case '1':
+      season = '春'
+      break
+    case '2':
+      season = '夏'
+      break
+    case '3':
+      season = '秋'
+      break
+    case '4':
+      season = '冬'
+      break
+    default:
+      break
+  }
+  return season
+}
