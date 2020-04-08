@@ -80,8 +80,8 @@ export default {
       getTop30(data).then(response => {
         this.table.currentPage = 1
         this.table.pageSize = 10
-        this.$store.dispatch('table/setTop30', response)
         this.page = true
+        this.$store.dispatch('table/setTop30', response)
         this.table.total = response.length
         this.table.tableData = pagination(1, this.table.pageSize, response)
         this.loading = false
