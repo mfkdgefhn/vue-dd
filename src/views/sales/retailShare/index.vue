@@ -2,7 +2,13 @@
   <div class="RetailShare">
     <!-- 搜索 -->
     <el-card shadow="hover" class="crad">
-      <search-sale :loading="loading" @getAnalysis="getAnalysis" @handleDownload="handleDownload" />
+      <search-sale
+        :title="table.title"
+        :loading="loading"
+        @getAnalysis="getAnalysis"
+        @handleDownload="handleDownload"
+        @exportPdf="exportPdf"
+      />
     </el-card>
 
     <el-card v-if="page" :body-style="{ padding: '0px 0px 50px 0px' }">
@@ -16,10 +22,10 @@
         :header-cell-style="{padding: '0px 0px'}"
         style="width: 100%"
       >
-        <el-table-column label="19冬季数量占比" align="center">
+        <el-table-column :label="table.title" align="center">
           <el-table-column prop="area" label="区域" align="center" />
           <el-table-column prop="customer" label="所属经销商" align="center" />
-          <el-table-column label="20年春季" align="center">
+          <el-table-column :label="table.year+table.season" align="center">
             <el-table-column prop="newSalesShare" label="销售占比" align="center" />
             <el-table-column prop="newAvgPrice" label="均单价" align="center" />
             <el-table-column prop="newInventoryRatio" label="库存占比" align="center" />
@@ -27,7 +33,7 @@
           </el-table-column>
         </el-table-column>
         <el-table-column :label="date" align="center">
-          <el-table-column label="19年春季" align="center">
+          <el-table-column :label="(table.year-1)+table.season" align="center">
             <el-table-column prop="oldSalesShare" label="销售占比" align="center" />
             <el-table-column prop="oldAvgPrice" label="单价" align="center" />
             <el-table-column prop="oldInventoryRatio" label="库存占比" align="center" />
@@ -37,16 +43,36 @@
       </el-table>
     </el-card>
 
-    <el-card v-if="page" class="block">
-      <el-pagination
-        :current-page="table.currentPage"
-        :page-sizes="table.pageSizes"
-        :page-size="table.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="table.total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
+    <el-card v-if="page" :body-style="{ padding: '0px 0px 50px 0px',marginTop:'10px 0px 0px 0px' }">
+      <el-table
+        v-loading="loading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0.8)"
+        :data="lastTable.tableData"
+        :row-style="rowStyle"
+        :header-cell-style="{padding: '0px 0px'}"
+        style="width: 100%"
+      >
+        <el-table-column :label="lastTable.title" align="center">
+          <el-table-column prop="area" label="区域" align="center" />
+          <el-table-column prop="customer" label="所属经销商" align="center" />
+          <el-table-column :label="lastTable.year+lastTable.season" align="center">
+            <el-table-column prop="newSalesShare" label="销售占比" align="center" />
+            <el-table-column prop="newAvgPrice" label="均单价" align="center" />
+            <el-table-column prop="newInventoryRatio" label="库存占比" align="center" />
+            <el-table-column prop="newStoreVolume" label="单店铺货量" align="center" />
+          </el-table-column>
+        </el-table-column>
+        <el-table-column :label="date" align="center">
+          <el-table-column :label="(lastTable.year-1)+lastTable.season" align="center">
+            <el-table-column prop="oldSalesShare" label="销售占比" align="center" />
+            <el-table-column prop="oldAvgPrice" label="单价" align="center" />
+            <el-table-column prop="oldInventoryRatio" label="库存占比" align="center" />
+            <el-table-column prop="oldStoreVolume" label="单店铺货量" align="center" />
+          </el-table-column>
+        </el-table-column>
+      </el-table>
     </el-card>
   </div>
 </template>
@@ -55,7 +81,7 @@
 import searchSale from '@/components/public/searchSale'
 import { getRetailShare } from '@/api/table'
 import { parseTime } from '@/utils'
-import { pagination } from '@/utils/array'
+import { getSeason } from '@/utils/times'
 
 export default {
   name: 'RetailShare',
@@ -70,60 +96,52 @@ export default {
       total: 0,
       table: {
         title: '零售占比',
-        total: 0,
-        currentPage: 1, // 当前在第几页
-        pageSize: 10,
-        pageSizes: [10, 20, 30, 40],
+        year: 0,
         tableData: []
       },
-      areaCustomer: {
-        '成都总经销商': '南区', '重庆总经销商': '南区', '新南昌总经销商': '南区',
-        '赣州总经销商': '南区', '新上海总经销商': '南区', '福州总经销商': '南区',
-        '柳州总经销商': '南区', '南宁总经销商': '南区', '蚌埠总经销商': '南区',
-        '合肥总经销商': '南区', '杭州总经销商': '南区', '株洲总经销商': '南区',
-        '广州总经销商': '南区', '武汉总经销商': '南区', '路桥总经销商': '南区',
-        '深圳总经销商': '南区',
-        '西安总经销商': '北区', '兰州总经销商': '北区', '徐州总经销商': '北区',
-        '石市总经销商': '北区', '沈阳总经销商': '北区', '郑州总经销商': '北区',
-        '乌市总经销商': '北区', '青岛总经销商': '北区', '南京总经销商': '北区',
-        '洛阳总经销商': '北区', '常熟总经销商': '北区', '济南总经销商': '北区',
-        '北京总经销商': '北区', '大富豪总经销商': '北区', '大连总经销商': '北区',
-        '新临沂总经销商': '北区', '长春总经销商': '北区'
+      lastTable: {
+        title: '零售占比',
+        year: '',
+        tableData: []
       }
     }
   },
   methods: {
-    getAnalysis(data) {
+    async getAnalysis(data) {
       this.loading = true
       this.date = '查询时间：' + data.billdate
-      getRetailShare(data).then(response => {
-        this.table.currentPage = 1
-        this.table.pageSize = 10
-        this.$store.dispatch('table/setRetailShare', response.data.items)
-        this.page = true
-        this.table.total = response.data.items.length
-        this.table.tableData = pagination(1, this.table.pageSize, response.data.items)
-        this.loading = false
-        this.$message({
-          message: '查询完成!!!',
-          type: 'success'
-        })
+      this.table.year = data.year = this.$moment(data.billdate).year()
+      this.table.season = getSeason(data.billdate).ch
+      this.table.title = '' + data.year + getSeason(data.billdate).ch + '数量占比'
+      data.season = getSeason(data.billdate).zh
+      await getRetailShare(data).then(response => {
+        this.$store.dispatch('table/setRetailShare', response)
+        this.table.tableData = response
       })
-      // state.listQuery = Object.assign({}, state.listQuery)
-      // this.$store.dispatch('baseApi/getCustomer').then(() => { })
-      // this.$store.dispatch('baseApi/setMonths', this.getMonths(0))
-    },
-    // 单页数量改变
-    handleSizeChange(val) {
-      this.table.pageSize = val
-      this.table.tableData = pagination(this.table.currentPage, this.table.pageSize, this.$store.getters.retailShare)
-    },
-    // 页数改变
-    handleCurrentChange(val) {
-      this.table.currentPage = val
-      this.table.tableData = pagination(this.table.currentPage, this.table.pageSize, this.$store.getters.retailShare)
-    },
+      var lastData = {
+        billdate: data.billdate,
+        year: this.$moment(data.billdate).add(-3, 'M').year(),
+        season: getSeason(this.$moment(data.billdate).add(-3, 'M')).zh
+      }
+      this.lastTable.year = lastData.year
+      this.lastTable.season = getSeason(this.$moment(data.billdate).add(-3, 'M')).ch
+      this.lastTable.title = '' + lastData.year + getSeason(this.$moment(data.billdate).add(-3, 'M')).ch + '数量占比'
 
+      await getRetailShare(lastData).then(response => {
+        this.$store.dispatch('table/setLastRetailShare', response)
+        this.lastTable.tableData = response
+        this.page = true
+        this.loading = false
+      })
+      this.$message({
+        message: '查询完成!!!',
+        type: 'success'
+      })
+    },
+    // 导出PDF
+    exportPdf() {
+      this.getPdf(this.table.title)
+    },
     // 导出
     handleDownload(str) {
       this.loading = true
@@ -170,8 +188,8 @@ export default {
     },
 
     rowStyle({ row, rowIndex }) {
-      if (row.customer === '全国') {
-        return 'background: yellow'
+      if (row.customer === '区域汇总') {
+        return 'background: #DDE6ED'
       }
       return ''
     }

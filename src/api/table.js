@@ -24,7 +24,7 @@ export function getStoreDayAvg(params) {
 
 export function getRetailShare(params) {
   return request({
-    url: '/table/getRetailShare',
+    url: url + '/Q/r.do?o=djlszb',
     method: 'get',
     params
   })
@@ -32,7 +32,7 @@ export function getRetailShare(params) {
 
 export function getInSaleStorage(params) {
   return request({
-    url: '/table/getInSaleStorage',
+    url: url + '/Q/r.do?o=xsfxJxc',
     method: 'get',
     params
   })
@@ -40,7 +40,7 @@ export function getInSaleStorage(params) {
 
 export function getLayoutStructure(params) {
   return request({
-    url: '/table/getLayoutStructure',
+    url: url + '/Q/r.do?o=bmjg',
     method: 'get',
     params
   })

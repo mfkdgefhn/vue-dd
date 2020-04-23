@@ -9,7 +9,8 @@
 const state = {
   top30: [], // 全国日销TOP30 全部数据
   storeDayAvg: [], // 系统客户日均单店
-  retailShare: [], // 冬季零售占比
+  retailShare: [], // 零售占比
+  lastRetailShare: [], // 上个季度零售占比
   inSaleStorage: [], // 进销存
   layoutStructure: []
 }
@@ -24,6 +25,9 @@ const mutations = {
   },
   SET_RETAIL_SHARE: (state, retailShare) => {
     state.retailShare = retailShare
+  },
+  SET_LAST_RETAIL_SHARE: (state, lastRetailShare) => {
+    state.lastRetailShare = lastRetailShare
   },
   SET_IN_SALE_STORAGE: (state, inSaleStorage) => {
     state.inSaleStorage = inSaleStorage
@@ -43,6 +47,9 @@ const actions = {
   },
   setRetailShare({ commit }, data) {
     commit('SET_RETAIL_SHARE', data)
+  },
+  setLastRetailShare({ commit }, data) {
+    commit('SET_LAST_RETAIL_SHARE', data)
   },
   setInSaleStorage({ commit }, data) {
     commit('SET_IN_SALE_STORAGE', data)

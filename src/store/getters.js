@@ -20,6 +20,7 @@ const getters = {
   top30: state => state.table.top30,
   storeDayAvg: state => state.table.storeDayAvg,
   retailShare: state => state.table.retailShare,
+  lastRetailShare: state => state.table.lastRetailShare,
   inSaleStorage: state => state.table.inSaleStorage,
   layoutStructure: state => state.table.layoutStructure
 

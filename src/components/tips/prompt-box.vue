@@ -13,7 +13,11 @@
     :before-close="handleClose"
     custom-class="dialog-class"
   >
-    <span v-html="tipsData" />
+    <!-- <span v-html="tipsData" /> -->
+    <el-table :data="tipsData">
+      <el-table-column property="name" label="字段名" width="150" />
+      <el-table-column property="description" label="字段说明" />
+    </el-table>
   </el-dialog>
 </template>
 
@@ -25,8 +29,8 @@ export default {
       default: false
     },
     tipsData: {
-      type: String,
-      default: ''
+      type: Array,
+      default: () => []
     },
     title: {
       type: String,
@@ -38,9 +42,6 @@ export default {
     }
   },
   watch: {
-    tips(val) {
-      console.log(val)
-    }
   },
   methods: {
     handleClose(done) {

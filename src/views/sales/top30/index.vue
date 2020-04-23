@@ -2,7 +2,13 @@
   <div class="Top30">
     <!-- 搜索 -->
     <el-card shadow="hover" class="crad">
-      <search-sale :loading="loading" @getAnalysis="getAnalysis" @handleDownload="handleDownload" />
+      <search-sale
+        :title="table.title"
+        :loading="loading"
+        @getAnalysis="getAnalysis"
+        @handleDownload="handleDownload"
+        @exportPdf="exportPdf"
+      />
     </el-card>
     <el-card v-if="page" :body-style="{ padding: '0px 0px 50px 0px' }">
       <el-table
@@ -16,6 +22,7 @@
       >
         <el-table-column label="系统店铺业绩TOP30汇总" align="center">
           <el-table-column prop="dayTop" label="日业绩排名" align="center" />
+          <el-table-column prop="customer" label="经销商" align="center" width="200px" />
           <el-table-column prop="storeName" label="店铺名称" align="center" width="200px" />
           <el-table-column prop="dayTotAmtActual" label="日业绩" align="center" />
           <el-table-column prop="dayQty" label="日销量" align="center" />
@@ -25,9 +32,9 @@
           <el-table-column prop="monTotAmtActual" label="本月业绩" align="center" />
           <el-table-column prop="monQty" label="本月销量" align="center" />
           <el-table-column prop="monAvgPrice" label="本月日均销额" align="center" />
-          <el-table-column prop="yearStorage" label="19秋库存" align="center" />
-          <el-table-column prop="yearStorage1" label="19冬库存" align="center" />
-          <el-table-column prop="yearStorage2" label="20春库存" align="center" />
+          <el-table-column prop="yearStorage" :label="lastMaxToday" align="center" />
+          <el-table-column prop="yearStorage1" :label="lastToday" align="center" />
+          <el-table-column prop="yearStorage2" :label="today" align="center" />
         </el-table-column>
       </el-table>
     </el-card>
@@ -51,6 +58,7 @@ import searchSale from '@/components/public/searchSale'
 import { getTop30 } from '@/api/table'
 import { parseTime } from '@/utils'
 import { pagination } from '@/utils/array'
+import { getSeason } from '@/utils/times'
 
 export default {
   name: 'Top30',
@@ -63,6 +71,9 @@ export default {
       date: '',
       page: false,
       total: 0,
+      today: ('' + this.$moment().add(-1, 'D').year()).substring(2, 4) + getSeason(this.$moment().add(-1, 'D')).ch + '库存',
+      lastToday: ('' + this.$moment().add(-1, 'D').add(-3, 'M').year()).substring(2, 4) + getSeason(this.$moment().add(-1, 'D').add(-3, 'M')).ch + '库存',
+      lastMaxToday: ('' + this.$moment().add(-1, 'D').add(-6, 'M').year()).substring(2, 4) + getSeason(this.$moment().add(-1, 'D').add(-6, 'M')).ch + '库存',
       table: {
         total: 0,
         title: 'top30',
@@ -92,9 +103,6 @@ export default {
       }).catch(error => {
         console.log(error)
       })
-      // state.listQuery = Object.assign({}, state.listQuery)
-      // this.$store.dispatch('baseApi/getCustomer').then(() => { })
-      // this.$store.dispatch('baseApi/setMonths', this.getMonths(0))
     },
     // 单页数量改变
     handleSizeChange(val) {
@@ -105,6 +113,11 @@ export default {
     handleCurrentChange(val) {
       this.table.currentPage = val
       this.table.tableData = pagination(this.table.currentPage, this.table.pageSize, this.$store.getters.top30)
+    },
+
+    // 导出PDF
+    exportPdf() {
+      this.getPdf(this.table.title)
     },
     // 导出
     handleDownload(str) {

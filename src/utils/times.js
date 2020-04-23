@@ -40,20 +40,32 @@ export function getDateStr(count, str) {
  */
 export function getSeason(date) {
   var m = (date === undefined) ? moment().month() + 1 : moment(date).month() + 1
-  var season = ''
+  var season = {}
 
   switch (m) {
     case 1: case 2: case 3:
-      season = '春季'
+      season = {
+        ch: '春季',
+        zh: '37'
+      }
       break
     case 4: case 5: case 6:
-      season = '夏季'
+      season = {
+        ch: '夏季',
+        zh: '38'
+      }
       break
     case 7: case 8: case 9:
-      season = '秋季'
+      season = {
+        ch: '秋季',
+        zh: '39'
+      }
       break
     case 10: case 11: case 12:
-      season = '冬季'
+      season = {
+        ch: '冬季',
+        zh: '40'
+      }
       break
     default:
       season = ''

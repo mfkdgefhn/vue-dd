@@ -23,13 +23,14 @@
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(0, 0, 0, 0.8)"
             :data="table.tableData"
+            :row-style="rowStyle"
           >
-            <el-table-column prop="customer" label="经销商" align="center" />
+            <el-table-column prop="customer" label="经销商" width="100px" align="center" />
             <el-table-column prop="mid6" label="品名" align="center" />
             <el-table-column prop="product" label="款" align="center" />
             <el-table-column prop="sku" label="SKU" align="center" />
             <el-table-column label="客户" align="center">
-              <el-table-column prop="wholesaleCustomer" label="批发" align="center" />
+              <el-table-column prop="wholeSaleCustomer" label="批发" align="center" />
             </el-table-column>
             <el-table-column label="直营销售" align="center">
               <el-table-column prop="cumulativeSales" label="累销" align="center" />
@@ -43,7 +44,7 @@
               <el-table-column prop="allUnitPrice" label="总单价" align="center" />
               <el-table-column prop="lastWeekUnitPrice" label="上周" align="center" />
               <el-table-column prop="thisWeekUnitPrice" label="本周" align="center" />
-              <el-table-column prop="UnitPriceChange" label="单价变化" align="center" />
+              <el-table-column prop="unitPriceChange" label="单价变化" align="center" />
             </el-table-column>
             <el-table-column label="仓库" align="center">
               <el-table-column prop="storageNum" label="数量" align="center" />
@@ -74,70 +75,48 @@ export default {
   data() {
     return {
       loading: false,
-      lastDate: this.$moment().add(-3, 'M').format('YYYYMMDD'),
-      today: this.$moment().format('YYYYMMDD'),
+      lastDate: this.$moment().add(-1, 'D').add(-3, 'M').format('YYYYMMDD'),
+      today: this.$moment().add(-1, 'D').format('YYYYMMDD'),
       isThisYear: true,
-      htmlTitle: 'pdf文件',
       table: {
         tableData: [],
-        beiquSum: [{
-          'area': '北区',
-          'customer': '汇总',
-          'outGoodsCount': '647294',
-          'SurplusGoodsCount': '3462',
-          'wholesaleCount': '137333',
-          'retailCount': '257821',
-          'unitPrice': '255',
-          'wholeSaleRate': '61%',
-          'grossMarginRate': '64%',
-          'storage': '33850',
-          'allStorage': '247731',
-          'storeNum': '504',
-          'storeStorage': '424'
-        }],
-        countrySum: [{
-          'area': '全国',
-          'customer': '汇总',
-          'outGoodsCount': '647294',
-          'SurplusGoodsCount': '3462',
-          'wholesaleCount': '137333',
-          'retailCount': '257821',
-          'unitPrice': '255',
-          'wholeSaleRate': '61%',
-          'grossMarginRate': '64%',
-          'storage': '33850',
-          'allStorage': '247731',
-          'storeNum': '504',
-          'storeStorage': '424'
-        }]
-      },
-      areaCustomer: {
-        '成都总经销商': '南区', '重庆总经销商': '南区', '新南昌总经销商': '南区',
-        '赣州总经销商': '南区', '新上海总经销商': '南区', '福州总经销商': '南区',
-        '柳州总经销商': '南区', '南宁总经销商': '南区', '蚌埠总经销商': '南区',
-        '合肥总经销商': '南区', '杭州总经销商': '南区', '株洲总经销商': '南区',
-        '广州总经销商': '南区', '武汉总经销商': '南区', '路桥总经销商': '南区',
-        '深圳总经销商': '南区',
-        '西安总经销商': '北区', '兰州总经销商': '北区', '徐州总经销商': '北区',
-        '石市总经销商': '北区', '沈阳总经销商': '北区', '郑州总经销商': '北区',
-        '乌市总经销商': '北区', '青岛总经销商': '北区', '南京总经销商': '北区',
-        '洛阳总经销商': '北区', '常熟总经销商': '北区', '济南总经销商': '北区',
-        '北京总经销商': '北区', '大富豪总经销商': '北区', '大连总经销商': '北区',
-        '新临沂总经销商': '北区', '长春总经销商': '北区'
+        htmlTitle: this.$moment(this.today).year() + '年' + getSeason(this.today).ch + '版面结构',
+        title: this.$moment(this.today).year() + '年' + getSeason(this.today).ch + '版面结构',
+        year: this.$moment(this.today).year(),
+        season: getSeason(this.today).zh
       }
     }
   },
+  // year
+  // season
   computed: {
     title() {
       // `this` 指向 vm 实例
       if (this.isThisYear) {
-        return this.$moment(this.today).year() + '年' + getSeason(this.today) + '版面结构'
+        return this.$moment(this.today).year() + '年' + getSeason(this.today).ch + '版面结构'
       } else {
-        return this.$moment(this.lastDate).year() + '年' + getSeason(this.lastDate) + '版面结构'
+        return this.$moment(this.lastDate).year() + '年' + getSeason(this.lastDate).ch + '版面结构'
       }
     }
   },
+  watch: {
+    isThisYear(val, oldVal) {
+      if (val) { // 今年
+        this.table.htmlTitle = this.$moment(this.today).year() + '年' + getSeason(this.today).ch + '进销存'
+        this.table.title = this.$moment(this.today).year() + '年' + getSeason(this.today).ch + '版面结构'
+        this.table.year = this.$moment(this.today).year()
+        this.table.season = getSeason(this.today).zh
+      } else { // 去年
+        this.table.htmlTitle = this.$moment(this.lastDate).year() + '年' + getSeason(this.lastDate).ch + '进销存'
+        this.table.title = this.$moment(this.lastDate).year() + '年' + getSeason(this.lastDate).ch + '版面结构'
+        this.table.year = this.$moment(this.lastDate).year()
+        this.table.season = getSeason(this.lastDate).zh
+      }
+      this.getAnalysis()
+    }
+  },
   created() {
+    this.isThisYear = true
     this.getAnalysis()
   },
   methods: {
@@ -148,12 +127,12 @@ export default {
       this.isThisYear = !this.isThisYear
       this.getAnalysis()
     },
-    getAnalysis(data) {
+    getAnalysis() {
       this.loading = true
       this.table.tableData = []
-      getLayoutStructure(data).then(response => {
-        this.$store.dispatch('table/setLayoutStructure', response.data.items)
-        this.table.tableData = response.data.items
+      getLayoutStructure({ year: this.table.year, season: this.table.season }).then(response => {
+        this.$store.dispatch('table/setLayoutStructure', response)
+        this.table.tableData = response
         this.loading = false
         this.$message({
           message: '查询完成!!!',
@@ -191,14 +170,7 @@ export default {
     },
 
     formatJson(filterVal, str) {
-      var data = []
-      if (str === 'all') {
-        data = this.$store.getters.layoutStructure
-      } else if (str === 'this') {
-        data = this.table.tableData
-      } else {
-        return
-      }
+      var data = this.$store.getters.layoutStructure
       return data.map(v => filterVal.map(j => {
         // 判断是否是时间字段
         if (j === 'timestamp') {
@@ -207,6 +179,15 @@ export default {
           return v[j]
         }
       }))
+    },
+
+    rowStyle({ row, rowIndex }) {
+      if (row.mid6.indexOf('汇总') > 0) {
+        return 'background: #DFE6ED'
+      } else if (row.mid6.indexOf('汇总') === 0) {
+        return 'background: #EFE6ED'
+      }
+      return ''
     }
 
   }

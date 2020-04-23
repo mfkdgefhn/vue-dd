@@ -2,7 +2,13 @@
   <div class="StoreDayAvg">
     <!-- 搜索 -->
     <el-card shadow="hover" class="crad">
-      <search-sale :loading="loading" @getAnalysis="getAnalysis" @handleDownload="handleDownload" />
+      <search-sale
+        :title="table.title"
+        :loading="loading"
+        @getAnalysis="getAnalysis"
+        @handleDownload="handleDownload"
+        @exportPdf="exportPdf"
+      />
     </el-card>
 
     <el-card v-if="page" :body-style="{ padding: '0px 0px 50px 0px' }">
@@ -17,7 +23,7 @@
         style="width: 100%"
       >
         <el-table-column prop="dayTop" label="日均销额排名" align="center" />
-        <el-table-column label="累计老店取值：营业时间>=7天" align="center">
+        <el-table-column :label="businessTime" align="center">
           <el-table-column prop="customer" label="经销商" align="center" />
           <el-table-column prop="dayAvgSale" label="当日店均销额" align="center" />
           <el-table-column prop="dayAvgSum" label="当日店均销量" align="center" />
@@ -72,6 +78,7 @@ export default {
     return {
       loading: false,
       date: '',
+      businessTime: '', // 营业时间
       page: false,
       total: 0,
       table: {
@@ -81,20 +88,6 @@ export default {
         pageSize: 10,
         pageSizes: [10, 20, 30, 40],
         tableData: []
-      },
-      areaCustomer: {
-        '成都总经销商': '南区', '重庆总经销商': '南区', '新南昌总经销商': '南区',
-        '赣州总经销商': '南区', '新上海总经销商': '南区', '福州总经销商': '南区',
-        '柳州总经销商': '南区', '南宁总经销商': '南区', '蚌埠总经销商': '南区',
-        '合肥总经销商': '南区', '杭州总经销商': '南区', '株洲总经销商': '南区',
-        '广州总经销商': '南区', '武汉总经销商': '南区', '路桥总经销商': '南区',
-        '深圳总经销商': '南区',
-        '西安总经销商': '北区', '兰州总经销商': '北区', '徐州总经销商': '北区',
-        '石市总经销商': '北区', '沈阳总经销商': '北区', '郑州总经销商': '北区',
-        '乌市总经销商': '北区', '青岛总经销商': '北区', '南京总经销商': '北区',
-        '洛阳总经销商': '北区', '常熟总经销商': '北区', '济南总经销商': '北区',
-        '北京总经销商': '北区', '大富豪总经销商': '北区', '大连总经销商': '北区',
-        '新临沂总经销商': '北区', '长春总经销商': '北区'
       }
     }
   },
@@ -102,6 +95,11 @@ export default {
     getAnalysis(data) {
       this.loading = true
       this.date = '查询时间：' + data.billdate
+      if (this.$moment(data.billdate).format('D') === '1') {
+        this.businessTime = '累计老店取值：营业时间 >=1天'
+      } else {
+        this.businessTime = '累计老店取值：营业时间 >=' + this.$moment(data.billdate).add(-1, 'd').format('D') + '天'
+      }
       getStoreDayAvg(data).then(response => {
         this.table.currentPage = 1
         this.table.pageSize = 10
@@ -131,6 +129,10 @@ export default {
       this.table.tableData = pagination(this.table.currentPage, this.table.pageSize, this.$store.getters.storeDayAvg)
     },
 
+    // 导出PDF
+    exportPdf() {
+      this.getPdf(this.table.title)
+    },
     // 导出
     handleDownload(str) {
       this.loading = true
@@ -178,7 +180,7 @@ export default {
 
     rowStyle({ row, rowIndex }) {
       if (row.customer === '全国') {
-        return 'background: yellow'
+        return 'background: #DDE6ED'
       }
       return ''
     }

@@ -68,69 +68,15 @@ export const constantRoutes = [
   // },
   /* --------------------人力独立使用 end -----------------------  */
 
+  /* -------------------销售分析独立 begin ------------------------*/
   {
     path: '/',
-    component: Layout,
-    redirect: '/sales',
-    // redirect: '/dataAnalysis',
-    name: '数据看板',
-    meta: {
-      title: '数据分析', icon: 'shoes'
-    },
-    children: [
-      {
-        path: 'dataAnalysis',
-        name: '大数据看板',
-        component: () => import('@/views/bigData/shoes/index'),
-        meta: { title: '大数据看板', icon: 'shoes' }
-      }]
-  },
-  {
-    path: '/Analysis',
-    component: Layout,
-    name: '数据分析',
-    redirect: '/Analysis/retail',
-    meta: {
-      title: '数据分析', icon: 'shoes'
-    },
-    children: [{
-      path: 'retail',
-      name: '零售分析',
-      component: () => import('@/views/analysis/retailAnalysis/index'),
-      meta: { title: '零售分析', icon: 'shoes' }
-    }, {
-      path: 'vip',
-      name: '会员分析',
-      component: () => import('@/views/analysis/vipAnalysis/index'),
-      meta: { title: '会员分析', icon: 'shoes' }
-    }, {
-      path: 'vipRetail',
-      name: '购买分析',
-      component: () => import('@/views/analysis/vipRetailAnalysis/index'),
-      meta: { title: '会员购买分析', icon: 'shoes' }
-    }]
-  },
-
-  {
-    path: '/vip',
-    component: Layout,
-    redirect: '/vip/index',
-    children: [{
-      path: 'index',
-      name: '会员挖掘',
-      component: () => import('@/views/vip/index'),
-      meta: { title: '会员挖掘', icon: 'shoes' }
-    }]
-  },
-
-  {
-    path: '/sales',
     component: Layout,
     name: '销售分析',
     meta: {
       title: '销售分析', icon: 'shoes'
     },
-    redirect: '/sales/layoutStructure',
+    redirect: '/top30',
     children: [
       {
         path: 'top30',
@@ -160,6 +106,100 @@ export const constantRoutes = [
       }
     ]
   },
+  /* --------------------销售分析独立 end -----------------------  */
+
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   redirect: '/sales',
+  //   // redirect: '/dataAnalysis',
+  //   name: '数据看板',
+  //   meta: {
+  //     title: '数据分析', icon: 'shoes'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'dataAnalysis',
+  //       name: '大数据看板',
+  //       component: () => import('@/views/bigData/shoes/index'),
+  //       meta: { title: '大数据看板', icon: 'shoes' }
+  //     }]
+  // },
+  // {
+  //   path: '/Analysis',
+  //   component: Layout,
+  //   name: '数据分析',
+  //   redirect: '/Analysis/retail',
+  //   meta: {
+  //     title: '数据分析', icon: 'shoes'
+  //   },
+  //   children: [{
+  //     path: 'retail',
+  //     name: '零售分析',
+  //     component: () => import('@/views/analysis/retailAnalysis/index'),
+  //     meta: { title: '零售分析', icon: 'shoes' }
+  //   }, {
+  //     path: 'vip',
+  //     name: '会员分析',
+  //     component: () => import('@/views/analysis/vipAnalysis/index'),
+  //     meta: { title: '会员分析', icon: 'shoes' }
+  //   }, {
+  //     path: 'vipRetail',
+  //     name: '购买分析',
+  //     component: () => import('@/views/analysis/vipRetailAnalysis/index'),
+  //     meta: { title: '会员购买分析', icon: 'shoes' }
+  //   }]
+  // },
+
+  // {
+  //   path: '/vip',
+  //   component: Layout,
+  //   redirect: '/vip/index',
+  //   children: [{
+  //     path: 'index',
+  //     name: '会员挖掘',
+  //     component: () => import('@/views/vip/index'),
+  //     meta: { title: '会员挖掘', icon: 'shoes' }
+  //   }]
+  // },
+
+  // {
+  //   path: '/sales',
+  //   component: Layout,
+  //   name: '销售分析',
+  //   meta: {
+  //     title: '销售分析', icon: 'shoes'
+  //   },
+  //   redirect: '/sales/top30',
+  //   children: [
+  //     {
+  //       path: 'top30',
+  //       name: '全国日销TOP30',
+  //       component: () => import('@/views/sales/top30/index'),
+  //       meta: { title: '全国日销TOP30', icon: 'shoes' }
+  //     }, {
+  //       path: 'storeDayAvg',
+  //       name: '系统客户日均单店',
+  //       component: () => import('@/views/sales/storeDayAvg/index'),
+  //       meta: { title: '系统客户日均单店', icon: 'shoes' }
+  //     }, {
+  //       path: 'retailShare',
+  //       name: '零售占比',
+  //       component: () => import('@/views/sales/retailShare/index'),
+  //       meta: { title: '零售占比', icon: 'shoes' }
+  //     }, {
+  //       path: 'inSaleStorage',
+  //       name: '进销存',
+  //       component: () => import('@/views/sales/inSaleStorage/index'),
+  //       meta: { title: '进销存', icon: 'shoes' }
+  //     }, {
+  //       path: 'layoutStructure',
+  //       name: '版面结构',
+  //       component: () => import('@/views/sales/layoutStructure/index'),
+  //       meta: { title: '版面结构', icon: 'shoes' }
+  //     }
+  //   ]
+  // },
 
   /* -----------------测试时注释掉-----begin---------------------  */
 
@@ -327,24 +367,24 @@ export const constantRoutes = [
   //   ]
   // },
 
-  {
-    path: '/table',
-    component: Layout,
-    redirect: '/table/complex-table',
-    name: 'Table',
-    meta: {
-      title: 'Table',
-      icon: 'table'
-    },
-    children: [
-      {
-        path: 'complex-table',
-        component: () => import('@/views/table/complex-table'),
-        name: 'ComplexTable',
-        meta: { title: 'Complex Table' }
-      }
-    ]
-  },
+  // {
+  //   path: '/table',
+  //   component: Layout,
+  //   redirect: '/table/complex-table',
+  //   name: 'Table',
+  //   meta: {
+  //     title: 'Table',
+  //     icon: 'table'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'complex-table',
+  //       component: () => import('@/views/table/complex-table'),
+  //       name: 'ComplexTable',
+  //       meta: { title: 'Complex Table' }
+  //     }
+  //   ]
+  // },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

@@ -2,20 +2,16 @@
   <div class="seach-length">
     <el-row :gutter="10">
       <!-- 时间查询 -->
-      <el-col :span="8">
+      <el-col>
         <el-date-picker
           v-model="listQuery.billdate"
-          style="width: 100%; margin-bottom: 5px; font-size:12px;"
+          style="min-width:300px;margin-bottom: 5px; font-size:12px;"
           type="date"
           value-format="yyyyMMdd"
           placeholder="开始日期"
           :picker-options="pickerOptions"
           format="yyyyMMdd"
         />
-      </el-col>
-
-      <!-- 搜索按钮 -->
-      <el-col :span="9">
         <el-button
           class="filter-item"
           type="primary"
@@ -34,6 +30,16 @@
           @click="handleDownload('this')"
         >单页导出</el-button>
 
+        <!-- PDF -->
+        <el-button
+          v-waves
+          :loading="loading"
+          class="filter-item"
+          type="primary"
+          icon="el-icon-download"
+          @click="exportPdf"
+        >PDF</el-button>
+
         <el-button
           v-waves
           :loading="loading"
@@ -42,43 +48,44 @@
           icon="el-icon-download"
           @click="handleDownload('all')"
         >全部导出</el-button>
+
+        <!-- 提示信息 -->
+        <el-button type="primary" icon="el-icon-message" circle @click="tipsInfo" />
       </el-col>
     </el-row>
 
     <!-- 提示信息弹窗 -->
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-      <span>这是一段信息</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
+    <prompt-box
+      :dialog-visible="dialogVisible"
+      :title="title"
+      :tips-data="tipsData"
+      @handleClose="handleClose"
+    />
   </div>
 </template>
 
 <script>
-// import { getStore } from "@/api/gmqApi"; // , getYear,getSeason,getCustomer,
 import waves from '@/directive/waves' // waves directive
 import { getDateStr } from '@/utils/times'
+import promptBox from '@/components/tips/prompt-box'
 
 export default {
-  name: "SearchSale",
+  name: 'SearchSale',
   directives: { waves },
+  components: {
+    promptBox
+  },
   props: {
-    screenHeight: {
-      type: Number,
-      default: 0
-    },
-    backgroundColor: {
-      type: String,
-      default: "background-color:rgba(78,143,223,0);"
-    },
     loading: {
       type: Boolean,
       default: false
+    },
+    title: {
+      type: String,
+      default: ''
     }
-  },
 
+  },
   data() {
     return {
       showAllLevels: false,
@@ -91,24 +98,128 @@ export default {
       options: [],
       pickerOptions: {
         disabledDate(time) {
-          return time.getTime() > Date.now() - 8.64e7;
+          return time.getTime() > Date.now() - 8.64e7
         }
+      },
+
+      tips: {
+        'top30': [
+          {
+            name: '店铺名称',
+            description: '有零售数据的店铺'
+          }, {
+            name: '日业绩',
+            description: '查询日期的零售金额'
+          }, {
+            name: '日销量',
+            description: '查询日期的零售数量'
+          }, {
+            name: '日单价',
+            description: '日业绩/日销量,取整'
+          }, {
+            name: '本月业绩',
+            description: '查询日期月份的总零售金额'
+          }, {
+            name: '本月销量',
+            description: '查询日期月份的总零售数量'
+          }, {
+            name: '本月日均销额',
+            description: '本月业绩/本月销量'
+          }, {
+            name: '季度库存',
+            description: '查询当日前一天的款号库存，该季度库存与查询日有关，与查询日期无关'
+          }
+        ],
+        'storeDayAvg': [
+          {
+            name: '经销商',
+            description: '按客户区分'
+          },
+          {
+            name: '当日店均销额',
+            description: '查询日期所有门店零售金额/有零售数据的门店数量'
+          },
+          {
+            name: '当日店均销量',
+            description: '查询日期所有门店零售数量/有零售数据的门店数量'
+          },
+          {
+            name: '当日店均单价',
+            description: '所有门店零售金额/所有门店零售数量'
+          },
+          {
+            name: '当月累计单店',
+            description: '当月所有门店零售金额/有零售数据的门店数量/天数'
+          },
+          {
+            name: '增长',
+            description: '(当月累计单店-上年当月累计单店)/上年当月累计单店'
+          },
+          {
+            name: '老店',
+            description: '开店时间大于365天的店铺'
+          },
+          {
+            name: '老店年日均',
+            description: '当月所有门店零售金额/门店数量/天数'
+          },
+          {
+            name: '老店日均增长',
+            description: '(当月累计单店-上年当月累计单店)/上年当月累计单店'
+          },
+          {
+            name: '老店年当日店均',
+            description: '当日所有门店零售金额/门店数量'
+          },
+          {
+            name: '日均增长',
+            description: '(当日累计单店-上年当日累计单店)/上年当日累计单店'
+          }
+        ],
+        'retailShare': [
+          {
+            name: '所属经销商',
+            description: '按客户区分'
+          },
+          {
+            name: '销量占比',
+            description: '当日所有门店年份+季节款   零售总数量/当日所有零售数量'
+          },
+          {
+            name: '均单价',
+            description: '当日所有门店年份+季节款   零售总金额/当日年份+季节款零售总数量'
+          },
+          {
+            name: '库存占比',
+            description: '当日所有门店年份+季节款   库存/当日所有库存'
+          },
+          {
+            name: '单店铺货量',
+            description: '当日所有门店年份+季节款   库存/门店数量'
+          }
+        ]
       }
-    };
+    }
   },
   computed: {
+    tipsData() {
+      if (this.title === 'top30') {
+        return this.tips.top30
+      } if (this.title === '系统客户日均单店') {
+        return this.tips.storeDayAvg
+      } if (this.title === '零售占比') {
+        return this.tips.retailShare
+      } else {
+        return ['字段提示，提示板块开发中.....']
+      }
+    }
   },
-  watch: {},
-  created() {
-    this.init();
-  },
-  mounted() { },
   methods: {
-    // 初始化经销商档案
-    init() {
-    },
     handleDownload(str) {
       this.$emit('handleDownload', str)
+    },
+    tipsInfo(str) {
+      this.dialogVisible = !this.dialogVisible
     },
     // 搜索栏回车事件
     handleFilter() {
@@ -118,39 +229,32 @@ export default {
       // this.handle(data)
       this.$emit('getAnalysis', data)
     },
-    // 刷新事件
-    refresh() {
-      console.log("刷新");
-    },
 
+    // 导出PDF
+    exportPdf() {
+      this.$emit('exportPdf')
+    },
     querySearch(queryString, cb) {
-      var restaurants = this.restaurants;
+      var restaurants = this.restaurants
       var results = queryString
         ? restaurants.filter(this.createFilter(queryString))
-        : restaurants;
+        : restaurants
       // 调用 callback 返回建议列表的数据
-      cb(results);
+      cb(results)
     },
     createFilter(queryString) {
       return restaurant => {
         return (
           restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
-        );
-      };
-    },
-    showMessage() {
-      this.dialogVisible = true;
+        )
+      }
     },
     handleClose(done) {
-      this.$confirm("确认关闭？")
-        .then(_ => {
-          done();
-        })
-        .catch(_ => { });
+      this.dialogVisible = !this.dialogVisible
     }
 
   }
-};
+}
 </script>
 
 <style scoped>
