@@ -114,14 +114,24 @@ export default {
       },
       // 提示信息
       title: '根据查询条件进行查询数据(该报表只查询会员数据)',
-      tipsData: '<div style="font-weight:900;">折扣率：</div>' +
-        '<div style="font-size:14px;line-height:20px;">以会员折扣比例为维度</div>' +
-        '<div style="font-weight:900;">单笔金额：</div>' +
-        '<div style="font-size:14px;line-height:20px;">以单笔金额为维度</div>' +
-        '<div style="font-weight:900;">会员积分：</div>' +
-        '<div style="font-size:14px;line-height:20px;">以会员积分为维度</div>' +
-        '<div style="font-weight:900;">商品类别：</div>' +
-        '<div style="font-size:14px;line-height:20px;">以商品类别为维度</div>'
+      tipsData: [
+        {
+          name: '折扣率：',
+          description: '以会员折扣比例为维度'
+        },
+        {
+          name: '单笔金额：',
+          description: '以单笔金额为维度'
+        },
+        {
+          name: '会员积分：',
+          description: '以会员积分为维度'
+        },
+        {
+          name: '商品类别：',
+          description: '以商品类别为维度'
+        }
+      ]
     }
   },
   watch: {

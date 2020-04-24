@@ -97,52 +97,47 @@ export default {
       frequencyType: {
         title: '次数',
         data: [
-          // { value: Math.round(1000 * (Math.random())), name: '1次' },
-          // { value: Math.round(1000 * (Math.random())), name: '2次' },
-          // { value: Math.round(1000 * (Math.random())), name: '3次' },
-          // { value: Math.round(1000 * (Math.random())), name: '大于3次' }
         ]
       },
       // 件数
       numberType: {
         title: '件数',
         data: [
-          // { value: Math.round(1000 * (Math.random())), name: '1件' },
-          // { value: Math.round(1000 * (Math.random())), name: '2件' },
-          // { value: Math.round(1000 * (Math.random())), name: '3件' },
-          // { value: Math.round(1000 * (Math.random())), name: '大于3件' }
         ]
       },
       // 金额
       montyType: {
         title: '金额',
         data: [
-          // { value: Math.round(1000 * (Math.random())), name: '200$' },
-          // { value: Math.round(1000 * (Math.random())), name: '500$' },
-          // { value: Math.round(1000 * (Math.random())), name: '1000$' },
-          // { value: Math.round(1000 * (Math.random())), name: '大于1000$' }
+
         ]
       },
       // 周期
       cycleType: {
         title: '周期',
         data: [
-          // { value: Math.round(1000 * (Math.random())), name: '小于3' },
-          // { value: Math.round(1000 * (Math.random())), name: '4-6' },
-          // { value: Math.round(1000 * (Math.random())), name: '7-9' },
-          // { value: Math.round(1000 * (Math.random())), name: '大于10' }
         ]
       },
       // 提示信息
       title: '根据查询条件进行查询数据(该报表只查询会员数据)',
-      tipsData: '<div style="font-weight:900;">次数：</div>' +
-        '<div style="font-size:14px;line-height:20px;">全部会员购买次数</div>' +
-        '<div style="font-weight:900;">件数：</div>' +
-        '<div style="font-size:14px;line-height:20px;">全部会员购买件数</div>' +
-        '<div style="font-weight:900;">金额：</div>' +
-        '<div style="font-size:14px;line-height:20px;">全部会员购买金额</div>' +
-        '<div style="font-weight:900;">周期：</div>' +
-        '<div style="font-size:14px;font-weight:500;line-height:20px;">会员购买周期，该图时间段为1年内(当天往前365天内)有购买过的总会员，两次购买的最短时间(该饼图与查询参数无关)</div>'
+      tipsData: [
+        {
+          name: '次数：',
+          description: '全部会员购买次数'
+        },
+        {
+          name: '件数：',
+          description: '全部会员购买件数'
+        },
+        {
+          name: '金额：',
+          description: '全部会员购买金额'
+        },
+        {
+          name: '周期：',
+          description: '会员购买周期，该图时间段为1年内(当天往前365天内)有购买过的总会员，两次购买的最短时间(该饼图与查询参数无关)'
+        }
+      ]
     }
   },
   watch: {

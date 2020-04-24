@@ -116,14 +116,24 @@ export default {
       },
       // 提示信息
       title: '根据查询条件进行查询数据',
-      tipsData: '<div style="font-weight:900;">时段零售：</div>' +
-        '<div style="font-size:14px;line-height:20px;">以两小时为维度，如0-1为例，时间为00:00-01:59，以此类推,没有零售的时段将不显示</div>' +
-        '<div style="font-weight:900;">商品风格：</div>' +
-        '<div style="font-size:14px;line-height:20px;">以商品风格为维度</div>' +
-        '<div style="font-weight:900;">会员占比：</div>' +
-        '<div style="font-size:14px;line-height:20px;">以会员为维度</div>' +
-        '<div style="font-weight:900;">码段：</div>' +
-        '<div style="font-size:14px;line-height:20px;">以商品尺码为维度</div>'
+      tipsData: [
+        {
+          name: '时段零售：',
+          description: '以两小时为维度，如0-1为例，时间为00:00-01:59，以此类推,没有零售的时段将不显示'
+        },
+        {
+          name: '商品风格：',
+          description: '以商品风格为维度'
+        },
+        {
+          name: '会员占比：',
+          description: '以会员为维度'
+        },
+        {
+          name: '码段：',
+          description: '以商品尺码为维度'
+        }
+      ]
     }
   },
   watch: {

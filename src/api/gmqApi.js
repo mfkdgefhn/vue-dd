@@ -108,7 +108,7 @@ export function getProductType(params) {
 }
 
 // 风格类别
-export function getProductstyle(params) {
+export function getProductStyle(params) {
   return request({
     url: url + '/Q/p.do?o=bifglb',
     method: 'get',
@@ -257,6 +257,24 @@ export function getStore(params) {
 export function getStores(params) {
   return request({
     url: url + '/Q/r.do?o=BIdccxjgj',
+    method: 'get',
+    params
+  })
+}
+// ---------------会员挖掘--------------------------------------------------------
+
+// 获取会员挖掘信息
+export function getVipExcavate(params) {
+  return request({
+    url: url + '/Q/r.do?o=hywj',
+    method: 'get',
+    params
+  })
+}
+// 获取会员零售信息
+export function getVipRetail(params) {
+  return request({
+    url: url + '/Q/r.do?o=hylsxx',
     method: 'get',
     params
   })

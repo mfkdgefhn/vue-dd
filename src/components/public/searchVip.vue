@@ -2,101 +2,71 @@
   <div class="seach-length">
     <el-row :gutter="10">
       <!-- 时间查询 -->
-      <el-col :md="8" :sm="12" :xs="24">
-        <el-row style="margin-bottom:0px;">
-          <el-col :span="11">
-            <el-date-picker
-              v-model="listQuery.beginDate"
-              style="width: 100%; margin-bottom: 5px; font-size:12px;"
-              type="date"
-              value-format="yyyyMMdd"
-              placeholder="开始日期"
-              format="yyyyMMdd"
-            />
-          </el-col>
-          <el-col :span="2" style="text-align:center;">
-            <span style="line-height:38px; color:#ccc;">至</span>
-          </el-col>
-          <el-col :span="11">
-            <el-date-picker
-              v-model="listQuery.endDate"
-              style="width: 100%;margin-bottom: 5px;font-size:12px;"
-              type="date"
-              value-format="yyyyMMdd"
-              placeholder="结束日期"
-              format="yyyyMMdd"
-            />
-          </el-col>
-        </el-row>
-      </el-col>
+      <el-col>
+        <el-date-picker
+          v-model="listQuery.beginDate"
+          class="price-class"
+          type="date"
+          value-format="yyyyMMdd"
+          placeholder="开始日期"
+          format="yyyyMMdd"
+        />
+        <span style="line-height:38px; color:#ccc;">至</span>
+        <el-date-picker
+          v-model="listQuery.endDate"
+          class="price-class"
+          type="date"
+          value-format="yyyyMMdd"
+          placeholder="结束日期"
+          format="yyyyMMdd"
+        />
 
-      <!-- 价格区间 -->
-      <el-col :md="8" :sm="12" :xs="24">
-        <el-row style="margin-bottom:0px;">
-          <el-col :span="11">
-            <el-input
-              v-model="listQuery.price1"
-              type="tel"
-              onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"
-              maxlength="4"
-              placeholder="最小值"
-            ></el-input>
-          </el-col>
-          <el-col :span="2" style="text-align:center;">
-            <span style="line-height:38px; color:#ccc;">至</span>
-          </el-col>
-          <el-col :span="11">
-            <el-input
-              v-model="listQuery.price2"
-              onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"
-              maxlength="4"
-              type="tel"
-              placeholder="最大值"
-            ></el-input>
-          </el-col>
-        </el-row>
-      </el-col>
+        <!-- 价格区间 -->
+        <el-input
+          v-model="listQuery.minPrice"
+          class="price-class"
+          type="tel"
+          onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"
+          maxlength="4"
+          placeholder="低价"
+        ></el-input>
+        <span style="line-height:38px; color:#ccc;">至</span>
+        <el-input
+          v-model="listQuery.maxPrice"
+          class="price-class"
+          onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"
+          maxlength="4"
+          type="tel"
+          placeholder="高价"
+        ></el-input>
 
-      <!-- 经销商 -->
-      <el-col :md="5" :sm="8" :xs="24">
+        <!-- 经销商选择 -->
         <el-select
-          v-model="listQuery.customerIds"
+          v-model="listQuery.customer"
+          class="price-class"
           multiple
           clearable
           collapse-tags
           style="margin-left: 20px;"
           placeholder="经销商"
         >
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
+          <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
-      </el-col>
 
-      <!-- 风格选择 -->
-      <el-col :md="5" :sm="8" :xs="12">
+        <!-- 风格选择 -->
         <el-select
           v-model="listQuery.mid8"
+          class="price-class"
           multiple
           clearable
           collapse-tags
           style="margin-left: 20px;"
           placeholder="风格"
         >
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
+          <el-option v-for="item in mid8s" :key="item.value" :label="item.name" :value="item.value"></el-option>
         </el-select>
-      </el-col>
 
-      <!-- 搜索按钮 -->
-      <el-col :md="3" :sm="5" :xs="5">
+        <!-- 搜索按钮 -->
         <el-button
           class="filter-item"
           type="primary"
@@ -104,57 +74,65 @@
           :loading="loading"
           :disabled="loading"
           @click="handleFilter"
-        >分析</el-button>
+        >会员挖掘</el-button>
+
+        <el-button
+          v-waves
+          :loading="loading"
+          class="filter-item"
+          type="primary"
+          icon="el-icon-download"
+          @click="handleDownload('this')"
+        >单页导出</el-button>
+
+        <el-button
+          v-waves
+          :loading="loading"
+          class="filter-item"
+          type="primary"
+          icon="el-icon-download"
+          @click="handleDownload('all')"
+        >全部导出</el-button>
+
+        <!-- PDF -->
+        <el-button
+          v-waves
+          :loading="loading"
+          class="filter-item"
+          type="primary"
+          icon="el-icon-download"
+          @click="exportPdf"
+        >PDF</el-button>
       </el-col>
     </el-row>
-
-    <!-- 提示信息弹窗 -->
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-      <span>这是一段信息</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getStore } from "@/api/gmqApi"; // , getYear,getSeason,getCustomer,
 import { getDateStr } from '@/utils/times'
+import waves from '@/directive/waves' // waves directive
+import { isEmpty } from '@/utils/string'
 
 export default {
   name: "SearchVip",
   props: {
-    screenHeight: {
-      type: Number,
-      default: 0
-    },
-    backgroundColor: {
-      type: String,
-      default: "background-color:rgba(78,143,223,0);"
-    },
     loading: {
       type: Boolean,
       default: false
     }
   },
-
   data() {
     return {
-      showAllLevels: false,
       listQuery: {
         beginDate: getDateStr(-7),
         endDate: getDateStr(-1),
         loading: false,
-        customerIds: []
       },
-      storeOptions: [],
-      restaurants: [],
-      dialogVisible: false,
-      options: []
+      options: [],
+      mid8s: []
     };
   },
+  directives: { waves },
   computed: {
   },
   watch: {},
@@ -163,39 +141,44 @@ export default {
   },
   mounted() { },
   methods: {
-    // 初始化经销商档案
+    // 初始化
     init() {
+      // 经销商档案
       this.$store.dispatch("baseApi/getCustomer").then(() => {
-        this.options = this.$store.getters.customer.map(x => {
-          const option = {
-            value: x.id,
-            label: x.name
-          };
-          return option;
-        });
-        this.options.unshift({ value: 176, label: "总部" });
+        this.options = this.$store.getters.customer
+      });
+      // 款号风格
+      this.$store.dispatch("baseApi/getProductStyle").then(() => {
+        this.mid8s = this.$store.getters.productStyle
       });
     },
+
     // 搜索栏回车事件
     handleFilter() {
       if (this.judge(this.listQuery)) {
-        this.$message.error("最小值比最大值，请重新输入！")
+        this.$message.error("最小值超过最大值，请重新输入！")
+        return
+      }
+      if (isEmpty(this.listQuery.customer.length) && (isEmpty(this.listQuery.minPrice) && isEmpty(this.listQuery.maxPrice))) {
+        this.$message.error("查询数据过万，请输入查询参数！！！")
         return
       }
       var data = Object.assign({}, this.listQuery)
       this.handle(data)
       this.$emit('getAnalysis', data)
     },
+    // 判断价格值
     judge(data) {
-      if (!data.price1)
+      if (!data.minPrice)
         return false
       else {
-        if (!data.price2)
+        if (!data.maxPrice)
           return false
         else
-          return data.price1 > data.price2 ? true : false
+          return data.minPrice > data.maxPrice ? true : false
       }
     },
+    // 对查询参数进行转换
     handle(data) {
       // 时间转换
       if (!data.beginDate) {
@@ -215,44 +198,34 @@ export default {
         data.endDate = getDateStr(-1);
       }
       // 经销商转换
-      if (data.customerIds > 0) {
+      if (data.customer.length > 0) {
         var arr = [];
-        data.customerIds.forEach(element => {
-          arr.push(element[1]);
+        data.customer.forEach(element => {
+          arr.push(element);
         });
-        data.customerIds = arr.join(",");
+        data.customer = arr.join(",");
+      } else {
+        delete data.customer
+      }
+      // 网格转换
+      if (data.mid8.length > 0) {
+        var arr = [];
+        data.mid8.forEach(element => {
+          arr.push(element);
+        });
+        data.mid8 = arr.join(",");
+      } else {
+        delete data.mid8
       }
     },
-    // 刷新事件
-    refresh() {
-      console.log("刷新");
+    // 导出excel
+    handleDownload(str) {
+      this.$emit('handleDownload', str)
     },
-    querySearch(queryString, cb) {
-      var restaurants = this.restaurants;
-      var results = queryString
-        ? restaurants.filter(this.createFilter(queryString))
-        : restaurants;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
+    // 导出PDF
+    exportPdf() {
+      this.$emit('exportPdf')
     },
-    createFilter(queryString) {
-      return restaurant => {
-        return (
-          restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
-          0
-        );
-      };
-    },
-    showMessage() {
-      this.dialogVisible = true;
-    },
-    handleClose(done) {
-      this.$confirm("确认关闭？")
-        .then(_ => {
-          done();
-        })
-        .catch(_ => { });
-    }
   }
 };
 </script>
@@ -264,5 +237,10 @@ export default {
 }
 .el-row {
   margin-bottom: 5px;
+}
+.price-class {
+  width: 150px;
+  margin-bottom: 10px;
+  margin-left: 10px;
 }
 </style>

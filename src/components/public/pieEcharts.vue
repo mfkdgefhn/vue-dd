@@ -38,8 +38,8 @@ export default {
       default: false
     },
     tipsData: {
-      type: String,
-      default: ''
+      type: Array,
+      default: () => []
     },
     title: {
       type: String,
