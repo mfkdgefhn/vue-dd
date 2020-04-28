@@ -6,7 +6,11 @@
  * @LastEditTime: 2019-11-26 13:37:46
  */
 
-import { getProductType, getProductStyle, getCustomer, getStore, getStores, getYear, getSeason, getVipExcavate, getVipRetail } from '@/api/gmqApi'
+import {
+  getProductType, getProductStyle, getCustomer, getStore, getStores,
+  getYear, getSeason, getVipExcavate, getVipRetail, getVipType,
+  getHywjStores
+} from '@/api/gmqApi'
 
 const state = {
   productStyle: [], // 款号风格
@@ -16,10 +20,12 @@ const state = {
   customer: [],
   year: [],
   season: [],
-  months: '111',
+  months: '',
   listQuery: {},
   vipExcavate: [],
-  vipRetail: []
+  vipRetail: [],
+  vipType: [],
+  hywjStores: []
 }
 
 const mutations = {
@@ -27,9 +33,17 @@ const mutations = {
   SET_VIP_EXCAVATE: (state, vipExcavate) => {
     state.vipExcavate = vipExcavate
   },
+  // 设置会员卡类型
+  SET_VIP_TYPE: (state, vipType) => {
+    state.vipType = vipType
+  },
   // 设置会员零售信息
   SET_VIP_RETAIL: (state, vipRetail) => {
     state.vipRetail = vipRetail
+  },
+  // 设置会员挖掘店仓信息
+  SET_HYWJ_STORES: (state, hywjStores) => {
+    state.hywjStores = hywjStores
   },
   // 设置款号风格
   SET_PORDUCTSTYLE: (state, productStyle) => {
@@ -104,6 +118,33 @@ const actions = {
       })
     })
   },
+  // 获取会员卡类型
+  getVipType({ commit }, count) {
+    return new Promise((resolve, reject) => {
+      getVipType(count).then(response => {
+        commit('SET_VIP_TYPE', response)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  // 获取全部店仓
+  getHywjStores({ commit }, count) {
+    return new Promise((resolve, reject) => {
+      if (state.stores.length > 0) {
+        resolve()
+      } else {
+        getHywjStores(count).then(response => {
+          commit('SET_HYWJ_STORES', response)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      }
+    })
+  },
+
   // 获取款号风格
   getProductStyle({ commit }) {
     return new Promise((resolve, reject) => {

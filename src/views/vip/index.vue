@@ -2,12 +2,13 @@
   <div class="vip">
     <!-- 搜索 -->
     <el-card shadow="hover" class="crad">
-      <search-vip :loading="loading" @getAnalysis="getAnalysis" />
+      <search-vip :loading="loading" @getAnalysis="getAnalysis" @handleDownload="handleDownload" />
     </el-card>
 
     <!-- 显示的表格 -->
     <el-card v-if="page" :body-style="{ padding: '0px 0px 50px 0px' }">
       <el-table
+        id="pdfDom"
         v-loading="loading"
         :data="table.tableData"
         style="width: 100%"
@@ -68,6 +69,7 @@ export default {
       loading: false,
       dialogVisible: false,
       page: false,
+      title: '会员挖掘',
       tipsData: [],
       tableData: [],
       table: {
@@ -76,15 +78,14 @@ export default {
         currentPage: 1, // 当前在第几页
         pageSize: 10,
         pageSizes: [10, 20, 30, 40],
-        tableData: []
+        tableData: [],
+        tHeader: ['经销商', '开卡店仓', '会员卡号', '会员卡类别', '手机号', '剩余积分'],
+        filterVal: ['customer', 'store', 'card', 'vipType', 'mobel', 'integral']
       }
     }
   },
-  created() {
-  },
   methods: {
-    init() {
-    },
+    // 查询
     getAnalysis(data) {
       this.loading = true
       this.table.tableData = []
@@ -115,8 +116,8 @@ export default {
     // 点击显示会员零售信息
     showVipInfo(val) {
       this.loading = true
-      this.dialogVisible = !this.dialogVisible
       this.$store.dispatch('baseApi/getVipRetail', val).then(() => {
+        this.dialogVisible = !this.dialogVisible
         this.tipsData = this.$store.getters.vipRetail
         // 会员信息json转成string字符串
         this.table.title = this.jsonToString(val)
@@ -135,15 +136,10 @@ export default {
         '<span class="html-title">卡号：</span><span class="html-font">' + json.card + '</span>' +
         '<span class="html-title">昵称：</span><span class="html-font">' + json.nickName + '</span>' +
         '<span class="html-title">剩余积分：</span><span class="html-font">' + json.integral + '</span>'
-
       return str
     },
     handleClose(done) {
       this.dialogVisible = !this.dialogVisible
-    },
-    // 导出PDF
-    exportPdf() {
-      this.getPdf('会员挖掘')
     },
     // 导出excel
     handleDownload(str) {
@@ -153,25 +149,43 @@ export default {
         return
       }
       str = (str === undefined) ? '' : str
+      switch (str) {
+        // 单页导出excel  全部导出all
+        case 'pageExcel':
+        case 'allExcel':
+          this.export2excel(str)
+          break
+        // 全部导出zip
+        case 'allZip':
+          this.export2zip()
+          break
+        // 导出pdf
+        case 'allPdf':
+          this.getPdf(this.title)
+          break
+        default:
+          break
+      }
+      this.loading = false
+    },
+    // 导出excel
+    export2excel(str) {
       import('@/vendor/Export2Excel').then(excel => {
-        // 设置Excel的表格第一行的标题
-        const tHeader = ['经销商', '开卡店仓', '会员卡号', '会员卡类别', '手机号', '剩余积分']
         // 设置对应表头属性
-        const filterVal = ['customer', 'store', 'card', 'vipType', 'mobel', 'integral']
-        const data = this.formatJson(filterVal, str)
+        const data = this.formatJson(this.table.filterVal, str)
         excel.export_json_to_excel({
-          header: tHeader,
+          // 设置Excel的表格第一行的标题
+          header: this.table.tHeader,
           data,
-          filename: this.table.title
+          filename: this.title + this.$moment().format('YYYY-MM-DD')
         })
-        this.loading = false
       })
     },
     formatJson(filterVal, str) {
       var data = []
-      if (str === 'all') {
+      if (str === 'allExcel' | str === 'allZip' | str === 'allPdf') {
         data = this.$store.getters.vipExcavate
-      } else if (str === 'this') {
+      } else if (str === 'pageExcel') {
         data = this.table.tableData
       } else {
         return
@@ -184,6 +198,16 @@ export default {
           return v[j]
         }
       }))
+    },
+    // 导出zip
+    export2zip() {
+      import('@/vendor/Export2Zip').then(zip => {
+        const data = this.formatJson1(this.table.filterVal, this.$store.getters.vipExcavate)
+        zip.export_txt_to_zip(this.table.tHeader, data, this.title + this.$moment().format('YYYY-MM-DD'), this.title + this.$moment().format('YYYY-MM-DD'))
+      })
+    },
+    formatJson1(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]))
     }
   }
 }

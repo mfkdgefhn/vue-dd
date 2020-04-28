@@ -124,7 +124,7 @@ export default {
             description: '查询日期月份的总零售数量'
           }, {
             name: '本月日均销额',
-            description: '本月业绩/本月销量'
+            description: '本月业绩/本月销量天数'
           }, {
             name: '季度库存',
             description: '查询当日前一天的款号库存，该季度库存与查询日有关，与查询日期无关'

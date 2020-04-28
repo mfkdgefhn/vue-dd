@@ -12,6 +12,7 @@
     </el-card>
     <el-card v-if="page" :body-style="{ padding: '0px 0px 50px 0px' }">
       <el-table
+        id="pdfDom"
         v-loading="loading"
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"

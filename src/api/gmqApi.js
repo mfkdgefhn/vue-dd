@@ -279,6 +279,22 @@ export function getVipRetail(params) {
     params
   })
 }
+// 获取会员卡类型
+export function getVipType(params) {
+  return request({
+    url: url + '/Q/r.do?o=VIPklx',
+    method: 'get',
+    params
+  })
+}
+// 获取会员挖掘店仓信息
+export function getHywjStores(params) {
+  return request({
+    url: url + '/Q/r.do?o=hywj-dc',
+    method: 'get',
+    params
+  })
+}
 
 // -----------------------------------------------------------------------
 
