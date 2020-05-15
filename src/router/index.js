@@ -174,17 +174,19 @@ export const constantRoutes = [
       meta: { title: '权限配置', icon: 'shoes' }
     }]
   },
+
   {
-    path: '/splitPane',
+    path: '/tab',
     component: Layout,
-    redirect: '/splitPane/index',
+    redirect: '/tab/index',
     children: [{
       path: 'index',
-      name: '框架',
-      component: () => import('@/views/splitPane/index'),
-      meta: { title: '框架', icon: 'shoes' }
+      name: 'tab',
+      component: () => import('@/views/tab/index'),
+      meta: { title: 'tab', icon: 'shoes' }
     }]
   },
+
   // {
   //   path: '/sales',
   //   component: Layout,

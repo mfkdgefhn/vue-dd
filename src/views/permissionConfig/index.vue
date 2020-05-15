@@ -1,17 +1,29 @@
 <template>
-  <div>
-    <dnd-list :list1-title="list1Title" :list2-title="list2Title" :list1="list1" :list2="list2" />
-    <el-button @click="getList1">提交</el-button>
-    <el-button @click="getList2">取消</el-button>
+  <div class="components-container">
+    <split-pane :min-percent="20" :default-percent="30" split="vertical" @resize="resize">
+      <template slot="paneL" class="left-container">A</template>
+      <template slot="paneR" class="right-container">
+        <dnd-list
+          :list1-title="list1Title"
+          :list2-title="list2Title"
+          :list1="list1"
+          :list2="list2"
+        />
+        <el-button @click="getList1">提交</el-button>
+        <el-button @click="getList2">取消</el-button>
+      </template>
+    </split-pane>
   </div>
 </template>
 
 <script>
+import splitPane from 'vue-splitpane'
 import dndList from '@/components/DndList'
 
 export default {
   name: 'PermissionConfig',
   components: {
+    splitPane,
     dndList
   },
   data() {
@@ -40,9 +52,26 @@ export default {
 
     getList2() {
       console.log(this.list2)
+    },
+    resize() {
+      console.log('resize')
     }
+
   }
 }
 </script>
 
-<style lang="stylus" scoped></style>
+<style  scoped>
+.components-container {
+  position: relative;
+  height: 100vh;
+}
+.left-container {
+  background-color: #f38181;
+  height: 100%;
+}
+.right-container {
+  background-color: #fce38a;
+  height: 100%;
+}
+</style>
