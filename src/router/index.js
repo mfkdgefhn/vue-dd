@@ -111,8 +111,8 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    // redirect: '/sales',
-    redirect: '/dataAnalysis',
+    redirect: '/permissionConfig',
+    // redirect: '/dataAnalysis',
     name: '数据看板',
     meta: {
       title: '数据分析', icon: 'shoes'
@@ -163,6 +163,28 @@ export const constantRoutes = [
     }]
   },
 
+  {
+    path: '/permissionConfig',
+    component: Layout,
+    redirect: '/permissionConfig/index',
+    children: [{
+      path: 'index',
+      name: '权限配置',
+      component: () => import('@/views/permissionConfig/index'),
+      meta: { title: '权限配置', icon: 'shoes' }
+    }]
+  },
+  {
+    path: '/splitPane',
+    component: Layout,
+    redirect: '/splitPane/index',
+    children: [{
+      path: 'index',
+      name: '框架',
+      component: () => import('@/views/splitPane/index'),
+      meta: { title: '框架', icon: 'shoes' }
+    }]
+  },
   // {
   //   path: '/sales',
   //   component: Layout,

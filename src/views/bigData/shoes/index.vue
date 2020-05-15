@@ -233,7 +233,7 @@ export default {
     this.$store.dispatch('baseApi/setMonths', this.getMonths(0))
 
     // 获取看板数据
-    this.getBigData(this.listQuery)
+    // this.getBigData(this.listQuery)
     // 获取基础数据(如：年份....)
     this.getBaseDate(this.listQuery)
   },

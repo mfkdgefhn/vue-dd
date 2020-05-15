@@ -8,7 +8,7 @@
           v-if="menuProperty.menus[0].checked"
           v-model="listQuery.selectDate"
           clearable
-          placeholder="请选择"
+          placeholder="时间区间"
         >
           <el-option
             v-for="item in menuProperty.options"
@@ -236,7 +236,7 @@
           <el-dropdown-menu>
             <el-dropdown-item command="pageExcel">单页导出(EXCEL)</el-dropdown-item>
             <el-dropdown-item command="allExcel">全部导出(EXCEL)</el-dropdown-item>
-            <el-dropdown-item command="allZip">全部导出(ZIP)</el-dropdown-item>
+            <el-dropdown-item command="allZip">导出(ZIP大数据)</el-dropdown-item>
             <el-dropdown-item command="allPdf">导出PDF</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
