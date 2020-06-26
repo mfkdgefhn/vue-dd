@@ -30,6 +30,15 @@
           @click="handleDownload('this')"
         >单页导出</el-button>
 
+        <el-button
+          v-waves
+          :loading="loading"
+          class="filter-item"
+          type="primary"
+          icon="el-icon-download"
+          @click="handleDownload('all')"
+        >全部导出</el-button>
+
         <!-- PDF -->
         <el-button
           v-waves
@@ -39,15 +48,6 @@
           icon="el-icon-download"
           @click="exportPdf"
         >PDF</el-button>
-
-        <el-button
-          v-waves
-          :loading="loading"
-          class="filter-item"
-          type="primary"
-          icon="el-icon-download"
-          @click="handleDownload('all')"
-        >全部导出</el-button>
 
         <!-- 提示信息 -->
         <el-button type="primary" icon="el-icon-message" circle @click="tipsInfo" />
@@ -127,7 +127,7 @@ export default {
             description: '本月业绩/本月销量天数'
           }, {
             name: '季度库存',
-            description: '查询当日前一天的款号库存，该季度库存与查询日有关，与查询日期无关'
+            description: '查询当日的款号季度库存，12月能查春季库存、3月能查夏季库存、6月能查秋季库存、9月能查冬季库存'
           }
         ],
         'storeDayAvg': [

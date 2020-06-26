@@ -360,3 +360,15 @@ export function getEducationProportion(params) {
     params
   })
 }
+
+// ---------------------------------- 权限设置 -------------------------------------
+
+// 总经销商
+export function getQxszCustomer(params) {
+  return request({
+    url: url + '/Q/r.do?o=qxsz-jxs',
+    method: 'get',
+    params
+  })
+}
+

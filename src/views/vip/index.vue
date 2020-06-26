@@ -117,11 +117,14 @@ export default {
     showVipInfo(val) {
       this.loading = true
       this.$store.dispatch('baseApi/getVipRetail', val).then(() => {
-        this.dialogVisible = !this.dialogVisible
-        this.tipsData = this.$store.getters.vipRetail
-        // 会员信息json转成string字符串
-        this.table.title = this.jsonToString(val)
-        this.loading = false
+        // 延时一秒弹窗，不然会显示太快,体验感不佳
+        setTimeout(() => {
+          this.dialogVisible = !this.dialogVisible
+          this.tipsData = this.$store.getters.vipRetail
+          // 会员信息json转成string字符串
+          this.table.title = this.jsonToString(val)
+          this.loading = false
+        }, 500)
       }).catch(error => {
         this.loading = false
         console.log(error)

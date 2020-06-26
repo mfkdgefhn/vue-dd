@@ -4,19 +4,19 @@
       <!-- 时间查询 -->
       <el-col>
         <el-select
-          class="price-class"
           v-if="menuProperty.menus[0].checked"
           v-model="listQuery.selectDate"
-          clearable
+          class="price-class"
           placeholder="时间区间"
+          @change="showMessage"
         >
           <el-option
             v-for="item in menuProperty.options"
-            :key="item.value"
+            :key="item.id"
             :label="item.label"
             :value="item.value"
             :disabled="item.disabled"
-          ></el-option>
+          />
         </el-select>
 
         <!-- 经销商选择 -->
@@ -36,7 +36,7 @@
             :key="item.id"
             :label="item.name"
             :value="item.id"
-          ></el-option>
+          />
         </el-select>
 
         <!-- 店仓选择 -->
@@ -59,7 +59,7 @@
             :key="item.id"
             :label="item.name"
             :value="item.id"
-          ></el-option>
+          />
         </el-select>
 
         <!-- 价格区间 -->
@@ -71,7 +71,7 @@
           onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"
           maxlength="4"
           placeholder="低价"
-        ></el-input>
+        />
         <span v-if="menuProperty.menus[2].checked" style="line-height:38px; color:#ccc;">至</span>
         <el-input
           v-if="menuProperty.menus[2].checked"
@@ -81,7 +81,7 @@
           maxlength="4"
           type="tel"
           placeholder="高价"
-        ></el-input>
+        />
 
         <!-- 风格选择 -->
         <el-select
@@ -98,16 +98,16 @@
             :key="item.value"
             :label="item.name"
             :value="item.value"
-          ></el-option>
+          />
         </el-select>
 
         <!-- 颜色选择 -->
         <el-input
           v-if="menuProperty.menus[4].checked"
-          class="price-class"
           v-model="listQuery.color"
+          class="price-class"
           placeholder="颜色"
-        ></el-input>
+        />
 
         <!-- 尺码 -->
         <el-select
@@ -124,7 +124,7 @@
             :key="item.id"
             :label="item.value"
             :value="item.id"
-          ></el-option>
+          />
         </el-select>
 
         <!-- 折扣区间 -->
@@ -134,7 +134,7 @@
           class="price-class"
           type="tel"
           placeholder="最低折扣"
-        ></el-input>
+        />
         <span v-if="menuProperty.menus[6].checked" style="line-height:38px; color:#ccc;">至</span>
         <el-input
           v-if="menuProperty.menus[6].checked"
@@ -142,29 +142,29 @@
           class="price-class"
           type="tel"
           placeholder="最高折扣"
-        ></el-input>
+        />
 
         <!-- 剩余积分 -->
         <el-input
           v-if="menuProperty.menus[7].checked"
+          v-model="listQuery.integral"
           class="price-class"
           type="tel"
           onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"
           maxlength="5"
-          v-model="listQuery.integral"
           placeholder="积分"
-        ></el-input>
+        />
 
         <!-- 双数选择 -->
         <el-input
           v-if="menuProperty.menus[8].checked"
-          class="price-class"
           v-model="listQuery.double"
+          class="price-class"
           type="tel"
           onkeyup="this.value=this.value.replace(/[^\d.]/g,'');"
           maxlength="1"
           placeholder="双数"
-        ></el-input>
+        />
 
         <!-- 季节选择 -->
         <el-select
@@ -181,7 +181,7 @@
             :key="item.id"
             :label="item.value"
             :value="item.id"
-          ></el-option>
+          />
         </el-select>
 
         <!-- 卡类型选择 -->
@@ -199,7 +199,7 @@
             :key="item.id"
             :label="item.name"
             :value="item.id"
-          ></el-option>
+          />
         </el-select>
       </el-col>
 
@@ -212,7 +212,7 @@
           :loading="loading"
           :disabled="loading"
           @click="handleFilter"
-        >{{title}}</el-button>
+        >{{ title }}</el-button>
 
         <!-- 查询全部菜单 -->
         <el-dropdown :hide-on-click="false" class="menu-right">
@@ -222,7 +222,7 @@
           </el-button>
           <el-dropdown-menu>
             <el-dropdown-item v-for="i in menuProperty.menus" :key="i.id">
-              <el-checkbox v-model="i.checked" :disabled="i.disabled">{{i.name}}</el-checkbox>
+              <el-checkbox v-model="i.checked" :disabled="i.disabled">{{ i.name }}</el-checkbox>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -231,7 +231,7 @@
         <el-dropdown class="menu-right" @command="handleCommand">
           <el-button type="primary">
             导出
-            <i class="el-icon-arrow-down el-icon--right"></i>
+            <i class="el-icon-arrow-down el-icon--right" />
           </el-button>
           <el-dropdown-menu>
             <el-dropdown-item command="pageExcel">单页导出(EXCEL)</el-dropdown-item>
@@ -261,9 +261,8 @@ import waves from '@/directive/waves' // waves directive
 import { isEmpty } from '@/utils/string'
 import promptBox from '@/components/tips/prompt-box'
 
-
 export default {
-  name: "SearchVip",
+  name: 'SearchVip',
   directives: { waves },
   components: {
     promptBox
@@ -297,12 +296,12 @@ export default {
         {
           name: '会员卡类别',
           description: '会员所属类别'
-        },
+        }
       ],
       // 菜单属性
       menuProperty: {
-        // 菜单
         /**
+         * 菜单
          * id:基本没用
          * checked:控制是否显示
          * value:菜单字段名
@@ -323,28 +322,20 @@ export default {
           { id: 11, checked: false, value: 'vipType', name: '卡类型', disabled: false },
           { id: 12, checked: false, value: 'store', name: '店仓', disabled: true }
         ],
-        // 查询时间选择
+        // 查询时间选择 [inDate]
         options: [
-          {
-            value: getDateStr(-7),
-            label: '1周内未零售会员',
-            disabled: true
-          }, {
-            value: getDateStr(-31),
-            label: '1月内未零售会员'
-          }, {
-            value: getDateStr(-61),
-            label: '2月内未零售会员'
-          }, {
-            value: getDateStr(-91),
-            label: '1季度内未零售会员'
-          }, {
-            value: getDateStr(-183),
-            label: '半年内未零售会员'
-          }, {
-            value: getDateStr(-365),
-            label: '1年内未零售会员'
-          }],
+          { id: 1, value: '1+' + getDateStr(-7), label: '1周内未零售会员', disabled: true },
+          { id: 2, value: '2+' + getDateStr(-31), label: '1月内未零售会员' },
+          { id: 3, value: '3+' + getDateStr(-61), label: '2月内未零售会员' },
+          { id: 4, value: '4+' + getDateStr(-92), label: '1季度内未零售会员' },
+          { id: 5, value: '5+' + getDateStr(-184), label: '半年内未零售会员' },
+          { id: 6, value: '6+' + getDateStr(-365), label: '1年内未零售会员' },
+          { id: 7, value: '7+' + getDateStr(-7), label: '1周内' },
+          { id: 8, value: '8+' + getDateStr(-31), label: '1月内' },
+          { id: 9, value: '9+' + getDateStr(-92), label: '1季度内' },
+          { id: 10, value: '10' + getDateStr(-184), label: '半年内' },
+          { id: 11, value: '11+' + getDateStr(-365), label: '1年内' }
+        ],
         // 经销商
         customers: [],
         // 风格
@@ -366,7 +357,7 @@ export default {
           { id: 38, value: '夏季' },
           { id: 39, value: '秋季' },
           { id: 40, value: '冬季' },
-          { id: 666, value: '其他' },
+          { id: 666, value: '其他' }
         ],
         stores: [],
         // 卡类型
@@ -379,49 +370,50 @@ export default {
         ]
       },
       listQuery: {
-        selectDate: getDateStr(-31),
+        selectDate: '2+' + getDateStr(-31),
+        outDate: '2+' + getDateStr(-31),
         loading: false
-      },
+      }
 
-    };
+    }
   },
   created() {
-    this.init();
+    this.init()
   },
   methods: {
     // 初始化
     init() {
       // 经销商档案
-      this.$store.dispatch("baseApi/getCustomer").then(() => {
+      this.$store.dispatch('baseApi/getCustomer').then(() => {
         this.menuProperty.customers = this.$store.getters.customer
-      });
+      })
       // 款号风格
-      this.$store.dispatch("baseApi/getProductStyle").then(() => {
+      this.$store.dispatch('baseApi/getProductStyle').then(() => {
         this.menuProperty.mid8s = this.$store.getters.productStyle
-      });
+      })
       // VIP卡类型
-      this.$store.dispatch("baseApi/getVipType").then(() => {
+      this.$store.dispatch('baseApi/getVipType').then(() => {
         this.menuProperty.vipTypes = this.$store.getters.vipType
-      });
+      })
       // 会员挖掘店仓信息
-      this.$store.dispatch("baseApi/getHywjStores")
+      this.$store.dispatch('baseApi/getHywjStores')
     },
     // 搜索栏回车事件
     handleFilter() {
       if (isEmpty(this.listQuery.selectDate)) {
-        this.$message.error("你未设置月份，这将无法挖掘数据!!!")
+        this.$message.error('你未设置月份，这将无法挖掘数据!!!')
         return
       }
       if (this.judgePrice(this.listQuery)) {
-        this.$message.error("最小值超过最大值，请重新输入！")
+        this.$message.error('最小值超过最大值，请重新输入！')
         return
       }
       if (this.judgeDiscount(this.listQuery)) {
-        this.$message.error("折扣区间要在0.01-1.00之间，请修改!")
+        this.$message.error('折扣区间要在0.01-1.00之间，请修改!')
         return
       }
       if (isEmpty(this.listQuery.customer.length) && (isEmpty(this.listQuery.minPrice) && isEmpty(this.listQuery.maxPrice))) {
-        this.$message.error("查询数据过十万，请输入查询参数！！！")
+        this.$message.error('查询数据过十万，请输入查询参数！！！')
         return
       }
       var data = Object.assign({}, this.listQuery)
@@ -431,6 +423,8 @@ export default {
     },
     // 过滤查询参数
     handle(data) {
+      // 查询日期转换
+
       // 过滤掉查询参数中未显示的查询字段
       for (let index = 0; index < this.menuProperty.menus.length; index++) {
         if (!this.menuProperty.menus[index].checked) {
@@ -447,7 +441,7 @@ export default {
       for (const key in data) {
         if (typeof data[key] === 'object') {
           if (data[key].length > 0) {
-            data[key] = data[key].join(",");
+            data[key] = data[key].join(',')
           } else {
             delete data[key]
           }
@@ -468,7 +462,7 @@ export default {
       if (!data.minPrice) return false
       else {
         if (!data.maxPrice) return false
-        else return parseInt(data.minPrice) > parseInt(data.maxPrice) ? true : false
+        else return parseInt(data.minPrice) > parseInt(data.maxPrice)
       }
     },
     // 判断折扣率
@@ -476,42 +470,42 @@ export default {
       if (!data.minDiscount) return false
       else {
         if (!data.maxDiscount) {
-          return parseFloat(data.minDiscount) < 0.01 || parseFloat(data.minDiscount) > 1.0 ? true : false
+          return !!(parseFloat(data.minDiscount) < 0.01 || parseFloat(data.minDiscount) > 1.0)
         } else {
-          return parseFloat(data.minDiscount) > parseFloat(data.maxDiscount) ? true :
-            parseFloat(data.minDiscount) > 1.0 ? true :
-              parseFloat(data.maxDiscount) < 0.01 ? true : false
+          return parseFloat(data.minDiscount) > parseFloat(data.maxDiscount) ? true
+            : parseFloat(data.minDiscount) > 1.0 ? true
+              : parseFloat(data.maxDiscount) < 0.01
         }
       }
     },
     // 经销商选择后，
     selectCustomer(val) {
       if (val.length > 0) this.menuProperty.menus[11].checked = true
-      this.$store.dispatch("baseApi/getHywjStores", { 'customerId': this.listQuery.customer.join(",") })
+      this.$store.dispatch('baseApi/getHywjStores', { 'customerId': this.listQuery.customer.join(',') })
 
       this.menuProperty.vipTypes = []
-      //更新会员卡类型与店仓
+      // 更新会员卡类型与店仓
       this.$store.getters.vipType.forEach(element => {
         val.forEach(customer => {
           if (customer === element.cCustomerId) {
             this.menuProperty.vipTypes.push(element)
           }
-        });
-      });
+        })
+      })
     },
     // 店仓选择后的结果
     remoteMethod(query) {
-      this.loadingStore = true;
-      let store = this.$store.getters.hywjStores
+      this.loadingStore = true
+      const store = this.$store.getters.hywjStores
       if (query !== '') {
         setTimeout(() => {
-          this.loadingStore = false;
+          this.loadingStore = false
           this.menuProperty.stores = store.filter(item => {
-            return item.name.indexOf(query) > -1;
-          });
-        }, 200);
+            return item.name.indexOf(query) > -1
+          })
+        }, 200)
       } else {
-        this.loadingStore = false;
+        this.loadingStore = false
         this.menuProperty.stores = store
       }
     },
@@ -525,9 +519,23 @@ export default {
     },
     handleClose(done) {
       this.dialogVisible = !this.dialogVisible
+    },
+    showMessage(e) {
+      debugger
+      this.menuProperty.options.forEach(element => {
+        if (element.value === e) {
+          if (element.id > 6) {
+            delete this.listQuery.outDate
+            this.listQuery.inDate = element.value
+          } else {
+            delete this.listQuery.inDate
+            this.listQuery.outDate = element.value
+          }
+        }
+      })
     }
   }
-};
+}
 </script>
 
 <style scoped>

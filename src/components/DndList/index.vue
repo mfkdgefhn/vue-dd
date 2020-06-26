@@ -4,15 +4,19 @@
       <!-- 左侧标题 -->
       <h3>{{ list1Title }}</h3>
       <draggable :set-data="setData" :list="list1" group="article" class="dragArea">
-        <div v-for="element in list1" :key="element.id" class="list-complete-item">
+        <div
+          v-for="element in list1"
+          :key="element.id"
+          class="list-complete-item"
+          @click="deleteEle(element)"
+        >
           <div
             class="list-complete-item-handle"
           >{{ element.id }}[{{ element.author }}] {{ element.title }}</div>
           <div style="position:absolute;right:0px;">
             <!-- 删除图标 -->
             <span
-              style="float: right ;margin-top: -20px;margin-right:5px;"
-              @click="deleteEle(element)"
+              style="float: right ;margin-top: -20px;margin-right:5px;padding-top:5px;padding-right:10px;"
             >
               <i style="color:#ff4949" class="el-icon-delete" />
             </span>
@@ -121,7 +125,7 @@ export default {
 <style lang="scss" scoped>
 .dndList {
   background: #fff;
-  padding-bottom: 40px;
+  padding-bottom: 30px;
   &:after {
     content: "";
     display: table;
@@ -148,6 +152,7 @@ export default {
   margin-top: 4px;
   border: 1px solid #bfcbd9;
   transition: all 1s;
+  border-radius: 10px;
 }
 .list-complete-item-handle {
   overflow: hidden;

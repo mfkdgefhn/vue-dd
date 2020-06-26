@@ -27,8 +27,10 @@ const getters = {
   storeDayAvg: state => state.table.storeDayAvg,
   retailShare: state => state.table.retailShare,
   lastRetailShare: state => state.table.lastRetailShare,
+  lastMaxRetailShare: state => state.table.lastMaxRetailShare,
   inSaleStorage: state => state.table.inSaleStorage,
-  layoutStructure: state => state.table.layoutStructure
+  layoutStructure: state => state.table.layoutStructure,
+  qxszCustomer: state => state.baseApi.qxszCustomer
 
 }
 export default getters

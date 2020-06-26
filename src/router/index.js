@@ -187,43 +187,43 @@ export const constantRoutes = [
     }]
   },
 
-  // {
-  //   path: '/sales',
-  //   component: Layout,
-  //   name: '销售分析',
-  //   meta: {
-  //     title: '销售分析', icon: 'shoes'
-  //   },
-  //   redirect: '/sales/top30',
-  //   children: [
-  //     {
-  //       path: 'top30',
-  //       name: '全国日销TOP30',
-  //       component: () => import('@/views/sales/top30/index'),
-  //       meta: { title: '全国日销TOP30', icon: 'shoes' }
-  //     }, {
-  //       path: 'storeDayAvg',
-  //       name: '系统客户日均单店',
-  //       component: () => import('@/views/sales/storeDayAvg/index'),
-  //       meta: { title: '系统客户日均单店', icon: 'shoes' }
-  //     }, {
-  //       path: 'retailShare',
-  //       name: '零售占比',
-  //       component: () => import('@/views/sales/retailShare/index'),
-  //       meta: { title: '零售占比', icon: 'shoes' }
-  //     }, {
-  //       path: 'inSaleStorage',
-  //       name: '进销存',
-  //       component: () => import('@/views/sales/inSaleStorage/index'),
-  //       meta: { title: '进销存', icon: 'shoes' }
-  //     }, {
-  //       path: 'layoutStructure',
-  //       name: '版面结构',
-  //       component: () => import('@/views/sales/layoutStructure/index'),
-  //       meta: { title: '版面结构', icon: 'shoes' }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/sales',
+    component: Layout,
+    name: '销售分析',
+    meta: {
+      title: '销售分析', icon: 'shoes'
+    },
+    redirect: '/sales/top30',
+    children: [
+      {
+        path: 'top30',
+        name: '全国日销TOP30',
+        component: () => import('@/views/sales/top30/index'),
+        meta: { title: '全国日销TOP30', icon: 'shoes' }
+      }, {
+        path: 'storeDayAvg',
+        name: '系统客户日均单店',
+        component: () => import('@/views/sales/storeDayAvg/index'),
+        meta: { title: '系统客户日均单店', icon: 'shoes' }
+      }, {
+        path: 'retailShare',
+        name: '零售占比',
+        component: () => import('@/views/sales/retailShare/index'),
+        meta: { title: '零售占比', icon: 'shoes' }
+      }, {
+        path: 'inSaleStorage',
+        name: '进销存',
+        component: () => import('@/views/sales/inSaleStorage/index'),
+        meta: { title: '进销存', icon: 'shoes' }
+      }, {
+        path: 'layoutStructure',
+        name: '版面结构',
+        component: () => import('@/views/sales/layoutStructure/index'),
+        meta: { title: '版面结构', icon: 'shoes' }
+      }
+    ]
+  },
 
   /* -----------------测试时注释掉-----begin---------------------  */
 

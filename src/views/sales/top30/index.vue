@@ -72,9 +72,9 @@ export default {
       date: '',
       page: false,
       total: 0,
-      today: ('' + this.$moment().add(-1, 'D').year()).substring(2, 4) + getSeason(this.$moment().add(-1, 'D')).ch + '库存',
-      lastToday: ('' + this.$moment().add(-1, 'D').add(-3, 'M').year()).substring(2, 4) + getSeason(this.$moment().add(-1, 'D').add(-3, 'M')).ch + '库存',
-      lastMaxToday: ('' + this.$moment().add(-1, 'D').add(-6, 'M').year()).substring(2, 4) + getSeason(this.$moment().add(-1, 'D').add(-6, 'M')).ch + '库存',
+      today: ('' + this.$moment().add(-1, 'D').add(1, 'M').year()).substring(2, 4) + getSeason(this.$moment().add(-1, 'D').add(1, 'M')).ch + '库存',
+      lastToday: ('' + this.$moment().add(-1, 'D').add(-2, 'M').year()).substring(2, 4) + getSeason(this.$moment().add(-1, 'D').add(-2, 'M')).ch + '库存',
+      lastMaxToday: ('' + this.$moment().add(-1, 'D').add(-5, 'M').year()).substring(2, 4) + getSeason(this.$moment().add(-1, 'D').add(-5, 'M')).ch + '库存',
       table: {
         total: 0,
         title: 'top30',
@@ -131,7 +131,7 @@ export default {
       import('@/vendor/Export2Excel').then(excel => {
         // 设置Excel的表格第一行的标题
         const tHeader = ['日业绩排名', '店铺名称', '日业绩', '日销量', '日单价',
-          '本月业绩', '本月销量', '本月日均销额', '19秋库存', '19冬库存', '20春库存']
+          '本月业绩', '本月销量', '本月日均销额', this.lastMaxToday, this.lastToday, this.today]
         // 设置对应表头属性
         const filterVal = ['dayTop', 'storeName', 'dayTotAmtActual', 'dayQty', 'dayAvgPrice',
           'monTotAmtActual', 'monQty', 'monAvgPrice', 'yearStorage', 'yearStorage1', 'yearStorage2']

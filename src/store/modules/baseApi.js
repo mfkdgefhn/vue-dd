@@ -9,7 +9,7 @@
 import {
   getProductType, getProductStyle, getCustomer, getStore, getStores,
   getYear, getSeason, getVipExcavate, getVipRetail, getVipType,
-  getHywjStores
+  getHywjStores, getQxszCustomer
 } from '@/api/gmqApi'
 
 const state = {
@@ -25,7 +25,8 @@ const state = {
   vipExcavate: [],
   vipRetail: [],
   vipType: [],
-  hywjStores: []
+  hywjStores: [],
+  qxszCustomer: []
 }
 
 const mutations = {
@@ -92,6 +93,9 @@ const mutations = {
       months: state.listQuery.months
     }
     state.listQuery = Object.assign({}, state.listQuery)
+  },
+  SET_QXSZ_CUSTOMER: (state, qxszCustomer) => {
+    state.qxszCustomer = qxszCustomer
   }
 }
 
@@ -215,7 +219,22 @@ const actions = {
   //     })
   //   })
   // },
-
+  // 获取权限设置-经销商
+  getQxszCustomer({ commit }) {
+    return new Promise((resolve, reject) => {
+      if (state.customer.length === 0) {
+        getQxszCustomer().then(response => {
+          commit('SET_QXSZ_CUSTOMER', response)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      } else {
+        resolve()
+      }
+    })
+  },
+  // 获取经销商
   getCustomer({ commit }) {
     return new Promise((resolve, reject) => {
       if (state.customer.length === 0) {

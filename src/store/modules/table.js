@@ -11,6 +11,7 @@ const state = {
   storeDayAvg: [], // 系统客户日均单店
   retailShare: [], // 零售占比
   lastRetailShare: [], // 上个季度零售占比
+  lastMaxRetailShare: [], // 上个季度零售占比
   inSaleStorage: [], // 进销存
   layoutStructure: []
 }
@@ -28,6 +29,9 @@ const mutations = {
   },
   SET_LAST_RETAIL_SHARE: (state, lastRetailShare) => {
     state.lastRetailShare = lastRetailShare
+  },
+  SET_LAST_MAX_RETAIL_SHARE: (state, lastMaxRetailShare) => {
+    state.lastMaxRetailShare = lastMaxRetailShare
   },
   SET_IN_SALE_STORAGE: (state, inSaleStorage) => {
     state.inSaleStorage = inSaleStorage
@@ -50,6 +54,9 @@ const actions = {
   },
   setLastRetailShare({ commit }, data) {
     commit('SET_LAST_RETAIL_SHARE', data)
+  },
+  setLastMaxRetailShare({ commit }, data) {
+    commit('SET_LAST_MAX_RETAIL_SHARE', data)
   },
   setInSaleStorage({ commit }, data) {
     commit('SET_IN_SALE_STORAGE', data)
