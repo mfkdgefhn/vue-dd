@@ -9,7 +9,7 @@
 import {
   getProductType, getProductStyle, getCustomer, getStore, getStores,
   getYear, getSeason, getVipExcavate, getVipRetail, getVipType,
-  getHywjStores, getQxszCustomer
+  getHywjStores, getQxszCustomer, getQxszStore
 } from '@/api/gmqApi'
 
 const state = {
@@ -26,7 +26,9 @@ const state = {
   vipRetail: [],
   vipType: [],
   hywjStores: [],
-  qxszCustomer: []
+  qxszCustomer: [],
+  qxszStore: [],
+  apiLog: []
 }
 
 const mutations = {
@@ -96,6 +98,13 @@ const mutations = {
   },
   SET_QXSZ_CUSTOMER: (state, qxszCustomer) => {
     state.qxszCustomer = qxszCustomer
+  },
+  SET_QXSZ_STORE: (state, qxszStore) => {
+    state.qxszStore = qxszStore
+  },
+  // 接口访问统计
+  SET_APILOG: (state, apiLog) => {
+    state.apiLog = apiLog
   }
 }
 
@@ -234,6 +243,21 @@ const actions = {
       }
     })
   },
+  // 获取权限设置-店仓
+  getQxszStore({ commit }, params) {
+    return new Promise((resolve, reject) => {
+      if (state.customer.length === 0) {
+        getQxszStore(params).then(response => {
+          commit('SET_QXSZ_STORE', response)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      } else {
+        resolve()
+      }
+    })
+  },
   // 获取经销商
   getCustomer({ commit }) {
     return new Promise((resolve, reject) => {
@@ -343,6 +367,13 @@ const actions = {
   resetListQuery({ commit }) {
     return new Promise((resolve, reject) => {
       commit('RESET_LISTQUERY')
+      resolve()
+    })
+  },
+  // 接口访问统计
+  setApiLog({ commit }, apiLog) {
+    return new Promise((resolve, reject) => {
+      commit('SET_APILOG', apiLog)
       resolve()
     })
   }

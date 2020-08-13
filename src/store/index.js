@@ -13,6 +13,7 @@ import settings from './modules/settings'
 import user from './modules/user'
 import baseApi from './modules/baseApi'
 import table from './modules/table'
+import dd from './modules/dd'
 
 Vue.use(Vuex)
 
@@ -22,7 +23,8 @@ const store = new Vuex.Store({
     settings,
     user,
     baseApi,
-    table
+    table,
+    dd
   },
   getters
 })

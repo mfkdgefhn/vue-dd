@@ -14,41 +14,30 @@
       :title="title"
       @handleClose="handleClose"
     />
+    <prompt-box-new :dialog-visible="isShow" :title="titleNew" @handleClose="handleClose" />
   </div>
 </template>
 
 <script>
 import promptBox from '@/components/tips/prompt-box'
+import promptBoxNew from '@/components/tips/prompt-box-new'
 
 export default {
   components: {
-    promptBox
+    promptBox, promptBoxNew
   },
   props: {
-    data: {
-      type: Object,
-      default: () => { }
-    },
-    legendData: {
-      type: Array,
-      default: () => []
-    },
-    loading: {
-      type: Boolean,
-      default: false
-    },
-    tipsData: {
-      type: Array,
-      default: () => []
-    },
-    title: {
-      type: String,
-      default: ''
-    }
+    data: { type: Object, default: () => { } },
+    legendData: { type: Array, default: () => [] },
+    loading: { type: Boolean, default: false },
+    tipsData: { type: Array, default: () => [] },
+    title: { type: String, default: '' }
   },
   data() {
     return {
-      dialogVisible: false
+      dialogVisible: false,
+      isShow: false,
+      titleNew: '明细'
     }
   },
   computed: {
@@ -83,16 +72,15 @@ export default {
   methods: {
     handleClose(parmas) {
       this.dialogVisible = false
+      this.isShow = false
     },
     drawLine() {
       // 初始化
       const myChart = this.$echarts.init(this.$refs.pieEcharts)
       var option = {
         // 图形根据color进行循环选择
-        // color: ['#B6C335', '#FBCE0F', '#E87C24', '#28727B', '#C0232A', '#9BCA62', '#F3A43B', '#D7504C', '#61C0DE'],
         color: ['#B6C335', 'orange', '#E87C24', 'green', '#94D8F6', '#75BFDF', '#3F48CC', '#E6444A', '#D7864E', '#D441D7'],
         // 背景颜色
-        // backgroundColor: '#2c343c',
         // backgroundColor: '#1972c6',
         // 标题
         title: {
@@ -172,7 +160,7 @@ export default {
             center: ['50%', '50%'],
             // data: this.data.data.sort(function(a, b) { return a.value - b.value }),
             data: this.data.data, // 数据
-            selectedMode: 'single', // 点击时突出
+            selectedMode: 'single', // 点击时突出 单选 single 多选 multiple
             // roseType: 'radius', // 是否展示成南丁格尔图
             // 视觉引导线
             labelLine: {
@@ -188,7 +176,7 @@ export default {
               position: 'outside', // outside外侧  inside饼图内  center
               formatter: '{d}%'
             },
-            // 显示的效果不同
+            // 显示的效果不同 scale expansion
             animationType: 'scale',
             animationEasing: 'elasticOut',
             // 初始动画的延迟
@@ -202,6 +190,10 @@ export default {
       myChart.setOption(option)
       // 隐藏加载效果
       myChart.hideLoading()
+      myChart.on('click', (params) => {
+        console.log(params)
+        this.isShow = true
+      })
       // 自适应屏幕宽高
       window.addEventListener('resize', () => { myChart.resize() })
     },

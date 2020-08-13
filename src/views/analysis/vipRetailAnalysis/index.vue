@@ -96,47 +96,30 @@ export default {
       // 次数
       frequencyType: {
         title: '次数',
-        data: [
-        ]
+        data: []
       },
       // 件数
       numberType: {
         title: '件数',
-        data: [
-        ]
+        data: []
       },
       // 金额
       montyType: {
         title: '金额',
-        data: [
-
-        ]
+        data: []
       },
       // 周期
       cycleType: {
         title: '周期',
-        data: [
-        ]
+        data: []
       },
       // 提示信息
       title: '根据查询条件进行查询数据(该报表只查询会员数据)',
       tipsData: [
-        {
-          name: '次数：',
-          description: '全部会员购买次数'
-        },
-        {
-          name: '件数：',
-          description: '全部会员购买件数'
-        },
-        {
-          name: '金额：',
-          description: '全部会员购买金额'
-        },
-        {
-          name: '周期：',
-          description: '会员购买周期，该图时间段为1年内(当天往前365天内)有购买过的总会员，两次购买的最短时间(该饼图与查询参数无关)'
-        }
+        { name: '次数：', description: '全部会员购买次数' },
+        { name: '件数：', description: '全部会员购买件数' },
+        { name: '金额：', description: '全部会员购买金额' },
+        { name: '周期：', description: '会员购买周期，该图时间段为1年内(当天往前365天内)有购买过的总会员，两次购买的最短时间(该饼图与查询参数无关)' }
       ]
     }
   },

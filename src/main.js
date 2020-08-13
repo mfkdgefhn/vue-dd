@@ -42,12 +42,14 @@ import AMap from 'vue-amap' // 高德地图
 import 'xe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
+Vue.use(VXETable)
 
 // 滚动条
 import scroll from 'vue-seamless-scroll'
 Vue.use(scroll)
 
-Vue.use(VXETable)
+import * as dd from 'dingtalk-jsapi'
+Vue.use(dd)
 
 Vue.use(BaiduMap, {
   // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */

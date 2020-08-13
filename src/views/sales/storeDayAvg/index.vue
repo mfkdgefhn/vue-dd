@@ -27,6 +27,20 @@
         <el-table-column :label="businessTime" align="center">
           <el-table-column prop="customer" label="经销商" align="center" />
           <el-table-column prop="dayAvgSale" label="当日店均销额" align="center" />
+          <!-- <el-table-column prop="dayAvgSale" label="当日店均销额" align="center">
+            <template slot-scope="scope">
+              <el-tooltip
+                v-model="scope.row.totAmtActual"
+                :disabled="!scope.row.totAmtActual"
+                placement="top"
+                :open-delay="500"
+                effect="dark"
+              >
+                <div slot="content">{{scope.row.}}</div>
+                <div>{{ scope.row.dayAvgSale }}</div>
+              </el-tooltip>
+            </template>
+          </el-table-column>-->
           <el-table-column prop="dayAvgSum" label="当日店均销量" align="center" />
           <el-table-column prop="dayAvgPrice" label="当日店均单价" align="center" />
           <el-table-column label="整体累计单店" align="center">
@@ -94,13 +108,15 @@ export default {
   },
   methods: {
     getAnalysis(data) {
+      this.table.tableData = []
       this.loading = true
       this.date = '查询时间：' + data.billdate
-      if (this.$moment(data.billdate).format('D') === '1') {
-        this.businessTime = '累计老店取值：营业时间 >=1天'
-      } else {
-        this.businessTime = '累计老店取值：营业时间 >=' + this.$moment(data.billdate).add(-1, 'd').format('D') + '天'
-      }
+      this.businessTime = '累计老店取值：营业时间 >=1天'
+      // if (this.$moment(data.billdate).format('D') === '1') {
+      //   this.businessTime = '累计老店取值：营业时间 >=1天'
+      // } else {
+      //   this.businessTime = '累计老店取值：营业时间 >=' + this.$moment(data.billdate).add(-1, 'd').format('D') + '天'
+      // }
       getStoreDayAvg(data).then(response => {
         this.table.currentPage = 1
         this.table.pageSize = 10

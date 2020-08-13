@@ -188,6 +188,18 @@ export const constantRoutes = [
   },
 
   {
+    path: '/api-log',
+    component: Layout,
+    redirect: '/apiLog/index',
+    children: [{
+      path: 'index',
+      name: 'apiLog',
+      component: () => import('@/views/apiLog/index'),
+      meta: { title: '接口日志', icon: 'shoes' }
+    }]
+  },
+
+  {
     path: '/sales',
     component: Layout,
     name: '销售分析',

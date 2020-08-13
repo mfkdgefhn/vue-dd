@@ -75,7 +75,7 @@ export default {
   methods: {
     rendering(data, str) {
       data.forEach(element => {
-        this.data.legend.push(element[str].substring(0, 2))
+        this.data.legend.push(element[str].substr(0, 2))
         this.data.series.push(element.fgl)
         // {value: element.fgl,
         // name: element[str]}
@@ -89,7 +89,7 @@ export default {
         if (!listQuery.province) {
           let cout = 0
           this.directlyCity.forEach(element => {
-            if (params.name.substring(0, 2) === element) {
+            if (params.name.substr(0, 2) === element) {
               ++cout
             }
           })

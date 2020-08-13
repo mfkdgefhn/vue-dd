@@ -414,7 +414,6 @@ export default {
     },
 
     // 只有一个省份的话，则下钻到省份地图
-
     // 进行判断 地图分为全国->省份数据、省份->城市数据、城市->区县数据，
     // 当查询条件为只有日期，则显示全国,
     // 有省份，则显示城市，
@@ -513,10 +512,22 @@ export default {
               title: '下月',
               icon: 'image://data:image/png;base64,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',
               onclick: () => {
-                const listQuery = this.$store.getters.listQuery
-                listQuery.months = dayjs(listQuery.months, 'YYYYMM').add(1, 'month').format('YYYYMM')
-                if (listQuery.months > dayjs().format('YYYYMM')) listQuery.months = dayjs().format('YYYYMM')
-                this.$store.dispatch('baseApi/setMonths', listQuery.months)
+                const mon = dayjs(this.listQuery.months, 'YYYYMM').format('YYYYMM')
+                const daymon = dayjs(new Date(), 'YYYYMM').format('YYYYMM')
+                if (mon !== daymon) {
+                  const listQuery = this.$store.getters.listQuery
+                  listQuery.months = dayjs(listQuery.months, 'YYYYMM').add(1, 'month').format('YYYYMM')
+                  if (listQuery.months > dayjs().format('YYYYMM')) listQuery.months = dayjs().format('YYYYMM')
+                  this.$store.dispatch('baseApi/setMonths', listQuery.months)
+                } else {
+                  this.$alert(`当月是${mon}，不能再往下了`, '警告', {
+                    type: 'warning',
+                    closeOnClickModal: true,
+                    callback: action => {
+                      // 这里不做操作，不写的话会报错
+                    }
+                  })
+                }
               }
             }
           }
@@ -544,19 +555,23 @@ export default {
           // }
         }],
         geo: { // 这个是重点配置区
-          map: place || 'china', // 表示中国地图
-          roam: 'scale', // 平移或者绽放
+          // 表示中国地图
+          map: place || 'china',
+          // 平移或者绽放
+          roam: 'true',
+          // 缩放比例
           scaleLimit: {
             min: 0.7,
             max: 2
           },
-          selectedMode: 'single', // 选中模式
+          // 选中模式
+          selectedMode: 'single',
           label: {
             textStyle: {
               color: 'rgba(0,0,0,0.4)'
-              // color: '#ccc'
             },
-            show: true // 是否显示对应地名
+            // 是否显示对应地名
+            show: true
           },
           itemStyle: {
             // borderColor: 'rgba(0, 0, 0, 0.2)'

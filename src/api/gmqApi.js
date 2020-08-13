@@ -371,4 +371,23 @@ export function getQxszCustomer(params) {
     params
   })
 }
+// 查询店仓
+export function getQxszStore(params) {
+  return request({
+    url: url + '/Q/r.do?o=qxsz-sotre',
+    method: 'get',
+    params
+  })
+}
+
+// ---------------------------------- 权限设置 -------------------------------------
+
+// 查询店仓
+export function getApiLog(params) {
+  return request({
+    url: url + '/Q/r.do?o=jkfwtj',
+    method: 'get',
+    params
+  })
+}
 

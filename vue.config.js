@@ -44,6 +44,20 @@ module.exports = {
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
+  // dev: {
+  //   assetsSubDirectory: 'static',
+  //   assetsPublicPath: '/',
+  //   proxyTable: {
+  //     '/dd': {
+  //       target: 'https://oapi.dingtalk.com',
+  //       changeOrigin: true,
+  //       pathRewrite: {
+  //         '^/dd': ''
+  //       },
+  //       secure: false
+  //     }
+  //   }
+  // },
   devServer: {
     port: port,
     open: true,
@@ -66,6 +80,14 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
+        }
+      },
+      '/dd': {
+        target: 'https://oapi.dingtalk.com',
+        secure: false,
+        changeOrigin: true,
+        pathRewrite: {
+          '^/dd': ''
         }
       }
     },

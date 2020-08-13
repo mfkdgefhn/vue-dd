@@ -30,7 +30,10 @@ const getters = {
   lastMaxRetailShare: state => state.table.lastMaxRetailShare,
   inSaleStorage: state => state.table.inSaleStorage,
   layoutStructure: state => state.table.layoutStructure,
-  qxszCustomer: state => state.baseApi.qxszCustomer
-
+  qxszCustomer: state => state.baseApi.qxszCustomer,
+  qxszStore: state => state.baseApi.qxszStore,
+  apiLog: state => state.baseApi.apiLog,
+  ddToken: state => state.dd.token,
+  jsapiTicket: state => state.dd.jsapiTicket
 }
 export default getters

@@ -16,7 +16,9 @@
   },
   "dependencies": {
     "axios": "0.18.1",
+    "crypto-js": "^4.0.0",
     "dayjs": "^1.8.17",
+    "dingtalk-jsapi": "^2.11.2",
     "echarts": "^4.3.0",
     "echarts-wordcloud": "^1.1.3",
     "element-ui": "^2.12.0",
