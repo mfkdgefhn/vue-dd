@@ -17,6 +17,7 @@
 
     <el-card v-if="page" body-style="{ margin-bottom: '10px'}" class="block">
       <el-table v-loading="loading" :data="table.tableData" width="100%" border>
+        <!-- 父组件传表头循环生成 -->
         <el-table-column
           v-for="item in tableHeader"
           :key="item.index"
