@@ -8,8 +8,7 @@
 <template>
   <div class="data-analysis">
     <el-row :gutter="10" style="700px;">
-      <!---->
-      <el-col :span="10" class="echarts-row-col">
+      <el-col :xs="24" :sm="10" class="echarts-row-col">
         <!-- 店铺排名TOP20 -->
         <el-row>
           <el-col>
@@ -25,6 +24,7 @@
                 <span class="table-header-totAmtActual">销售额</span>
                 <span class="table-header-qty">数量</span>
               </div>
+              <!-- 滚动表格 -->
               <vue-seamless-scroll
                 :class-option="classOption"
                 :data="storeRankingM"
@@ -57,7 +57,8 @@
         </el-row>
       </el-col>
 
-      <el-col :span="14" class="echarts-row-col">
+      <el-col :xs="24" :sm="14" class="echarts-row-col">
+        <!-- 统计字段 -->
         <el-row :gutter="10">
           <el-col :span="8" style="padding-bottom:10px;">
             <el-card :body-style="bodyStyle" shadow="hover" :style="cardRetail">
@@ -103,12 +104,14 @@
     </el-row>
 
     <el-row :gutter="10" style="padding-top:10px;">
-      <el-col :span="12">
+      <!-- 销量/数量同比 -->
+      <el-col :xs="24" :sm="12">
         <el-card :body-style="{ height:'300px',padding:'10px' }" shadow="hover">
           <line-echarts :year-on-year="yearOnYear" />
         </el-card>
       </el-col>
-      <el-col :span="12">
+      <!-- 会员复购 -->
+      <el-col :xs="24" :sm="12">
         <el-card :body-style="{ height:'300px',padding:'10px' }" shadow="hover">
           <bar-echarts :vip-repeat-purchase="vipRepeatPurchase" :loading="loading" />
         </el-card>

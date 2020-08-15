@@ -43,10 +43,10 @@
 
     <!-- 提示信息弹窗 -->
     <prompt-box-new
-      :loading="loading"
       :dialog-visible="dialogVisible"
+      :loading="loading"
       :title="table.title"
-      :tips-data="tipsData"
+      :item-date="itemDate"
       @handleClose="handleClose"
     />
   </div>
@@ -70,7 +70,7 @@ export default {
       dialogVisible: false,
       page: false,
       title: '会员挖掘',
-      tipsData: [],
+      itemDate: [],
       tableData: [],
       table: {
         total: 0,
@@ -120,7 +120,7 @@ export default {
         // 延时一秒弹窗，不然会显示太快,体验感不佳
         setTimeout(() => {
           this.dialogVisible = !this.dialogVisible
-          this.tipsData = this.$store.getters.vipRetail
+          this.itemDate = this.$store.getters.vipRetail
           // 会员信息json转成string字符串
           this.table.title = this.jsonToString(val)
           this.loading = false

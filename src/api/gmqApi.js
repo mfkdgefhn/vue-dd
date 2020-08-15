@@ -126,6 +126,16 @@ export function getIntervalAnalysis(params) {
   })
 }
 
+/** 零售分析 */
+// 时段分析-详细
+export function getRetailItemAnalysis(params) {
+  return request({
+    url: url + '/Q/r.do?o=lsfx-xx',
+    method: 'get',
+    params
+  })
+}
+
 // 是否会员
 export function getVipAnalysis(params) {
   return request({

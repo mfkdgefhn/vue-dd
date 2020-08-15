@@ -7,37 +7,42 @@
  -->
 <template>
   <div class="retail-analysis">
-    <div ref="pieEcharts" class="pie-echarts" style="width: 100%;height: 100%;">{{ title }}</div>
+    <!-- 图表 -->
+    <div ref="pieEcharts" class="pie-echarts" style="width: 100%;height: 100%;">{{ data.title }}</div>
+    <!-- 字段说明 -->
     <prompt-box
       :dialog-visible="dialogVisible"
       :tips-data="tipsData"
-      :title="title"
+      :title="data.title"
       @handleClose="handleClose"
     />
-    <prompt-box-new :dialog-visible="isShow" :title="titleNew" @handleClose="handleClose" />
   </div>
 </template>
 
 <script>
 import promptBox from '@/components/tips/prompt-box'
-import promptBoxNew from '@/components/tips/prompt-box-new'
+
+// import { getRetailItemAnalysis } from '@/api/gmqApi'
 
 export default {
   components: {
-    promptBox, promptBoxNew
+    promptBox
   },
   props: {
     data: { type: Object, default: () => { } },
     legendData: { type: Array, default: () => [] },
     loading: { type: Boolean, default: false },
     tipsData: { type: Array, default: () => [] },
-    title: { type: String, default: '' }
+    title: { type: String, default: '' },
+    params: { type: Object, default: () => { } }
   },
   data() {
     return {
       dialogVisible: false,
       isShow: false,
-      titleNew: '明细'
+      titleNew: '明细',
+      detailedData: [],
+      itemLoading: false
     }
   },
   computed: {
@@ -85,10 +90,7 @@ export default {
         // 标题
         title: {
           text: this.data.title ? this.data.title : '无',
-          // left: 'center',
-          // tip: -10,
           textStyle: {
-            // color: '#ccc'
             color: '#04BEFF'
           }
         },
@@ -97,22 +99,10 @@ export default {
           show: true,
           trigger: 'item',
           formatter: '{a} <br/>{b} : {c}  ({d}%)',
-          // formatter: (parmas) => {
-          //   return parmas
-          // },
           textStyle: {
             color: '#fff'
           }
         },
-        // 左下方组件 视觉映射组件
-        // visualMap: {
-        //   show: false,
-        //   min: 80,
-        //   max: 2000,
-        //   inRange: {
-        //     colorLightness: [0, 1]
-        //   }
-        // },
 
         // 图例组件。
         legend: {
@@ -160,7 +150,7 @@ export default {
             center: ['50%', '50%'],
             // data: this.data.data.sort(function(a, b) { return a.value - b.value }),
             data: this.data.data, // 数据
-            selectedMode: 'single', // 点击时突出 单选 single 多选 multiple
+            // selectedMode: 'single', // 点击时突出 单选 single 多选 multiple
             // roseType: 'radius', // 是否展示成南丁格尔图
             // 视觉引导线
             labelLine: {
@@ -190,9 +180,9 @@ export default {
       myChart.setOption(option)
       // 隐藏加载效果
       myChart.hideLoading()
-      myChart.on('click', (params) => {
-        console.log(params)
-        this.isShow = true
+      myChart.on('click', (val) => {
+        // 返回父组件，执行readerParams
+        this.$emit('readerParams', val)
       })
       // 自适应屏幕宽高
       window.addEventListener('resize', () => { myChart.resize() })

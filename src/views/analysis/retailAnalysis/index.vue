@@ -13,19 +13,19 @@
     </el-card>
 
     <!-- 展示内容 -->
-    <div v-if="loadingCon" class="el-row-class">
+    <div class="el-row-class">
       <!-- 饼图开始 -->
       <el-row :gutter="10">
         <!-- 时段 -->
         <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
           <el-card shadow="hover" class="el-card-class">
             <pie-echarts
-              :data="retailInterval"
-              :tips-data="tipsData"
-              :title="retailInterval.title"
-              :loading="loading"
               class="pie-class"
               style="height:300px;"
+              :data="retailInterval"
+              :tips-data="tipsData"
+              :loading="loading"
+              @readerParams="readerParams"
             />
             <!-- :title="title" -->
           </el-card>
@@ -34,12 +34,12 @@
         <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
           <el-card shadow="hover" class="el-card-class">
             <pie-echarts
-              :data="productStyle"
-              :tips-data="tipsData"
-              :title="productStyle.title"
-              :loading="loading"
               class="pie-class"
               style="height:300px;"
+              :data="productStyle"
+              :tips-data="tipsData"
+              :loading="loading"
+              @readerParams="readerParams"
             />
           </el-card>
         </el-col>
@@ -49,12 +49,12 @@
         <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
           <el-card shadow="hover" class="el-card-class">
             <pie-echarts
-              :data="vipProportion"
-              :tips-data="tipsData"
-              :title="vipProportion.title"
-              :loading="loading"
               class="pie-class"
               style="height:300px;"
+              :data="vipProportion"
+              :tips-data="tipsData"
+              :loading="loading"
+              @readerParams="readerParams"
             />
           </el-card>
         </el-col>
@@ -62,17 +62,26 @@
         <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
           <el-card shadow="hover" class="el-card-class">
             <pie-echarts
-              :data="codeSegment"
-              :tips-data="tipsData"
-              :title="codeSegment.title"
-              :loading="loading"
               class="pie-class"
               style="height:300px;"
+              :data="codeSegment"
+              :tips-data="tipsData"
+              :loading="loading"
+              @readerParams="readerParams"
             />
           </el-card>
         </el-col>
       </el-row>
     </div>
+
+    <!-- 点击响应弹窗详细信息 -->
+    <prompt-box-new
+      :dialog-visible="dialogVisible"
+      :loading="itemLoading"
+      :title="titleNew"
+      :item-date="itemDate"
+      @handleClose="handleClose"
+    />
   </div>
 </template>
 
@@ -80,60 +89,39 @@
 
 import Search from '@/components/public/search'
 import pieEcharts from '@/components/public/pieEcharts'
+import promptBoxNew from '@/components/tips/prompt-box-new'
 import { getVipAnalysis, getIntervalAnalysis, getCodeSegment, getStyle } from '@/api/gmqApi' // getProductstyle
-
+// getRetailItemAnalysis
 export default {
   name: 'RetailAnalysis',
   components: {
-    Search, pieEcharts
+    Search, pieEcharts, promptBoxNew
   },
   data() {
     return {
       showLoad: false,
       // 加载动画
       loading: false,
-      loadingCon: true,
+      itemLoading: false,
+      dialogVisible: false,
       loadCount: 0,
-      // 时段零售
-      retailInterval: {
-        title: '时段零售',
-        data: []
-      },
-      // 商品风格
-      productStyle: {
-        title: '商品风格',
-        data: []
-      },
-      // 会员占比
-      vipProportion: {
-        title: '会员占比',
-        data: []
-      },
-      // 码段
-      codeSegment: {
-        title: '码段',
-        data: []
-      },
+      itemDate: [],
+      detailedData: [],
+      titleNew: '明细',
+      // 时段零售 商品风格 会员占比 码段
+      retailInterval: { title: '时段零售', type: 'timeInterval', data: [] },
+      productStyle: { title: '商品风格', type: 'productStyle', data: [] },
+      vipProportion: { title: '会员占比', type: 'vipProportion', data: [] },
+      codeSegment: { title: '码段', type: 'codeSegment', data: [] },
       // 提示信息
       title: '根据查询条件进行查询数据',
       tipsData: [
-        {
-          name: '时段零售：',
-          description: '以两小时为维度，如0-1为例，时间为00:00-01:59，以此类推,没有零售的时段将不显示'
-        },
-        {
-          name: '商品风格：',
-          description: '以商品风格为维度'
-        },
-        {
-          name: '会员占比：',
-          description: '以会员为维度'
-        },
-        {
-          name: '码段：',
-          description: '以商品尺码为维度'
-        }
-      ]
+        { name: '时段零售：', description: '以两小时为维度，如0-1为例，时间为00:00-01:59，以此类推,没有零售的时段将不显示' },
+        { name: '商品风格：', description: '以商品风格为维度' },
+        { name: '会员占比：', description: '以会员为维度' },
+        { name: '码段：', description: '以商品尺码为维度' }
+      ],
+      params: {}
     }
   },
   watch: {
@@ -156,11 +144,47 @@ export default {
   },
   methods: {
     init() {
-      this.loadingCon = true
+    },
+    handleClose() {
+      this.dialogVisible = false
+    },
+    // 渲染参数
+    readerParams(val) {
+      this.itemDate = []
+      this.dialogVisible = true
+      this.itemLoading = true
+      const paramsDate = Object.assign({}, this.params)
+      this.detailedData = []
+      if (val.seriesName === '时段零售') {
+        var timeDate = val.name.split('-')
+        for (let i = 0; i < timeDate.length; i++) {
+          if (timeDate[i].length === 1) {
+            timeDate[i] = '0' + timeDate[i]
+          }
+        }
+        paramsDate.timeInterval = timeDate.join(',')
+        this.titleNew = paramsDate.timeInterval + ' ' + val.seriesName
+      } else if (val.seriesName === '商品风格') {
+        this.titleNew = (paramsDate.productStyle = val.name) + ' ' + val.seriesName
+      } else if (val.seriesName === '会员占比') {
+        this.titleNew = (paramsDate.vipProportion = val.name) + ' ' + val.seriesName
+      } else if (val.seriesName === '码段') {
+        const codeSegment = val.name === '包包' ? '00' : val.name.slice(0, val.name.length - 1)
+        this.titleNew = (paramsDate.codeSegment = codeSegment) + ' ' + val.seriesName
+      }
+      this.$store.dispatch('baseApi/getRetailItemAnalysis', paramsDate).then(() => {
+        setTimeout(() => {
+          this.itemDate = this.$store.getters.retailItemAnalysis
+          this.itemLoading = false
+        }, 500)
+      }).catch(error => {
+        this.itemLoading = false
+        console.log(error)
+      })
     },
     // 获取数据
     getAnalysis(params) {
-      this.loadingCon = true
+      this.params = Object.assign({}, params)
       this.loading = true
 
       // 获取时段数据

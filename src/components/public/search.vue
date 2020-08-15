@@ -244,7 +244,6 @@ export default {
     },
     // 搜索栏回车事件
     handleFilter() {
-
       var data = Object.assign({}, this.listQuery)
       this.handle(data)
       this.$emit('getAnalysis', data)

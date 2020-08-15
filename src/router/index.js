@@ -111,8 +111,8 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/permissionConfig',
-    // redirect: '/dataAnalysis',
+    // redirect: '/permissionConfig',
+    redirect: '/dataAnalysis',
     name: '数据看板',
     meta: {
       title: '数据分析', icon: 'shoes'

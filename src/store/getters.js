@@ -33,6 +33,7 @@ const getters = {
   qxszCustomer: state => state.baseApi.qxszCustomer,
   qxszStore: state => state.baseApi.qxszStore,
   apiLog: state => state.baseApi.apiLog,
+  retailItemAnalysis: state => state.baseApi.retailItemAnalysis,
   ddToken: state => state.dd.token,
   jsapiTicket: state => state.dd.jsapiTicket
 }

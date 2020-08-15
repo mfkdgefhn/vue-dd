@@ -13,19 +13,19 @@
     </el-card>
 
     <!-- 展示内容 -->
-    <div v-if="loadingCon" class="el-row-class">
+    <div class="el-row-class">
       <!-- 饼图开始 -->
       <el-row :gutter="10">
         <!-- 折扣率 -->
         <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
           <el-card shadow="hover" class="el-card-class">
             <pie-echarts
-              :data="discountRate"
-              :tips-data="tipsData"
-              :title="discountRate.title"
-              :loading="loading"
               class="pie-class"
               style="height:300px"
+              :data="discountRate"
+              :tips-data="tipsData"
+              :loading="loading"
+              @readerParams="readerParams"
             />
           </el-card>
         </el-col>
@@ -33,12 +33,12 @@
         <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
           <el-card shadow="hover" class="el-card-class">
             <pie-echarts
-              :data="singleSum"
-              :tips-data="tipsData"
-              :title="singleSum.title"
-              :loading="loading"
               class="pie-class"
               style="height:300px"
+              :data="singleSum"
+              :tips-data="tipsData"
+              :loading="loading"
+              @readerParams="readerParams"
             />
           </el-card>
         </el-col>
@@ -48,12 +48,12 @@
         <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
           <el-card shadow="hover" class="el-card-class">
             <pie-echarts
-              :data="membershipScore"
-              :tips-data="tipsData"
-              :title="membershipScore.title"
-              :loading="loading"
               class="pie-class"
               style="height:300px"
+              :data="membershipScore"
+              :tips-data="tipsData"
+              :loading="loading"
+              @readerParams="readerParams"
             />
           </el-card>
         </el-col>
@@ -61,17 +61,26 @@
         <el-col :lg="12" :md="12" :sm="12" :xs="24" class="el-col-class">
           <el-card shadow="hover" class="el-card-class">
             <pie-echarts
-              :data="CommodityCategory"
-              :tips-data="tipsData"
-              :title="CommodityCategory.title"
-              :loading="loading"
               class="pie-class"
               style="height:300px"
+              :data="CommodityCategory"
+              :tips-data="tipsData"
+              :loading="loading"
+              @readerParams="readerParams"
             />
           </el-card>
         </el-col>
       </el-row>
     </div>
+
+    <!-- 点击响应弹窗详细信息 -->
+    <prompt-box-new
+      :dialog-visible="dialogVisible"
+      :loading="itemLoading"
+      :title="titleNew"
+      :item-date="itemDate"
+      @handleClose="handleClose"
+    />
   </div>
 </template>
 
@@ -79,58 +88,36 @@
 
 import Search from '@/components/public/search'
 import pieEcharts from '@/components/public/pieEcharts'
+import promptBoxNew from '@/components/tips/prompt-box-new'
 import { getProductType, getDiscountRate, getSingleSum, getMembershipScore, getCommodityCategory } from '@/api/gmqApi'
 
 export default {
   name: 'VipAnalysis',
   components: {
-    Search, pieEcharts
+    Search, pieEcharts, promptBoxNew
   },
   data() {
     return {
       // 加载动画
       loading: false,
-      loadingCon: true,
+      dialogVisible: false,
+      itemLoading: false,
+      titleNew: '明细',
+      itemDate: [],
       loadCount: 0,
-      // 折扣率
-      discountRate: {
-        title: '折扣率',
-        data: []
-      },
-      // 单笔金额
-      singleSum: {
-        title: '单笔金额',
-        data: []
-      },
-      // 会员积分
-      membershipScore: {
-        title: '会员积分',
-        data: []
-      },
-      // 商品类别
-      CommodityCategory: {
-        title: '商品类别',
-        data: []
-      },
+      params: {},
+      // 折扣率 单笔金额 会员积分 商品类别
+      discountRate: { title: '折扣率', type: 'discountRate', data: [] },
+      singleSum: { title: '单笔金额', type: 'singleAmount', data: [] },
+      membershipScore: { title: '会员积分', type: 'membershipPoints', data: [] },
+      CommodityCategory: { title: '商品类别', type: 'commodityCategory', data: [] },
       // 提示信息
       title: '根据查询条件进行查询数据(该报表只查询会员数据)',
       tipsData: [
-        {
-          name: '折扣率：',
-          description: '以会员折扣比例为维度'
-        },
-        {
-          name: '单笔金额：',
-          description: '以单笔金额为维度'
-        },
-        {
-          name: '会员积分：',
-          description: '以会员积分为维度'
-        },
-        {
-          name: '商品类别：',
-          description: '以商品类别为维度'
-        }
+        { name: '折扣率：', description: '以会员折扣比例为维度' },
+        { name: '单笔金额：', description: '以单笔金额为维度' },
+        { name: '会员积分：', description: '以会员积分为维度' },
+        { name: '商品类别：', description: '以商品类别为维度' }
       ]
     }
   },
@@ -151,6 +138,44 @@ export default {
     // this.getProductType()
   },
   methods: {
+    // 渲染参数
+    readerParams(val) {
+      debugger
+      this.itemDate = []
+      this.dialogVisible = true
+      this.itemLoading = true
+      const paramsDate = Object.assign({}, this.params)
+      this.detailedData = []
+      if (val.seriesName === '折扣率') {
+        var timeDate = val.name.split('-')
+        for (let i = 0; i < timeDate.length; i++) {
+          if (timeDate[i].length === 1) {
+            timeDate[i] = '0' + timeDate[i]
+          }
+        }
+        paramsDate.timeInterval = timeDate.join(',')
+        this.titleNew = paramsDate.timeInterval + ' ' + val.seriesName
+      } else if (val.seriesName === '单笔金额') {
+        this.titleNew = (paramsDate.productStyle = val.name) + ' ' + val.seriesName
+      } else if (val.seriesName === '会员积分') {
+        this.titleNew = (paramsDate.vipProportion = val.name) + ' ' + val.seriesName
+      } else if (val.seriesName === '商品类别') {
+        const codeSegment = val.name === '包包' ? '00' : val.name.slice(0, val.name.length - 1)
+        this.titleNew = (paramsDate.codeSegment = codeSegment) + ' ' + val.seriesName
+      }
+      this.$store.dispatch('baseApi/getRetailItemAnalysis', paramsDate).then(() => {
+        setTimeout(() => {
+          this.itemDate = this.$store.getters.retailItemAnalysis
+          this.itemLoading = false
+        }, 500)
+      }).catch(error => {
+        this.itemLoading = false
+        console.log(error)
+      })
+    },
+    handleClose() {
+      this.dialogVisible = false
+    },
     // 获取款号类型
     getProductType() {
       var that = this
@@ -168,7 +193,7 @@ export default {
       })
     },
     getAnalysis(params) {
-      this.loadingCon = true
+      this.params = Object.assign({}, params)
       this.loading = true
       // 折扣率分析饼图
       getDiscountRate(params).then(response => {

@@ -9,7 +9,7 @@
 import {
   getProductType, getProductStyle, getCustomer, getStore, getStores,
   getYear, getSeason, getVipExcavate, getVipRetail, getVipType,
-  getHywjStores, getQxszCustomer, getQxszStore
+  getHywjStores, getQxszCustomer, getQxszStore, getRetailItemAnalysis
 } from '@/api/gmqApi'
 
 const state = {
@@ -28,7 +28,8 @@ const state = {
   hywjStores: [],
   qxszCustomer: [],
   qxszStore: [],
-  apiLog: []
+  apiLog: [],
+  retailItemAnalysis: []
 }
 
 const mutations = {
@@ -105,10 +106,26 @@ const mutations = {
   // 接口访问统计
   SET_APILOG: (state, apiLog) => {
     state.apiLog = apiLog
+  },
+  SET_RETAIL_ITEM_ANALYSIS: (state, retailItemAnalysis) => {
+    state.retailItemAnalysis = retailItemAnalysis
   }
 }
 
 const actions = {
+
+  // 获取零售信息
+  getRetailItemAnalysis({ commit }, count) {
+    return new Promise((resolve, reject) => {
+      getRetailItemAnalysis(count).then(response => {
+        commit('SET_RETAIL_ITEM_ANALYSIS', response)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
   // 获取会员零售信息
   getVipRetail({ commit }, count) {
     return new Promise((resolve, reject) => {
