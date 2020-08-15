@@ -75,6 +75,7 @@
 
     <!-- 点击响应弹窗详细信息 -->
     <prompt-box-new
+      :table-header="tableHeader"
       :dialog-visible="dialogVisible"
       :loading="itemLoading"
       :title="titleNew"
@@ -106,6 +107,14 @@ export default {
       itemDate: [],
       loadCount: 0,
       params: {},
+      tableHeader: [
+        { id: 1, property: 'billdate', label: '单据日期' },
+        { id: 2, property: 'cStoreName', label: '店仓' },
+        { id: 3, property: 'docno', label: '单据编号' },
+        { id: 4, property: 'mProductName', label: '款号' },
+        { id: 5, property: 'totAmtActual', label: '价格' },
+        { id: 6, property: 'attribname', label: '风格' }
+      ],
       // 折扣率 单笔金额 会员积分 商品类别
       discountRate: { title: '折扣率', type: 'discountRate', data: [] },
       singleSum: { title: '单笔金额', type: 'singleAmount', data: [] },
@@ -140,28 +149,30 @@ export default {
   methods: {
     // 渲染参数
     readerParams(val) {
-      debugger
+      this.tableHeader = [
+        { property: 'billdate', label: '单据日期' },
+        { property: 'cStoreName', label: '店仓' },
+        { property: 'docno', label: '单据编号' },
+        { property: 'mProductName', label: '款号' },
+        { property: 'totAmtActual', label: '价格' }
+      ]
       this.itemDate = []
       this.dialogVisible = true
       this.itemLoading = true
       const paramsDate = Object.assign({}, this.params)
-      this.detailedData = []
       if (val.seriesName === '折扣率') {
-        var timeDate = val.name.split('-')
-        for (let i = 0; i < timeDate.length; i++) {
-          if (timeDate[i].length === 1) {
-            timeDate[i] = '0' + timeDate[i]
-          }
-        }
-        paramsDate.timeInterval = timeDate.join(',')
-        this.titleNew = paramsDate.timeInterval + ' ' + val.seriesName
+        this.titleNew = (paramsDate.discountRate = val.name) + ' ' + val.seriesName
+        this.tableHeader.push({ property: 'discountRate', label: '折扣率' })
       } else if (val.seriesName === '单笔金额') {
-        this.titleNew = (paramsDate.productStyle = val.name) + ' ' + val.seriesName
+        this.titleNew = (paramsDate.singleAmount = val.name) + ' ' + val.seriesName
+        this.tableHeader.push({ property: 'singleAmount', label: '单笔金额' })
       } else if (val.seriesName === '会员积分') {
-        this.titleNew = (paramsDate.vipProportion = val.name) + ' ' + val.seriesName
+        this.titleNew = (paramsDate.membershipPoints = val.name) + ' ' + val.seriesName
+        this.tableHeader.push({ property: 'membershipPoints', label: '会员积分' })
       } else if (val.seriesName === '商品类别') {
-        const codeSegment = val.name === '包包' ? '00' : val.name.slice(0, val.name.length - 1)
-        this.titleNew = (paramsDate.codeSegment = codeSegment) + ' ' + val.seriesName
+        const commodityCategory = val.name === '包包' ? '00' : val.name.slice(0, val.name.length - 1)
+        this.titleNew = (paramsDate.commodityCategory = commodityCategory) + ' ' + val.seriesName
+        this.tableHeader.push({ property: 'commodityCategory', label: '商品类别' })
       }
       this.$store.dispatch('baseApi/getRetailItemAnalysis', paramsDate).then(() => {
         setTimeout(() => {

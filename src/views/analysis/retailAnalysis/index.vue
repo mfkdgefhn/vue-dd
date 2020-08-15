@@ -76,6 +76,7 @@
 
     <!-- 点击响应弹窗详细信息 -->
     <prompt-box-new
+      :table-header="tableHeader"
       :dialog-visible="dialogVisible"
       :loading="itemLoading"
       :title="titleNew"
@@ -106,8 +107,14 @@ export default {
       dialogVisible: false,
       loadCount: 0,
       itemDate: [],
-      detailedData: [],
       titleNew: '明细',
+      tableHeader: [
+        { property: 'billdate', label: '单据日期' },
+        { property: 'cStoreName', label: '店仓' },
+        { property: 'docno', label: '单据编号' },
+        { property: 'mProductName', label: '款号' },
+        { property: 'totAmtActual', label: '价格' }
+      ],
       // 时段零售 商品风格 会员占比 码段
       retailInterval: { title: '时段零售', type: 'timeInterval', data: [] },
       productStyle: { title: '商品风格', type: 'productStyle', data: [] },
@@ -150,11 +157,16 @@ export default {
     },
     // 渲染参数
     readerParams(val) {
+      this.tableHeader = [
+        { property: 'billdate', label: '单据日期' },
+        { property: 'cStoreName', label: '店仓' },
+        { property: 'docno', label: '单据编号' },
+        { property: 'mProductName', label: '款号' },
+        { property: 'totAmtActual', label: '价格' }]
       this.itemDate = []
       this.dialogVisible = true
       this.itemLoading = true
       const paramsDate = Object.assign({}, this.params)
-      this.detailedData = []
       if (val.seriesName === '时段零售') {
         var timeDate = val.name.split('-')
         for (let i = 0; i < timeDate.length; i++) {
@@ -164,13 +176,17 @@ export default {
         }
         paramsDate.timeInterval = timeDate.join(',')
         this.titleNew = paramsDate.timeInterval + ' ' + val.seriesName
+        this.tableHeader.push({ property: 'timeInterval', label: '时段' })
       } else if (val.seriesName === '商品风格') {
         this.titleNew = (paramsDate.productStyle = val.name) + ' ' + val.seriesName
+        this.tableHeader.push({ property: 'productStyle', label: '风格' })
       } else if (val.seriesName === '会员占比') {
         this.titleNew = (paramsDate.vipProportion = val.name) + ' ' + val.seriesName
+        this.tableHeader.push({ property: 'vipProportion', label: '会员' })
       } else if (val.seriesName === '码段') {
         const codeSegment = val.name === '包包' ? '00' : val.name.slice(0, val.name.length - 1)
         this.titleNew = (paramsDate.codeSegment = codeSegment) + ' ' + val.seriesName
+        this.tableHeader.push({ property: 'codeSegment', label: '码段' })
       }
       this.$store.dispatch('baseApi/getRetailItemAnalysis', paramsDate).then(() => {
         setTimeout(() => {

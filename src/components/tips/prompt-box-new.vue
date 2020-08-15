@@ -14,14 +14,20 @@
     center
   >
     <span slot="title" v-html="title" />
-    <el-table v-loading="loading" :data="table.tableData" style="width: 100%">
-      <el-table-column property="billdate" label="单据日期" />
-      <el-table-column property="cStoreName" label="店仓" />
-      <el-table-column property="docno" label="单据编号" />
-      <el-table-column property="mProductName" label="款号" />
-      <el-table-column property="totAmtActual" label="价格" />
-      <el-table-column property="attribname" label="风格" />
-    </el-table>
+
+    <el-card v-if="page" body-style="{ margin-bottom: '10px'}" class="block">
+      <el-table v-loading="loading" :data="table.tableData" width="100%" border>
+        <el-table-column
+          v-for="item in tableHeader"
+          :key="item.index"
+          :label="item.label"
+          :property="item.property"
+          align="center"
+        >
+          <template slot-scope="scope">{{ scope.row[scope.column.property] }}</template>
+        </el-table-column>
+      </el-table>
+    </el-card>
 
     <!-- 分页 -->
     <el-card v-if="page" class="block">
@@ -46,6 +52,10 @@ export default {
     dialogVisible: {
       type: Boolean,
       default: false
+    },
+    tableHeader: {
+      type: Array,
+      default: () => []
     },
     itemDate: {
       type: Array,
@@ -90,7 +100,6 @@ export default {
     //     }
     //   }
     // }
-
     itemDate(val) {
       this.table.currentPage = 1
       this.table.pageSize = 10
@@ -127,6 +136,7 @@ span {
 
 <style>
 .dialog-class .el-dialog__body {
+  margin-bottom: 100px;
   padding: 10px 20px;
   text-align: center;
 }

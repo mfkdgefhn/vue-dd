@@ -43,6 +43,7 @@
 
     <!-- 提示信息弹窗 -->
     <prompt-box-new
+      :table-header="tableHeader"
       :dialog-visible="dialogVisible"
       :loading="loading"
       :title="table.title"
@@ -70,6 +71,14 @@ export default {
       dialogVisible: false,
       page: false,
       title: '会员挖掘',
+      tableHeader: [
+        { id: 1, 'property': 'billdate', 'label': '单据日期' },
+        { id: 2, 'property': 'cStoreName', 'label': '店仓' },
+        { id: 3, 'property': 'docno', 'label': '单据编号' },
+        { id: 4, 'property': 'mProductName', 'label': '款号' },
+        { id: 5, 'property': 'totAmtActual', 'label': '价格' },
+        { id: 6, 'property': 'attribname', 'label': '风格' }
+      ],
       itemDate: [],
       tableData: [],
       table: {
