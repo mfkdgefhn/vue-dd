@@ -136,6 +136,26 @@ export function getRetailItemAnalysis(params) {
   })
 }
 
+/** 零售分析 */
+// 时段分析-详细
+export function getRetailItemAnalysis1(params) {
+  return request({
+    url: url + '/Q/r.do?o=dbjemx',
+    method: 'get',
+    params
+  })
+}
+
+/** 零售分析 */
+// 时段分析-详细
+export function getRetailItemAnalysis2(params) {
+  return request({
+    url: url + '/Q/r.do?o=hyjfmx',
+    method: 'get',
+    params
+  })
+}
+
 // 是否会员
 export function getVipAnalysis(params) {
   return request({

@@ -15,7 +15,7 @@
   >
     <span slot="title" v-html="title" />
 
-    <el-card v-if="page" body-style="{ margin-bottom: '10px'}" class="block">
+    <el-card v-if="page" shadow="hover" body-style="{ margin-bottom: '10px'}" class="block">
       <el-table v-loading="loading" :data="table.tableData" width="100%" border>
         <!-- 父组件传表头循环生成 -->
         <el-table-column
@@ -31,7 +31,7 @@
     </el-card>
 
     <!-- 分页 -->
-    <el-card v-if="page" class="block">
+    <el-card v-if="page" shadow="hover" class="block">
       <el-pagination
         :current-page="table.currentPage"
         :page-sizes="table.pageSizes"
@@ -132,6 +132,9 @@ export default {
 span {
   font-size: 16px;
   line-height: 40px;
+}
+.block {
+  margin-bottom: 10px;
 }
 </style>
 

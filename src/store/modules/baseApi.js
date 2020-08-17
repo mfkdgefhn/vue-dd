@@ -9,7 +9,8 @@
 import {
   getProductType, getProductStyle, getCustomer, getStore, getStores,
   getYear, getSeason, getVipExcavate, getVipRetail, getVipType,
-  getHywjStores, getQxszCustomer, getQxszStore, getRetailItemAnalysis
+  getHywjStores, getQxszCustomer, getQxszStore, getRetailItemAnalysis,
+  getRetailItemAnalysis1, getRetailItemAnalysis2
 } from '@/api/gmqApi'
 
 const state = {
@@ -117,12 +118,28 @@ const actions = {
   // 获取零售信息
   getRetailItemAnalysis({ commit }, count) {
     return new Promise((resolve, reject) => {
-      getRetailItemAnalysis(count).then(response => {
-        commit('SET_RETAIL_ITEM_ANALYSIS', response)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      if (count.singleAmount) { // 单笔金额
+        getRetailItemAnalysis1(count).then(response => {
+          commit('SET_RETAIL_ITEM_ANALYSIS', response)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      } else if (count.membershipPoints) { // 会员积分
+        getRetailItemAnalysis2(count).then(response => {
+          commit('SET_RETAIL_ITEM_ANALYSIS', response)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      } else { // 其它计算方式
+        getRetailItemAnalysis(count).then(response => {
+          commit('SET_RETAIL_ITEM_ANALYSIS', response)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      }
     })
   },
 
