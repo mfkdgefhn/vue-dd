@@ -92,12 +92,13 @@
 
 import Search from '@/components/public/search'
 import pieEcharts from '@/components/public/pieEcharts'
+import promptBoxNew from '@/components/tips/prompt-box-new'
 import { getNumberOfMemberPurchases, getNumberOfPurchasesByMembers, getMemberPurchaseAmount, getMemberBuyingCycle } from '@/api/gmqApi'
 
 export default {
   name: 'VipRetailAnalysis',
   components: {
-    Search, pieEcharts
+    Search, pieEcharts, promptBoxNew
   },
   data() {
     return {
