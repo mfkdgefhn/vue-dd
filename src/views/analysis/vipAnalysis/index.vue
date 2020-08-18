@@ -108,12 +108,12 @@ export default {
       loadCount: 0,
       params: {},
       tableHeader: [
-        { id: 1, property: 'billdate', label: '单据日期' },
-        { id: 2, property: 'cStoreName', label: '店仓' },
-        { id: 3, property: 'docno', label: '单据编号' },
-        { id: 4, property: 'mProductName', label: '款号' },
-        { id: 5, property: 'totAmtActual', label: '价格' },
-        { id: 6, property: 'attribname', label: '风格' }
+        { property: 'billdate', label: '单据日期' },
+        { property: 'cStoreName', label: '店仓' },
+        { property: 'docno', label: '单据编号' },
+        { property: 'mProductName', label: '款号' },
+        { property: 'totAmtActual', label: '价格' },
+        { property: 'attribname', label: '风格' }
       ],
       // 折扣率 单笔金额 会员积分 商品类别
       discountRate: { title: '折扣率', type: 'discountRate', data: [] },
@@ -178,6 +178,8 @@ export default {
         ]
       } else if (val.seriesName === '商品类别') {
         this.titleNew = (paramsDate.commodityCategory = val.name) + ' ' + val.seriesName
+        this.tableHeader.push({ property: 'mProductName', label: '款号' })
+        this.tableHeader.push({ property: 'totAmtActual', label: '价格' })
         this.tableHeader.push({ property: 'commodityCategory', label: '商品类别' })
       }
       this.$store.dispatch('baseApi/getRetailItemAnalysis', paramsDate).then(() => {

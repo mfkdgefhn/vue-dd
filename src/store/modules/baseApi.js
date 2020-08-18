@@ -10,7 +10,8 @@ import {
   getProductType, getProductStyle, getCustomer, getStore, getStores,
   getYear, getSeason, getVipExcavate, getVipRetail, getVipType,
   getHywjStores, getQxszCustomer, getQxszStore, getRetailItemAnalysis,
-  getRetailItemAnalysis1, getRetailItemAnalysis2
+  getRetailItemAnalysis1, getRetailItemAnalysis2, getRetailItemAnalysis3,
+  getRetailItemAnalysis4, getRetailItemAnalysis5, getRetailItemAnalysis6
 } from '@/api/gmqApi'
 
 const state = {
@@ -127,6 +128,34 @@ const actions = {
         })
       } else if (count.membershipPoints) { // 会员积分
         getRetailItemAnalysis2(count).then(response => {
+          commit('SET_RETAIL_ITEM_ANALYSIS', response)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      } else if (count.frequency) { // 次数
+        getRetailItemAnalysis3(count).then(response => {
+          commit('SET_RETAIL_ITEM_ANALYSIS', response)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      } else if (count.pieceQty) { // 次数
+        getRetailItemAnalysis4(count).then(response => {
+          commit('SET_RETAIL_ITEM_ANALYSIS', response)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      } else if (count.cycle) { // 次数
+        getRetailItemAnalysis5(count).then(response => {
+          commit('SET_RETAIL_ITEM_ANALYSIS', response)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      } else if (count.amount) { // 次数
+        getRetailItemAnalysis6(count).then(response => {
           commit('SET_RETAIL_ITEM_ANALYSIS', response)
           resolve()
         }).catch(error => {

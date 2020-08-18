@@ -156,6 +156,46 @@ export function getRetailItemAnalysis2(params) {
   })
 }
 
+/** 零售分析 */
+// 时段分析-详细
+export function getRetailItemAnalysis3(params) {
+  return request({
+    url: url + '/Q/r.do?o=hygmcsmx',
+    method: 'get',
+    params
+  })
+}
+
+/** 零售分析 */
+// 时段分析-详细
+export function getRetailItemAnalysis4(params) {
+  return request({
+    url: url + '/Q/r.do?o=hygmjsmx',
+    method: 'get',
+    params
+  })
+}
+
+/** 零售分析 */
+// 时段分析-详细
+export function getRetailItemAnalysis5(params) {
+  return request({
+    url: url + '/Q/r.do?o=hygmjemx',
+    method: 'get',
+    params
+  })
+}
+
+/** 零售分析 */
+// 时段分析-详细
+export function getRetailItemAnalysis6(params) {
+  return request({
+    url: url + '/Q/r.do?o=hygmzqmx',
+    method: 'get',
+    params
+  })
+}
+
 // 是否会员
 export function getVipAnalysis(params) {
   return request({

@@ -106,45 +106,31 @@ export default {
       itemLoading: false,
       titleNew: '明细',
       itemDate: [],
+      params: {},
       tableHeader: [
-        { id: 1, property: 'billdate', label: '单据日期' },
-        { id: 2, property: 'cStoreName', label: '店仓' },
-        { id: 3, property: 'docno', label: '单据编号' },
-        { id: 4, property: 'mProductName', label: '款号' },
-        { id: 5, property: 'totAmtActual', label: '价格' },
-        { id: 6, property: 'attribname', label: '风格' }
+        { property: 'billdate', label: '单据日期' },
+        { property: 'cStoreName', label: '店仓' },
+        { property: 'docno', label: '单据编号' },
+        { property: 'mProductName', label: '款号' },
+        { property: 'totAmtActual', label: '价格' },
+        { property: 'attribname', label: '风格' }
       ],
       screenHeight: window.innerHeight,
       // 加载动画
       loading: false,
       loadingCon: true,
       loadCount: 0,
-      // 次数
-      frequencyType: {
-        title: '次数',
-        data: []
-      },
-      // 件数
-      numberType: {
-        title: '件数',
-        data: []
-      },
-      // 金额
-      montyType: {
-        title: '金额',
-        data: []
-      },
-      // 周期
-      cycleType: {
-        title: '周期',
-        data: []
-      },
+      // 次数 件数 金额 周期
+      frequencyType: { title: '次数', type: 'frequency', data: [] },
+      numberType: { title: '件数', type: 'pieceQty', data: [] },
+      montyType: { title: '金额', type: 'amount', data: [] },
+      cycleType: { title: '周期', type: 'cycle', data: [] },
       // 提示信息
       title: '根据查询条件进行查询数据(该报表只查询会员数据)',
       tipsData: [
-        { name: '次数：', description: '全部会员购买次数' },
-        { name: '件数：', description: '全部会员购买件数' },
-        { name: '金额：', description: '全部会员购买金额' },
+        { name: '次数：', description: '全部会员购买次数(时间段内零售单数)' },
+        { name: '件数：', description: '全部会员购买件数(时间段内全部件数，非分组单据)' },
+        { name: '金额：', description: '全部会员购买金额(时间段内金额，非分组单据)' },
         { name: '周期：', description: '会员购买周期，该图时间段为1年内(当天往前365天内)有购买过的总会员，两次购买的最短时间(该饼图与查询参数无关)' }
       ]
     }
@@ -178,35 +164,31 @@ export default {
     // 渲染参数
     readerParams(val) {
       this.tableHeader = [
-        { property: 'billdate', label: '单据日期' },
-        { property: 'cStoreName', label: '店仓' },
-        { property: 'docno', label: '单据编号' }
+        { property: 'cardno', label: '会员卡号' },
+        { property: 'vipname', label: '会员昵称' },
+        { property: 'mobil', label: '手机号' },
+        { property: 'birthday', label: '生日' },
+        { property: 'storeName', label: '店名' }
       ]
       this.itemDate = []
       this.dialogVisible = true
       this.itemLoading = true
       const paramsDate = Object.assign({}, this.params)
-      if (val.seriesName === '折扣率') {
-        this.titleNew = (paramsDate.discountRate = val.name) + ' ' + val.seriesName
-        this.tableHeader.push({ property: 'mProductName', label: '款号' })
-        this.tableHeader.push({ property: 'totAmtActual', label: '价格' })
-        this.tableHeader.push({ property: 'discountRate', label: '折扣率' })
-      } else if (val.seriesName === '单笔金额') {
-        this.titleNew = (paramsDate.singleAmount = val.name.replace(/\$/g, '')) + ' ' + val.seriesName
-        console.log(val.name.replace(/\$/g, ''))
-        this.tableHeader.push({ property: 'singleAmount', label: '单笔金额' })
-      } else if (val.seriesName === '会员积分') {
-        this.titleNew = (paramsDate.membershipPoints = val.name) + ' ' + val.seriesName
-        this.tableHeader = [
-          { property: 'cardno', label: '会员卡号' },
-          { property: 'vipname', label: '会员昵称' },
-          { property: 'mobil', label: '手机号' },
-          { property: 'birthday', label: '出生日期' },
-          { property: 'membershipPoints', label: '会员积分' }
-        ]
-      } else if (val.seriesName === '商品类别') {
-        this.titleNew = (paramsDate.commodityCategory = val.name) + ' ' + val.seriesName
-        this.tableHeader.push({ property: 'commodityCategory', label: '商品类别' })
+      debugger
+      if (val.seriesName === '次数') {
+        this.titleNew = (paramsDate.frequency = val.name) + ' ' + val.seriesName
+        this.tableHeader.push({ property: 'frequency', label: '次数' })
+      } else if (val.seriesName === '件数') { // pieceQty
+        this.titleNew = (paramsDate.pieceQty = val.name) + ' ' + val.seriesName
+        this.tableHeader.push({ property: 'billdate', label: '单据日期' })
+        this.tableHeader.push({ property: 'docno', label: '单据编号' })
+        this.tableHeader.push({ property: 'pieceQty', label: '件数' })
+      } else if (val.seriesName === '金额') { // amount
+        this.titleNew = (paramsDate.amount = val.name.replace(/\$/g, '')) + ' ' + val.seriesName
+        this.tableHeader.push({ property: 'amount', label: '金额' })
+      } else if (val.seriesName === '周期') { // cycle
+        this.titleNew = (paramsDate.cycle = val.name) + ' ' + val.seriesName
+        this.tableHeader.push({ property: 'cycle', label: '周期' })
       }
       this.$store.dispatch('baseApi/getRetailItemAnalysis', paramsDate).then(() => {
         setTimeout(() => {
@@ -219,6 +201,7 @@ export default {
       })
     },
     getAnalysis(params) {
+      this.params = Object.assign({}, params)
       this.loadingCon = true
       this.loading = true
       // 次数
