@@ -113,7 +113,8 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     // redirect: '/permissionConfig',
-    redirect: '/dataAnalysis',
+    redirect: '/kucunyuan',
+    // redirect: '/dataAnalysis',
     name: '数据看板',
     meta: {
       title: '数据分析', icon: 'shoes'
@@ -161,6 +162,26 @@ export const constantRoutes = [
       name: '会员挖掘',
       component: () => import('@/views/vip/index'),
       meta: { title: '会员挖掘', icon: 'shoes' }
+    }]
+  },
+  {
+    path: '/kucunyuan',
+    component: Layout,
+    redirect: '/kucunyuan/index',
+    name: '数据分析',
+    meta: {
+      title: '数据分析', icon: 'shoes'
+    },
+    children: [{
+      path: 'index',
+      name: '库存源',
+      component: () => import('@/views/kucunyuan/index'),
+      meta: { title: '库存源', icon: 'shoes' }
+    }, {
+      path: 'achievement',
+      name: '业绩',
+      component: () => import('@/views/kucunyuan/achievement'),
+      meta: { title: '业绩', icon: 'shoes' }
     }]
   },
 
