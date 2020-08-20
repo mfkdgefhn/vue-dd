@@ -51,7 +51,6 @@
           <el-table-column prop="monQty" label="本月销量" align="center" />
           <el-table-column prop="monRetailQty" label="本月日均销售" align="center" />
           <el-table-column prop="monRechargeQty" label="本月日均充值" align="center" />
-          <el-table-column prop="monAvgPrice" label="本月日均销额" align="center" />
           <el-table-column prop="yearStorage" :label="lastMaxToday" align="center" />
           <el-table-column prop="yearStorage1" :label="lastToday" align="center" />
           <el-table-column prop="yearStorage2" :label="today" align="center" />
@@ -150,11 +149,13 @@ export default {
       str = (str === undefined) ? '' : str
       import('@/vendor/Export2Excel').then(excel => {
         // 设置Excel的表格第一行的标题
-        const tHeader = ['日业绩排名', '店铺名称', '日业绩', '日销量', '日单价',
-          '本月业绩', '本月销量', '本月日均销额', this.lastMaxToday, this.lastToday, this.today]
+        const tHeader = ['日业绩排名', '店铺名称', '当日业绩', '其中：销售', '其中：充值',
+          '日销量', '日单价', '本月业绩', '其中：销售', '其中：充值', '本月销量',
+          '本月日均销额', '本月日均充值', this.lastMaxToday, this.lastToday, this.today]
         // 设置对应表头属性
-        const filterVal = ['dayTop', 'storeName', 'dayTotAmtActual', 'dayQty', 'dayAvgPrice',
-          'monTotAmtActual', 'monQty', 'monAvgPrice', 'yearStorage', 'yearStorage1', 'yearStorage2']
+        const filterVal = ['dayTop', 'storeName', 'dayTotAmtActual', 'dayRetailTotAmtActual', 'dayRechargeTotAmtActual',
+          'dayQty', 'dayAvgPrice', 'monTotAmtActual', 'monRetailTotAmtActual', 'monRechargeTotAmtActual', 'monQty',
+          'monRetailQty', 'monRechargeQty', 'yearStorage', 'yearStorage1', 'yearStorage2']
         const data = this.formatJson(filterVal, str)
         excel.export_json_to_excel({
           header: tHeader,

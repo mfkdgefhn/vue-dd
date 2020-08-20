@@ -145,8 +145,8 @@ export default {
         const tHeader = ['区域', '所属经销商', '销售占比', '均单价', '库存占比',
           '单店铺货量', '销售占比', '单价', '库存占比', '单店铺货量']
         // 设置对应表头属性
-        const filterVal = ['area', 'customer', 'newSalesShare', 'newAvgPrice', 'newInventoryRatio',
-          'newStoreVolume', 'oldSalesShare', 'oldAvgPrice', 'oldInventoryRatio', 'oldStoreVolume']
+        const filterVal = ['area', 'customer', 'newSalesShare', 'newAvgPrice1', 'newInventoryRatio',
+          'newStoreVolume', 'oldSalesShare', 'oldAvgPrice1', 'oldInventoryRatio', 'oldStoreVolume']
         const data = this.formatJson(filterVal, str)
 
         if (str === 'this') {
