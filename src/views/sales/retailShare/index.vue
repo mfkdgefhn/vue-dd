@@ -26,11 +26,11 @@
             style="width: 100%"
           >
             <el-table-column :label="item.title" align="center">
-              <el-table-column prop="area" label="区域" align="center" />
-              <el-table-column prop="customer" label="所属经销商" align="center" />
+              <el-table-column prop="area" label="区域" align="center" width="80" />
+              <el-table-column prop="customer" label="所属经销商" align="center" width="120" />
               <el-table-column :label="item.year + item.seasonCh" align="center">
                 <el-table-column prop="newSalesShare" label="销售占比" align="center" />
-                <el-table-column prop="newAvgPrice" label="均单价" align="center" />
+                <el-table-column prop="newAvgPrice1" label="均单价" align="center" />
                 <el-table-column prop="newInventoryRatio" label="库存占比" align="center" />
                 <el-table-column prop="newStoreVolume" label="单店铺货量" align="center" />
               </el-table-column>
@@ -38,7 +38,7 @@
             <el-table-column :label="date" align="center">
               <el-table-column :label="(item.year-1)+item.seasonCh" align="center">
                 <el-table-column prop="oldSalesShare" label="销售占比" align="center" />
-                <el-table-column prop="oldAvgPrice" label="单价" align="center" />
+                <el-table-column prop="oldAvgPrice1" label="单价" align="center" />
                 <el-table-column prop="oldInventoryRatio" label="库存占比" align="center" />
                 <el-table-column prop="oldStoreVolume" label="单店铺货量" align="center" />
               </el-table-column>

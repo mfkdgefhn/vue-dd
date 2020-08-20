@@ -17,6 +17,7 @@
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0.8)"
+        show-summary
         :header-cell-style="{padding: '0px 0px'}"
         :data="table.tableData"
         style="width: 100%"
@@ -25,13 +26,31 @@
           <el-table-column prop="dayTop" label="日业绩排名" align="center" />
           <el-table-column prop="customer" label="经销商" align="center" width="200px" />
           <el-table-column prop="storeName" label="店铺名称" align="center" width="200px" />
-          <el-table-column prop="dayTotAmtActual" label="日业绩" align="center" />
+          <el-table-column prop="dayTotAmtActual" label="当日业绩" align="center" />
+          <el-table-column prop="dayRetailTotAmtActual" label="其中：销售" align="center" />
+          <el-table-column prop="dayRechargeTotAmtActual" label="其中：充值" align="center" />
           <el-table-column prop="dayQty" label="日销量" align="center" />
-          <el-table-column prop="dayAvgPrice" label="日单价" align="center" />
+          <!-- <el-table-column prop="dayAvgPrice" label="日单价" align="center" /> -->
+          <el-table-column label="日单价" align="center">
+            <template slot-scope="scope">
+              <el-popover trigger="hover" :close-delay="1" placement="top">
+                <p>当日业绩 / 日销量</p>
+                <p>{{ scope.row.dayTotAmtActual }} / {{ scope.row.dayQty }}</p>
+                <div slot="reference" class="name-wrapper">
+                  <!-- <el-tag size="medium">{{ scope.row.dayAvgSale }}</el-tag> -->
+                  {{ scope.row.dayAvgPrice }}
+                </div>
+              </el-popover>
+            </template>
+          </el-table-column>
         </el-table-column>
         <el-table-column :label="date" align="center">
           <el-table-column prop="monTotAmtActual" label="本月业绩" align="center" />
+          <el-table-column prop="monRetailTotAmtActual" label="其中：销售" align="center" />
+          <el-table-column prop="monRechargeTotAmtActual" label="其中：充值" align="center" />
           <el-table-column prop="monQty" label="本月销量" align="center" />
+          <el-table-column prop="monRetailQty" label="本月日均销售" align="center" />
+          <el-table-column prop="monRechargeQty" label="本月日均充值" align="center" />
           <el-table-column prop="monAvgPrice" label="本月日均销额" align="center" />
           <el-table-column prop="yearStorage" :label="lastMaxToday" align="center" />
           <el-table-column prop="yearStorage1" :label="lastToday" align="center" />
@@ -88,6 +107,7 @@ export default {
   methods: {
     getAnalysis(data) {
       this.loading = true
+      this.table.tableData = []
       this.date = '查询时间：' + data.billdate
       getTop30(data).then(response => {
         this.table.currentPage = 1

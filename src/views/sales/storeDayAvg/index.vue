@@ -18,33 +18,60 @@
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0.8)"
+        show-summary
+        :cell-class-name="cellClassName"
         :data="table.tableData"
         :row-style="rowStyle"
         :header-cell-style="{padding: '0px 0px'}"
         style="width: 100%"
       >
-        <el-table-column prop="dayTop" label="日均销额排名" align="center" />
+        <el-table-column prop="dayTop" label="日均销额排名" align="center" width="50" />
         <el-table-column :label="businessTime" align="center">
-          <el-table-column prop="customer" label="经销商" align="center" />
-          <el-table-column prop="dayAvgSale" label="当日店均销额" align="center" />
-          <!-- <el-table-column prop="dayAvgSale" label="当日店均销额" align="center">
+          <el-table-column prop="customer" label="经销商" align="center" width="120" />
+          <el-table-column label="当日店均销额" align="center" width="80">
             <template slot-scope="scope">
-              <el-tooltip
-                v-model="scope.row.totAmtActual"
-                :disabled="!scope.row.totAmtActual"
-                placement="top"
-                :open-delay="500"
-                effect="dark"
-              >
-                <div slot="content">{{scope.row.}}</div>
-                <div>{{ scope.row.dayAvgSale }}</div>
-              </el-tooltip>
+              <el-popover trigger="hover" :close-delay="1" placement="top">
+                <p>零售总金额 / 零售门店数量</p>
+                <p>{{ scope.row.totAmtActual }} / {{ scope.row.storeCount }}</p>
+                <div slot="reference" class="name-wrapper">
+                  <!-- <el-tag size="medium">{{ scope.row.dayAvgSale }}</el-tag> -->
+                  {{ scope.row.dayAvgSale }}
+                </div>
+              </el-popover>
             </template>
-          </el-table-column>-->
+          </el-table-column>
+          <el-table-column label="其中：店均销售" align="center" width="80">
+            <template slot-scope="scope">
+              <el-popover trigger="hover" :close-delay="1" placement="top">
+                <p>零售总金额(非充值卡) / 零售门店数量</p>
+                <p>{{ scope.row.dayStoreAvgSum }} / {{ scope.row.storeRetailCount }}</p>
+                <div slot="reference" class="name-wrapper">{{ scope.row.dayRetailAvgSale }}</div>
+              </el-popover>
+            </template>
+          </el-table-column>
+          <el-table-column label="其中：店均充值" align="center" width="80">
+            <template slot-scope="scope">
+              <el-popover trigger="hover" :close-delay="1" placement="top">
+                <p>充值总金额 / 充值门店数量</p>
+                <p>{{ scope.row.dayRechargeAvgSum }} / {{ scope.row.storeRechargeCount }}</p>
+                <div slot="reference" class="name-wrapper">{{ scope.row.dayRechargeAvgSale }}</div>
+              </el-popover>
+            </template>
+          </el-table-column>
           <el-table-column prop="dayAvgSum" label="当日店均销量" align="center" />
-          <el-table-column prop="dayAvgPrice" label="当日店均单价" align="center" />
+          <el-table-column label="当日店均单价" align="center" width="80">
+            <template slot-scope="scope">
+              <el-popover trigger="hover" :close-delay="1" placement="top">
+                <p>正常零售价总金额 / 正常零售价鞋子数量</p>
+                <p>{{ scope.row.storeAvgTotAmtActual }} / {{ scope.row.storeAvgQty }}</p>
+                <div slot="reference" class="name-wrapper">{{ scope.row.dayAvgPrice }}</div>
+              </el-popover>
+            </template>
+          </el-table-column>
           <el-table-column label="整体累计单店" align="center">
             <el-table-column prop="monStoreSum1" label="20年当月累计单店" align="center" />
+            <el-table-column prop="monStoreSum11" label="其中：累计单店日均销售" align="center" />
+            <el-table-column prop="monStoreSum12" label="其中：累计单店日均充值" align="center" />
             <el-table-column prop="monStoreSum2" label="19年当月累计单店" align="center" />
             <el-table-column prop="increase" label="增长" align="center" />
           </el-table-column>
@@ -52,11 +79,15 @@
         <el-table-column :label="date" align="center">
           <el-table-column label="月累计老店日均" align="center">
             <el-table-column prop="oldYearDayAvg1" label="20年日均" align="center" />
+            <el-table-column prop="oldYearDayAvg11" label="其中：累计老店日均销售" align="center" />
+            <el-table-column prop="oldYearDayAvg12" label="其中：累计老店日均充值" align="center" />
             <el-table-column prop="oldYearDayAvg2" label="19年日均" align="center" />
             <el-table-column prop="oldDayAvgIncrease1" label="日均增长" align="center" />
           </el-table-column>
           <el-table-column label="当日老店日均" align="center">
             <el-table-column prop="oldDayAvg1" label="20年当日店均" align="center" />
+            <el-table-column prop="oldDayAvg11" label="其中：当日店均销售" align="center" />
+            <el-table-column prop="oldDayAvg12" label="其中：当日店均充值" align="center" />
             <el-table-column prop="oldDayAvg2" label="19年当日店均" align="center" />
             <el-table-column prop="oldDayAvgIncrease2" label="日均增长" align="center" />
           </el-table-column>
@@ -64,6 +95,7 @@
       </el-table>
     </el-card>
 
+    <!-- 分布 -->
     <el-card v-if="page" class="block">
       <el-pagination
         :current-page="table.currentPage"
@@ -112,11 +144,6 @@ export default {
       this.loading = true
       this.date = '查询时间：' + data.billdate
       this.businessTime = '累计老店取值：营业时间 >=1天'
-      // if (this.$moment(data.billdate).format('D') === '1') {
-      //   this.businessTime = '累计老店取值：营业时间 >=1天'
-      // } else {
-      //   this.businessTime = '累计老店取值：营业时间 >=' + this.$moment(data.billdate).add(-1, 'd').format('D') + '天'
-      // }
       getStoreDayAvg(data).then(response => {
         this.table.currentPage = 1
         this.table.pageSize = 10
@@ -129,11 +156,7 @@ export default {
           message: '查询完成!!!',
           type: 'success'
         })
-        // 初始化 页大小、页数
       })
-      // state.listQuery = Object.assign({}, state.listQuery)
-      // this.$store.dispatch('baseApi/getCustomer').then(() => { })
-      // this.$store.dispatch('baseApi/setMonths', this.getMonths(0))
     },
     // 单页数量改变
     handleSizeChange(val) {
@@ -160,13 +183,15 @@ export default {
       str = (str === undefined) ? '' : str
       import('@/vendor/Export2Excel').then(excel => {
         // 设置Excel的表格第一行的标题
-        const tHeader = ['日均销额排名', '经销商', '当日店均销额', '当日店均销量', '当日店均单价',
-          '20年当月累计单店', '19年当月累计单店', '增长', '20年日均', '19年日均',
-          '日均增长', '20年当日店均', '19年当日店均', '日均增长']
+        const tHeader = ['日均销额排名', '经销商', '当日店均销额', '其中：店均销售', '其中：店均充值',
+          '当日店均销量', '当日店均单价', '20年当月累计单店', '其中：累计单店日均销售', '其中：累计单店日均充值',
+          '19年当月累计单店', '增长', '20年日均', '其中：累计老店日均销售', '其中：累计老店日均充值', '19年日均',
+          '日均增长', '20年当日店均', '其中：当日店均销售', '其中：当日店均充值', '19年当日店均', '日均增长']
         // 设置对应表头属性
-        const filterVal = ['dayTop', 'customer', 'dayAvgSale', 'dayAvgSum', 'dayAvgPrice',
-          'monStoreSum1', 'monStoreSum2', 'increase', 'oldYearDayAvg1', 'olgYearDayAvg2',
-          'oldDayAvgIncrease1', 'oldDayAvg1', 'oldDayAvg2', 'oldDayAvgIncrease2']
+        const filterVal = ['dayTop', 'customer', 'dayAvgSale', 'dayRetailAvgSale', 'dayRechargeAvgSale',
+          'dayAvgSum', 'dayAvgPrice', 'monStoreSum1', 'monStoreSum11', 'monStoreSum12',
+          'monStoreSum2', 'increase', 'oldYearDayAvg1', 'oldYearDayAvg11', 'oldYearDayAvg12', 'olgYearDayAvg2',
+          'oldDayAvgIncrease1', 'oldDayAvg1', 'oldDayAvg11', 'oldDayAvg12', 'oldDayAvg2', 'oldDayAvgIncrease2']
         const data = this.formatJson(filterVal, str)
         excel.export_json_to_excel({
           header: tHeader,
@@ -200,6 +225,17 @@ export default {
         return 'background: #DDE6ED'
       }
       return ''
+    },
+    // 渲染单元格
+    cellClassName({ row, column, rowIndex, columnIndex }) {
+      if (column.label === '增长' && row.increase && row.increase.indexOf('-') !== -1) {
+        return 'special'
+      } else if (column.property === 'oldDayAvgIncrease1' && row.oldDayAvgIncrease1 && row.oldDayAvgIncrease1.indexOf('-') !== -1) {
+        return 'special'
+      } else if (column.property === 'oldDayAvgIncrease2' && row.oldDayAvgIncrease2 && row.oldDayAvgIncrease2.indexOf('-') !== -1) {
+        return 'special'
+      }
+      return 'block'
     }
   }
 }
@@ -208,5 +244,13 @@ export default {
 <style scoped>
 .block {
   text-align: center;
+}
+</style>
+
+<style >
+.special {
+  background: #99ffcc;
+  font-weight: 900;
+  color: black;
 }
 </style>

@@ -4,9 +4,9 @@
       <!-- 时间查询 -->
       <el-col :md="8" :sm="12" :xs="24">
         <el-row style="margin-bottom:0px;">
-          <el-col :span="11">
+          <el-col :span="24">
             <el-date-picker
-              v-model="listQuery.beginDate"
+              v-model="listQuery.billdate"
               style="width: 100%; margin-bottom: 5px; font-size:12px;"
               type="date"
               value-format="yyyyMMdd"
@@ -14,84 +14,7 @@
               format="yyyyMMdd"
             />
           </el-col>
-          <el-col :span="2" style="text-align:center;">
-            <span style="line-height:38px; color:#ccc;">至</span>
-          </el-col>
-          <el-col :span="11">
-            <el-date-picker
-              v-model="listQuery.endDate"
-              style="width: 100%;margin-bottom: 5px;font-size:12px;"
-              type="date"
-              value-format="yyyyMMdd"
-              placeholder="结束日期"
-              format="yyyyMMdd"
-            />
-          </el-col>
         </el-row>
-      </el-col>
-
-      <!-- 店仓 -->
-      <!-- <el-col :md="5" :sm="8" :xs="12">
-        <el-cascader
-          v-model="listQuery.storeId"
-          placeholder="店仓"
-          :options="options"
-          :show-all-levels="showAllLevels"
-          :props="props"
-          style="width:100%"
-          collapse-tags
-          clear-checked-nodes
-        />
-      </el-col>-->
-      <!-- 经销商、店仓 -->
-      <el-col :md="5" :sm="8" :xs="12">
-        <el-cascader
-          v-model="listQuery.storeIds"
-          placeholder="店仓"
-          :props="props"
-          collapse-tags
-          :show-all-levels="false"
-          clear-checked-nodes
-          style="width:100%"
-        />
-      </el-col>
-
-      <!-- 年份 -->
-      <el-col :md="4" :sm="8" :xs="12">
-        <el-select
-          v-model="listQuery.year"
-          multiple
-          clearable
-          collapse-tags
-          style="width:100%"
-          placeholder="款号年份"
-        >
-          <el-option
-            v-for="item in yearOptions"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          />
-        </el-select>
-      </el-col>
-
-      <!-- 季节 -->
-      <el-col :md="4" :sm="8" :xs="12">
-        <el-select
-          v-model="listQuery.season"
-          style="width:100%"
-          multiple
-          clearable
-          collapse-tags
-          placeholder="款号季节"
-        >
-          <el-option
-            v-for="item in seasonOptions"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          />
-        </el-select>
       </el-col>
 
       <!-- 搜索按钮 -->
@@ -105,11 +28,6 @@
           @click="handleFilter"
         >搜索</el-button>
       </el-col>
-
-      <!-- 提示信息 -->
-      <!-- <el-col :md="1" :sm="1" :xs="1">
-        <el-button type="primary" icon="el-icon-message" circle @click="showMessage" />
-      </el-col>-->
     </el-row>
 
     <!-- 提示信息弹窗 -->
@@ -124,7 +42,6 @@
 </template>
 
 <script>
-import { getStore } from '@/api/gmqApi' // , getYear,getSeason,getCustomer,
 
 export default {
   name: 'Search',
@@ -146,94 +63,17 @@ export default {
   data() {
     return {
       showAllLevels: false,
-      props: {
-        multiple: true,
-        value: 'id',
-        label: 'name',
-        // 通过lazy开启动态加载，并通过lazyload来设置加载数据源的方法。
-        // lazyload方法有两个参数，第一个参数node为当前点击的节点，第二个resolve为数据加载完成的回调(必须调用)。
-        // 为了更准确的显示节点的状态，还可以对节点数据添加是否为叶子节点的标志位 (默认字段为leaf，可通过props.leaf修改)，
-        // 否则会简单的以有无子节点来判断是否为叶子节点
-        lazy: true,
-        lazyLoad: (node, resolve) => {
-          if (node.level < 2) {
-            setTimeout(() => {
-              if (node.level === 0) {
-                this.$store.dispatch('baseApi/getCustomer').then(() => {
-                  const areas = this.$store.getters.customer.map((value, i) => ({
-                    id: value.id,
-                    name: value.name,
-                    leaf: node.level >= 1
-                  }))
-                  resolve(areas)
-                })
-              } else if (node.level === 1) {
-                getStore({ customerId: node.value }).then(response => {
-                  const areas = response.map((value, i) => ({
-                    id: value.id,
-                    name: value.name,
-                    leaf: node.level >= 1
-                  }))
-                  resolve(areas)
-                })
-              }
-            }, 200)
-          }
-          resolve()
-        }
-      },
       listQuery: {
-        beginDate: this.getDateStr(-7),
-        endDate: this.getDateStr(-1),
+        billdate: this.$moment().add('-1', 'days').format('YYYYMMDD'),
         storeIds: [],
         loading: false
       },
-      // year: [],
-      // season: [],
-      // yearOptions: [],
-      // seasonOptions: [],
       storeOptions: [],
       restaurants: [],
       dialogVisible: false
     }
   },
-  computed: {
-    // options() {
-    //   return this.$store.getters.store
-    // },
-    yearOptions() {
-      return this.$store.getters.year
-    },
-    seasonOptions() {
-      return this.$store.getters.season
-    }
-  },
-  watch: {
-  },
-  created() {
-    this.$store.dispatch('baseApi/getYear')
-    this.$store.dispatch('baseApi/getSeason')
-  },
-  mounted() {
-    // this.init()
-  },
   methods: {
-    // 初始化
-    init() {
-      // this.$store.dispatch('baseApi/getYear').then(() => {
-      //   this.year = this.$store.getters.year
-      // })
-      // this.$store.dispatch('baseApi/getSeason').then(() => {
-      //   this.season = this.$store.getters.season
-      // })
-      // getYear().then(response => {
-      //   this.yearOptions = response.result
-      // })
-      // 季节
-      // getSeason().then(response => {
-      //   this.seasonOptions = response.result
-      // })
-    },
     // 搜索栏回车事件
     handleFilter() {
       var data = Object.assign({}, this.listQuery)
@@ -258,7 +98,7 @@ export default {
       }
       if (!data.beginDate && !data.endDate) {
         data.beginDate = 20180101
-        data.endDate = this.getDateStr(-1)
+        data.endDate = this.$moment().add('-1', 'days').format('YYYYMMDD')
       }
       // 店仓转换
       if (data.storeIds.length > 0) {
@@ -269,34 +109,21 @@ export default {
         data.storeIds = arr.join(',')
       }
     },
-    // 刷新事件
-    refresh() {
-      console.log('刷新')
-    },
-    getDateStr(count) {
-      var dd = new Date()
-      dd.setDate(dd.getDate() + count)
-      var y = dd.getFullYear()
-      var m = dd.getMonth() + 1
-      var d = dd.getDate()
-      m = m > 9 ? m : '0' + m
-      d = d > 9 ? d : '0' + d
-      return '' + y + m + d
-    },
-    querySearch(queryString, cb) {
-      var restaurants = this.restaurants
-      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
-      // 调用 callback 返回建议列表的数据
-      cb(results)
-    },
-    createFilter(queryString) {
-      return (restaurant) => {
-        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
-      }
-    },
-    showMessage() {
-      this.dialogVisible = true
-    },
+    // // 刷新事件
+    // refresh() {
+    //   console.log('刷新')
+    // },
+    // querySearch(queryString, cb) {
+    //   var restaurants = this.restaurants
+    //   var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
+    //   // 调用 callback 返回建议列表的数据
+    //   cb(results)
+    // },
+    // createFilter(queryString) {
+    //   return (restaurant) => {
+    //     return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+    //   }
+    // },
     handleClose(done) {
       this.$confirm('确认关闭？')
         .then(_ => {
