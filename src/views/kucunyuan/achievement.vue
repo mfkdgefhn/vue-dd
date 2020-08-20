@@ -1,32 +1,14 @@
 <template>
-  <el-card shadow="hover" class="kucunyuan">
-    <el-table
-      v-loading="loading"
-      style="width: 98%"
-      show-summary
-      :data="tableData"
-      class="kucunyuan-table"
-    >
-      <el-table-column prop="yearSeason" label="江西$温州" align="center" width="100" />
-      <el-table-column prop="purchase" label="进货" align="center" />
-      <el-table-column prop="sellOut" label="售罄" align="center" />
-      <el-table-column prop="surplusGoods" label="余货" align="center" />
-      <el-table-column label="库存" align="center">
-        <el-table-column prop="storehouse" label="仓库" align="center" />
-        <el-table-column prop="store" label="店铺" align="center" />
-      </el-table-column>
-      <el-table-column label="江西-7.3" align="center">
-        <el-table-column prop="qtyJx" label="数量" align="center" />
-        <el-table-column prop="amountJx" label="金额" align="center" />
-      </el-table-column>
-      <el-table-column label="温州-7.3" align="center">
-        <el-table-column prop="qtyWz" label="数量" align="center" />
-        <el-table-column prop="amountWz" label="金额" align="center" />
-      </el-table-column>
-      <el-table-column prop="sale" label="批发" align="center" />
-      <el-table-column prop="retail" label="零售" align="center" />
-    </el-table>
-  </el-card>
+  <div class="kucunyuan">
+    <el-card shadow="hover" class="crad">
+      <el-table v-loading="loading" show-summary :data="tableData" class="kucunyuan-table">
+        <el-table-column prop="rn" label="排序" align="center" />
+        <el-table-column prop="name" label="江西达成" align="center" />
+        <el-table-column prop="target" label="目标" align="center" />
+        <el-table-column prop="sales" label="销售" align="center" />
+      </el-table>
+    </el-card>
+  </div>
 </template>
 
 <script>
@@ -62,10 +44,15 @@ export default {
   margin: 10px;
 }
 .kucunyuan-table {
-  margin: 10px auto;
+  margin: 0 auto;
 }
 // 深度设定样式
-/deep/ .el-card__body {
-  padding: 0px;
+// /deep/ .el-card__body {
+//   padding: 0px;
+// }
+.crad {
+  margin-bottom: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 </style>

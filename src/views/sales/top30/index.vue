@@ -49,8 +49,8 @@
           <el-table-column prop="monRetailTotAmtActual" label="其中：销售" align="center" />
           <el-table-column prop="monRechargeTotAmtActual" label="其中：充值" align="center" />
           <el-table-column prop="monQty" label="本月销量" align="center" />
-          <el-table-column prop="monRetailQty" label="本月日均销售" align="center" />
-          <el-table-column prop="monRechargeQty" label="本月日均充值" align="center" />
+          <el-table-column prop="monRetailAvgPrice" label="本月日均销售" align="center" />
+          <el-table-column prop="monRechargeAvgPrice" label="本月日均充值" align="center" />
           <el-table-column prop="yearStorage" :label="lastMaxToday" align="center" />
           <el-table-column prop="yearStorage1" :label="lastToday" align="center" />
           <el-table-column prop="yearStorage2" :label="today" align="center" />
@@ -155,7 +155,7 @@ export default {
         // 设置对应表头属性
         const filterVal = ['dayTop', 'storeName', 'dayTotAmtActual', 'dayRetailTotAmtActual', 'dayRechargeTotAmtActual',
           'dayQty', 'dayAvgPrice', 'monTotAmtActual', 'monRetailTotAmtActual', 'monRechargeTotAmtActual', 'monQty',
-          'monRetailQty', 'monRechargeQty', 'yearStorage', 'yearStorage1', 'yearStorage2']
+          'monRetailAvgPrice', 'monRechargeAvgPrice', 'yearStorage', 'yearStorage1', 'yearStorage2']
         const data = this.formatJson(filterVal, str)
         excel.export_json_to_excel({
           header: tHeader,

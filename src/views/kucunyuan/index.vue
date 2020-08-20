@@ -9,14 +9,8 @@
       />
     </el-card>
 
-    <el-card shadow="hover">
-      <el-table
-        v-loading="loading"
-        style="width: 98%"
-        show-summary
-        :data="tableData"
-        class="kucunyuan-table"
-      >
+    <el-card shadow="hover" class="crad">
+      <el-table v-loading="loading" show-summary :data="tableData" class="kucunyuan-table">
         <el-table-column prop="yearSeason" label="江西$温州" align="center" width="100" />
         <el-table-column prop="purchase" label="进货" align="center" />
         <el-table-column prop="sellOut" label="售罄" align="center" />
@@ -165,5 +159,7 @@ export default {
 // }
 .crad {
   margin-bottom: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 </style>
