@@ -28,7 +28,7 @@
         <el-table-column prop="dayTop" label="日均销额排名" align="center" width="50" />
         <el-table-column :label="businessTime" align="center">
           <el-table-column prop="customer" label="经销商" align="center" width="120" />
-          <el-table-column label="当日店均销额" align="center" width="80">
+          <el-table-column label="当日店均业绩" align="center" width="80">
             <template slot-scope="scope">
               <el-popover trigger="hover" :close-delay="1" placement="top">
                 <p>零售总金额 / 零售门店数量</p>
@@ -69,26 +69,26 @@
             </template>
           </el-table-column>
           <el-table-column label="整体累计单店" align="center">
-            <el-table-column prop="monStoreSum1" label="20年当月累计单店" align="center" />
+            <el-table-column prop="monStoreSum1" label="20年当月累计单店日均总业绩" align="center" />
             <el-table-column prop="monStoreSum11" label="其中：累计单店日均销售" align="center" />
             <el-table-column prop="monStoreSum12" label="其中：累计单店日均充值" align="center" />
-            <el-table-column prop="monStoreSum2" label="19年当月累计单店" align="center" />
+            <el-table-column prop="monStoreSum2" label="19年当月累计单店日均业绩" align="center" />
             <el-table-column prop="increase" label="增长" align="center" width="60" />
           </el-table-column>
         </el-table-column>
         <el-table-column :label="date" align="center">
           <el-table-column label="月累计老店日均" align="center">
-            <el-table-column prop="oldYearDayAvg1" label="20年日均" align="center" />
+            <el-table-column prop="oldYearDayAvg1" label="20年当月累计老店日均总业绩" align="center" />
             <el-table-column prop="oldYearDayAvg11" label="其中：累计老店日均销售" align="center" />
             <el-table-column prop="oldYearDayAvg12" label="其中：累计老店日均充值" align="center" />
-            <el-table-column prop="oldYearDayAvg2" label="19年日均" align="center" />
+            <el-table-column prop="oldYearDayAvg2" label="19年老店日均总业绩" align="center" />
             <el-table-column prop="oldDayAvgIncrease1" label="日均增长" align="center" width="60" />
           </el-table-column>
           <el-table-column label="当日老店日均" align="center">
-            <el-table-column prop="oldDayAvg1" label="20年当日店均" align="center" />
+            <el-table-column prop="oldDayAvg1" label="20年当日店均总业绩" align="center" />
             <el-table-column prop="oldDayAvg11" label="其中：当日店均销售" align="center" />
             <el-table-column prop="oldDayAvg12" label="其中：当日店均充值" align="center" />
-            <el-table-column prop="oldDayAvg2" label="19年当日店均" align="center" />
+            <el-table-column prop="oldDayAvg2" label="19年当日店均总业绩" align="center" />
             <el-table-column prop="oldDayAvgIncrease2" label="日均增长" align="center" width="60" />
           </el-table-column>
         </el-table-column>

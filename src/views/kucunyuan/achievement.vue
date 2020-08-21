@@ -1,7 +1,19 @@
 <template>
   <div class="kucunyuan">
+    <!-- 达成率 -->
     <el-card shadow="hover" class="crad">
-      <el-row :gutter="10">
+      <div slot="header" class="clearfix">
+        <el-select v-model="value" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+        <el-button style="float: right;margin-right:5px">导出</el-button>
+      </div>
+      <el-row :gutter="10" class="text item">
         <el-col :span="12">
           <el-table
             v-loading="loading"
@@ -65,7 +77,23 @@ export default {
       tableDataJx: [],
       tableDataWz: [],
       color: '#409eff',
-      strokeWidth: 16
+      strokeWidth: 16,
+      value: '1',
+      options: [{
+        value: '1',
+        label: '达成率'
+      }, {
+        value: '2',
+        label: '同比'
+      }]
+    }
+  },
+  watch: {
+    value(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        console.log(newVal)
+        // 这里设置调用接口并渲染数据
+      }
     }
   },
   created() {
@@ -104,6 +132,13 @@ export default {
         this.loading = false
       }, 100)
     }
+    // selectChange(data) {
+    //   if (data === '1') {
+    //     console.log('达成率')
+    //   } else if (data === '2') {
+    //     console.log('同比')
+    //   }
+    // }
   }
 }
 </script>
@@ -123,5 +158,12 @@ export default {
   margin-bottom: 10px;
   margin-left: 10px;
   margin-right: 10px;
+}
+.card-header {
+  font-size: 20px;
+  font-weight: 700;
+  color: #409eff;
+  letter-spacing: 3px;
+  line-height: 40px;
 }
 </style>
