@@ -15,7 +15,7 @@ import store from '@/store'
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   withCredentials: false, // send cookies when cross-domain requests 跨域需要设置
-  timeout: 60000 // request timeout
+  timeout: 120000 // request timeout
 })
 
 // request interceptor

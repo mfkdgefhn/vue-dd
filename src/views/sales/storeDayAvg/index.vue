@@ -52,8 +52,8 @@
           <el-table-column label="其中：店均充值" align="center" width="80">
             <template slot-scope="scope">
               <el-popover trigger="hover" :close-delay="1" placement="top">
-                <p>充值总金额 / 充值门店数量</p>
-                <p>{{ scope.row.dayRechargeAvgSum }} / {{ scope.row.storeRechargeCount }}</p>
+                <p>充值总金额 / 零售总门店数量</p>
+                <p>{{ scope.row.dayRechargeAvgSum }} / {{ scope.row.storeRetailCount }}</p>
                 <div slot="reference" class="name-wrapper">{{ scope.row.dayRechargeAvgSale }}</div>
               </el-popover>
             </template>
