@@ -19,6 +19,7 @@
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0.8)"
         show-summary
+        :summary-method="summaryMethod"
         :cell-class-name="cellClassName"
         :data="table.tableData"
         :row-style="rowStyle"
@@ -28,7 +29,7 @@
         <el-table-column prop="dayTop" label="日均销额排名" align="center" width="50" />
         <el-table-column :label="businessTime" align="center">
           <el-table-column prop="customer" label="经销商" align="center" width="120" />
-          <el-table-column label="当日店均业绩" align="center" width="80">
+          <el-table-column label="当日店均业绩" align="center" width="70">
             <template slot-scope="scope">
               <el-popover trigger="hover" :close-delay="1" placement="top">
                 <p>零售总金额 / 零售门店数量</p>
@@ -40,7 +41,7 @@
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column label="其中：店均销售" align="center" width="80">
+          <el-table-column label="其中：店均销售" align="center" width="70">
             <template slot-scope="scope">
               <el-popover trigger="hover" :close-delay="1" placement="top">
                 <p>零售总金额(非充值卡) / 零售门店数量</p>
@@ -49,7 +50,7 @@
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column label="其中：店均充值" align="center" width="80">
+          <el-table-column label="其中：店均充值" align="center" width="70">
             <template slot-scope="scope">
               <el-popover trigger="hover" :close-delay="1" placement="top">
                 <p>充值总金额 / 零售总门店数量</p>
@@ -59,7 +60,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="dayAvgSum" label="当日店均销量" align="center" />
-          <el-table-column label="当日店均单价" align="center" width="80">
+          <el-table-column label="当日店均单价" align="center" width="70">
             <template slot-scope="scope">
               <el-popover trigger="hover" :close-delay="1" placement="top">
                 <p>正常零售价总金额 / 正常零售价鞋子数量</p>
@@ -115,6 +116,7 @@ import searchSale from '@/components/public/searchSale'
 import { getStoreDayAvg } from '@/api/table'
 import { parseTime } from '@/utils'
 import { pagination } from '@/utils/array'
+import { tableSummary } from '@/utils/readerTableSummary'
 
 export default {
   name: 'StoreDayAvg',
@@ -139,6 +141,10 @@ export default {
     }
   },
   methods: {
+    // 合计行 方法计算方式
+    summaryMethod(data) {
+      return tableSummary(data)
+    },
     getAnalysis(data) {
       this.table.tableData = []
       this.loading = true
@@ -168,7 +174,6 @@ export default {
       this.table.currentPage = val
       this.table.tableData = pagination(this.table.currentPage, this.table.pageSize, this.$store.getters.storeDayAvg)
     },
-
     // 导出PDF
     exportPdf() {
       this.getPdf(this.table.title)
