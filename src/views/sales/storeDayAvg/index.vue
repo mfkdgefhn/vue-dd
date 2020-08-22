@@ -63,8 +63,8 @@
             <template slot-scope="scope">
               <el-popover trigger="hover" :close-delay="1" placement="top">
                 <p>正常零售价总金额 / 正常零售价鞋子数量</p>
-                <p>{{ scope.row.storeAvgTotAmtActual }} / {{ scope.row.storeAvgQty }}</p>
-                <div slot="reference" class="name-wrapper">{{ scope.row.dayAvgPrice }}</div>
+                <p>{{ scope.row.totRetailAmtActual }} / {{ scope.row.totRetailQty }}</p>
+                <div slot="reference" class="name-wrapper">{{ scope.row.dayAvgPrice1 }}</div>
               </el-popover>
             </template>
           </el-table-column>
@@ -183,14 +183,15 @@ export default {
       str = (str === undefined) ? '' : str
       import('@/vendor/Export2Excel').then(excel => {
         // 设置Excel的表格第一行的标题
-        const tHeader = ['日均销额排名', '经销商', '当日店均销额', '其中：店均销售', '其中：店均充值',
-          '当日店均销量', '当日店均单价', '20年当月累计单店', '其中：累计单店日均销售', '其中：累计单店日均充值',
-          '19年当月累计单店', '增长', '20年日均', '其中：累计老店日均销售', '其中：累计老店日均充值', '19年日均',
-          '日均增长', '20年当日店均', '其中：当日店均销售', '其中：当日店均充值', '19年当日店均', '日均增长']
+        const tHeader = ['日均销额排名', '经销商', '当日店均业绩', '其中：店均销售', '其中：店均充值',
+          '当日店均销量', '当日店均单价', '20年当月累计单店日均总业绩', '其中：累计单店日均销售', '其中：累计单店日均充值',
+          '19年当月累计单店日均业绩', '增长', '20年当月累计老店日均总业绩', '其中：累计老店日均销售', '其中：累计老店日均充值',
+          '19年老店日均总业绩', '日均增长', '20年当日店均销售', '其中：当日店均销售', '其中：当日店均充值',
+          '19年当日店均总业绩', '日均增长']
         // 设置对应表头属性
         const filterVal = ['dayTop', 'customer', 'dayAvgSale', 'dayRetailAvgSale', 'dayRechargeAvgSale',
           'dayAvgSum', 'dayAvgPrice', 'monStoreSum1', 'monStoreSum11', 'monStoreSum12',
-          'monStoreSum2', 'increase', 'oldYearDayAvg1', 'oldYearDayAvg11', 'oldYearDayAvg12', 'olgYearDayAvg2',
+          'monStoreSum2', 'increase', 'oldYearDayAvg1', 'oldYearDayAvg11', 'oldYearDayAvg12', 'oldYearDayAvg2',
           'oldDayAvgIncrease1', 'oldDayAvg1', 'oldDayAvg11', 'oldDayAvg12', 'oldDayAvg2', 'oldDayAvgIncrease2']
         const data = this.formatJson(filterVal, str)
         excel.export_json_to_excel({

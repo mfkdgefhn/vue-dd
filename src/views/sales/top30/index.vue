@@ -29,16 +29,16 @@
           <el-table-column prop="dayTotAmtActual" label="当日业绩" align="center" />
           <el-table-column prop="dayRetailTotAmtActual" label="其中：销售" align="center" />
           <el-table-column prop="dayRechargeTotAmtActual" label="其中：充值" align="center" />
-          <el-table-column prop="dayQty" label="日销量" align="center" />
+          <el-table-column prop="dayRetailQty" label="日销量" align="center" />
           <!-- <el-table-column prop="dayAvgPrice" label="日单价" align="center" /> -->
           <el-table-column label="日单价" align="center">
             <template slot-scope="scope">
               <el-popover trigger="hover" :close-delay="1" placement="top">
                 <p>当日业绩 / 日销量</p>
-                <p>{{ scope.row.dayTotAmtActual }} / {{ scope.row.dayQty }}</p>
+                <p>{{ scope.row.dayRetailTotAmtActual1 }} / {{ scope.row.dayRetailQty1 }}</p>
                 <div slot="reference" class="name-wrapper">
                   <!-- <el-tag size="medium">{{ scope.row.dayAvgSale }}</el-tag> -->
-                  {{ scope.row.dayAvgPrice }}
+                  {{ scope.row.dayAvgPrice1 }}
                 </div>
               </el-popover>
             </template>
@@ -149,11 +149,11 @@ export default {
       str = (str === undefined) ? '' : str
       import('@/vendor/Export2Excel').then(excel => {
         // 设置Excel的表格第一行的标题
-        const tHeader = ['日业绩排名', '店铺名称', '当日业绩', '其中：销售', '其中：充值',
+        const tHeader = ['日业绩排名', '经销商', '店铺名称', '当日业绩', '其中：销售', '其中：充值',
           '日销量', '日单价', '本月业绩', '其中：销售', '其中：充值', '本月销量',
           '本月日均销额', '本月日均充值', this.lastMaxToday, this.lastToday, this.today]
         // 设置对应表头属性
-        const filterVal = ['dayTop', 'storeName', 'dayTotAmtActual', 'dayRetailTotAmtActual', 'dayRechargeTotAmtActual',
+        const filterVal = ['dayTop', 'customer', 'storeName', 'dayTotAmtActual', 'dayRetailTotAmtActual', 'dayRechargeTotAmtActual',
           'dayQty', 'dayAvgPrice', 'monTotAmtActual', 'monRetailTotAmtActual', 'monRechargeTotAmtActual', 'monQty',
           'monRetailAvgPrice', 'monRechargeAvgPrice', 'yearStorage', 'yearStorage1', 'yearStorage2']
         const data = this.formatJson(filterVal, str)
