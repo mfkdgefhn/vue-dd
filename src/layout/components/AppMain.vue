@@ -3,12 +3,14 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2019-11-15 11:12:39
+ * @LastEditTime: 2020-08-27 17:59:00
  -->
 <template>
   <section class="app-main">
     <!-- <transition name="fade-transform" mode="out-in"> -->
-    <router-view :key="key" />
+    <keep-alive>
+      <router-view :key="key" />
+    </keep-alive>
     <!-- </transition> -->
   </section>
 </template>

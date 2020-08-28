@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2020-08-24 16:06:36
+ * @LastEditTime: 2020-08-27 17:57:34
  */
 
 import Vue from 'vue'
@@ -182,7 +182,7 @@ export const constantRoutes = [
       meta: { title: '库存源', icon: 'shoes' }
     }, {
       path: 'achievement',
-      name: '业绩',
+      name: 'Kucunyuan',
       component: () => import('@/views/kucunyuan/achievement'),
       meta: { title: '业绩', icon: 'shoes' }
     }]

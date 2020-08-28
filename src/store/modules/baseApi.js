@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2019-11-26 13:37:46
+ * @LastEditTime: 2020-08-27 17:40:58
  */
 
 import {
@@ -11,7 +11,8 @@ import {
   getYear, getSeason, getVipExcavate, getVipRetail, getVipType,
   getHywjStores, getQxszCustomer, getQxszStore, getRetailItemAnalysis,
   getRetailItemAnalysis1, getRetailItemAnalysis2, getRetailItemAnalysis3,
-  getRetailItemAnalysis4, getRetailItemAnalysis5, getRetailItemAnalysis6
+  getRetailItemAnalysis4, getRetailItemAnalysis5, getRetailItemAnalysis6,
+  xnclsfx
 } from '@/api/gmqApi'
 
 const state = {
@@ -31,7 +32,8 @@ const state = {
   qxszCustomer: [],
   qxszStore: [],
   apiLog: [],
-  retailItemAnalysis: []
+  retailItemAnalysis: [],
+  xnclsfx: []
 }
 
 const mutations = {
@@ -111,6 +113,9 @@ const mutations = {
   },
   SET_RETAIL_ITEM_ANALYSIS: (state, retailItemAnalysis) => {
     state.retailItemAnalysis = retailItemAnalysis
+  },
+  SET_XNCLSFX: (state, xnclsfx) => {
+    state.xnclsfx = xnclsfx
   }
 }
 
@@ -438,6 +443,17 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit('SET_APILOG', apiLog)
       resolve()
+    })
+  },
+  // 新南昌零售分析
+  xnclsfx({ commit }, params) {
+    return new Promise((resolve, reject) => {
+      xnclsfx(params).then(response => {
+        commit('SET_XNCLSFX', response)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
     })
   }
 
