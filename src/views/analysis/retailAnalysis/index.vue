@@ -2,8 +2,8 @@
  * @Description: 说明
  * @Author: anan
  * @Date: 2019-10-15 10:23:32
- * @LastEditors  : anan
- * @LastEditTime : 2020-01-12 14:50:07
+ * @LastEditors: anan
+ * @LastEditTime: 2020-08-30 15:11:14
  -->
 <template>
   <div class="retail-analysis">
@@ -168,7 +168,8 @@ export default {
       this.itemLoading = true
       const paramsDate = Object.assign({}, this.params)
       if (val.seriesName === '时段零售') {
-        var timeDate = val.name.split('-')
+        var timeDate = this.readerTimeInterval(val.name)
+        // var timeDate = val.name.split('-')
         for (let i = 0; i < timeDate.length; i++) {
           if (timeDate[i].length === 1) {
             timeDate[i] = '0' + timeDate[i]
@@ -213,14 +214,12 @@ export default {
           // 数据库 0-1 --- 8-9 排序会与 10-24 错乱，因此数据库 选择用00-01，前端用0-1
           if (val.name === '00-01') {
             obj.name = '0-1'
-          } else if (val.name === '02-03') {
-            obj.name = '2-3'
-          } else if (val.name === '04-05') {
-            obj.name = '4-5'
-          } else if (val.name === '06-07') {
-            obj.name = '6-7'
-          } else if (val.name === '08-09') {
-            obj.name = '8-9'
+          } else if (val.name === '02-05') {
+            obj.name = '2-5'
+          } else if (val.name === '06-08') {
+            obj.name = '6-8'
+          } else if (val.name === '09-10') {
+            obj.name = '9-10'
           } else {
             obj.name = val.name
           }
@@ -264,6 +263,34 @@ export default {
         arr.push(val.name)
       })
       return arr
+    },
+    // 渲染时间段
+    readerTimeInterval(val) {
+      var returnArray = []
+      if (val === '0-1') {
+        returnArray.push('00')
+        returnArray.push('01')
+      } else if (val === '2-5') {
+        returnArray.push('02')
+        returnArray.push('03')
+        returnArray.push('04')
+        returnArray.push('05')
+      } else if (val === '6-8') {
+        returnArray.push('06')
+        returnArray.push('07')
+        returnArray.push('08')
+      } else if (val === '9-10') {
+        returnArray.push('09')
+        returnArray.push('10')
+      } else if (val === '21-24') {
+        returnArray.push('21')
+        returnArray.push('22')
+        returnArray.push('23')
+        returnArray.push('24')
+      } else {
+        returnArray.push(val.split('-'))
+      }
+      return returnArray
     }
   }
 }

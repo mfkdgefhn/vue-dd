@@ -53,7 +53,6 @@ export default {
       this.vStyle = 'width: auto;height: ' + (val * 0.2) + 'px'
     },
     vipRepeatPurchase(val) {
-      debugger
       this.data = {
         legend: [],
         series: []

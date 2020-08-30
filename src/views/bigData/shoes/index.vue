@@ -2,8 +2,8 @@
  * @Description: 说明
  * @Author: anan
  * @Date: 2019-09-27 17:16:04
- * @LastEditors  : anan
- * @LastEditTime : 2020-01-12 14:07:13
+ * @LastEditors: anan
+ * @LastEditTime: 2020-08-30 15:35:24
  -->
 <template>
   <div class="data-analysis">
@@ -201,7 +201,6 @@ export default {
   watch: {
     listQuery(val) {
       this.loading = true
-      // debugger
       this.getBigData(val)
     },
     count(val) {

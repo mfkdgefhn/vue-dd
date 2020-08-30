@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2020-08-27 17:41:24
+ * @LastEditTime: 2020-08-29 15:41:24
  */
 const getters = {
   sidebar: state => state.app.sidebar,
@@ -36,6 +36,7 @@ const getters = {
   retailItemAnalysis: state => state.baseApi.retailItemAnalysis,
   ddToken: state => state.dd.token,
   jsapiTicket: state => state.dd.jsapiTicket,
-  xnclsfx: state => state.baseApi.xnclsfx
+  xnclsfx: state => state.baseApi.xnclsfx,
+  yjdctbfx: state => state.baseApi.yjdctbfx
 }
 export default getters

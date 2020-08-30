@@ -2,8 +2,8 @@
  * @Description: 说明
  * @Author: anan
  * @Date: 2019-10-15 11:02:26
- * @LastEditors  : anan
- * @LastEditTime : 2020-01-12 14:48:19
+ * @LastEditors: anan
+ * @LastEditTime: 2020-08-30 14:42:57
  -->
 <template>
   <div class="retail-analysis">

@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2020-08-27 17:40:58
+ * @LastEditTime: 2020-08-29 15:41:15
  */
 
 import {
@@ -12,7 +12,7 @@ import {
   getHywjStores, getQxszCustomer, getQxszStore, getRetailItemAnalysis,
   getRetailItemAnalysis1, getRetailItemAnalysis2, getRetailItemAnalysis3,
   getRetailItemAnalysis4, getRetailItemAnalysis5, getRetailItemAnalysis6,
-  xnclsfx
+  xnclsfx, yjdctbfx
 } from '@/api/gmqApi'
 
 const state = {
@@ -33,7 +33,8 @@ const state = {
   qxszStore: [],
   apiLog: [],
   retailItemAnalysis: [],
-  xnclsfx: []
+  xnclsfx: [],
+  yjdctbfx: []
 }
 
 const mutations = {
@@ -116,6 +117,9 @@ const mutations = {
   },
   SET_XNCLSFX: (state, xnclsfx) => {
     state.xnclsfx = xnclsfx
+  },
+  SET_YJDCTBFX: (state, yjdctbfx) => {
+    state.yjdctbfx = yjdctbfx
   }
 }
 
@@ -450,6 +454,17 @@ const actions = {
     return new Promise((resolve, reject) => {
       xnclsfx(params).then(response => {
         commit('SET_XNCLSFX', response)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  // 新南昌零售分析
+  yjdctbfx({ commit }, params) {
+    return new Promise((resolve, reject) => {
+      yjdctbfx(params).then(response => {
+        commit('SET_YJDCTBFX', response)
         resolve()
       }).catch(error => {
         reject(error)

@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-15 10:00:39
  * @LastEditors: anan
- * @LastEditTime: 2020-08-27 17:39:23
+ * @LastEditTime: 2020-08-29 15:34:49
  */
 import request from '@/utils/request'
 
@@ -461,10 +461,19 @@ export function getApiLog(params) {
   })
 }
 
-// 大数据看板-全国
+// 新南昌零售分析
 export function xnclsfx(params) {
   return request({
     url: url + '/Q/r.do?o=xnclsfx',
+    method: 'get',
+    params
+  })
+}
+
+// 业绩达成同比分析
+export function yjdctbfx(params) {
+  return request({
+    url: url + '/Q/r.do?o=yjdctbfx',
     method: 'get',
     params
   })

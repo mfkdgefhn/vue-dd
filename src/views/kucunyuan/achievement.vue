@@ -1,5 +1,5 @@
 <template>
-  <div class="kucunyuan">
+  <div class="achievement">
     <!-- 达成率 -->
     <el-card shadow="hover" class="crad">
       <div slot="header" class="clearfix">
@@ -13,26 +13,96 @@
         </el-select>
         <el-button style="float: right;margin-right:5px">导出</el-button>
       </div>
-      <el-row :gutter="10" class="text item">
+      <!-- 达成 -->
+      <el-row v-if="value==='1'" :gutter="10" class="text item">
         <el-col :span="12">
           <el-table
             v-loading="loading"
             border
             show-summary
             :data="tableDataJx"
-            class="kucunyuan-table"
+            class="achievement-table"
           >
-            <el-table-column prop="rnJx" label="排序" align="center" width="60" />
-            <el-table-column prop="nameJx" label="江西达成" align="center" width="170" />
-            <el-table-column prop="targetJx" label="目标" align="center" width="70" />
-            <el-table-column prop="salesJx" label="销售" align="center" width="70" />
-            <el-table-column label="达成" align="center">
+            <el-table-column prop="rn" :label="tableLabelDc.jx.rn" align="center" width="60" />
+            <el-table-column prop="name" :label="tableLabelDc.jx.name" align="center" width="170" />
+            <el-table-column
+              prop="target"
+              :label="tableLabelDc.jx.target"
+              align="center"
+              width="70"
+            />
+            <el-table-column prop="sales" :label="tableLabelDc.jx.sales" align="center" width="70" />
+            <el-table-column :label="tableLabelDc.jx.reach" align="center">
               <template slot-scope="{row}">
                 <el-progress
                   :text-inside="true"
                   :stroke-width="strokeWidth"
                   :color="readerPropress"
-                  :percentage="row.reach"
+                  :percentage="row.reach > 100 ? 100: parseInt(row.reach)"
+                  :format="_format(row.reach)"
+                />
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+
+        <el-col :span="12">
+          <el-table
+            v-loading="loading"
+            border
+            show-summary
+            :data="tableDataWz"
+            class="achievement-table"
+          >
+            <el-table-column prop="rn" :label="tableLabelDc.wz.rn" align="center" width="60" />
+            <el-table-column prop="name" :label="tableLabelDc.wz.name" align="center" width="170" />
+            <el-table-column
+              prop="target"
+              :label="tableLabelDc.wz.target"
+              align="center"
+              width="70"
+            />
+            <el-table-column prop="sales" :label="tableLabelDc.wz.sales" align="center" width="70" />
+            <el-table-column :label="tableLabelDc.wz.reach" align="center">
+              <template slot-scope="{row}">
+                <el-progress
+                  :text-inside="true"
+                  :stroke-width="strokeWidth"
+                  :color="readerPropress"
+                  :percentage="row.reach > 100 ? 100: parseInt(row.reach)"
+                  :format="_format(row.reach)"
+                />
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
+      <!-- 同比 -->
+      <el-row v-else :gutter="10" class="text item">
+        <el-col :span="12">
+          <el-table
+            v-loading="loading"
+            border
+            show-summary
+            :data="tableDataJx"
+            class="achievement-table"
+          >
+            <el-table-column prop="rn" :label="tableLabelTb.jx.rn" align="center" width="60" />
+            <el-table-column prop="name" :label="tableLabelTb.jx.name" align="center" width="170" />
+            <el-table-column
+              prop="samePeriod"
+              :label="tableLabelTb.jx.samePeriod"
+              align="center"
+              width="70"
+            />
+            <el-table-column prop="sales" :label="tableLabelTb.jx.sales" align="center" width="70" />
+            <el-table-column :label="tableLabelTb.jx.yearOnYear" align="center">
+              <template slot-scope="{row}">
+                <el-progress
+                  :text-inside="true"
+                  :stroke-width="strokeWidth"
+                  :color="readerPropress"
+                  :percentage="row.yearOnYear"
                 />
               </template>
             </el-table-column>
@@ -47,17 +117,22 @@
             :data="tableDataWz"
             class="kucunyuan-table"
           >
-            <el-table-column prop="rnWz" label="排序" align="center" width="60" />
-            <el-table-column prop="nameWz" label="温州达成" align="center" width="170" />
-            <el-table-column prop="targetWz" label="目标" align="center" width="70" />
-            <el-table-column prop="salesWz" label="销售" align="center" width="70" />
-            <el-table-column label="达成" align="center">
+            <el-table-column prop="rn" :label="tableLabelTb.wz.rn" align="center" width="60" />
+            <el-table-column prop="name" :label="tableLabelTb.wz.name" align="center" width="170" />
+            <el-table-column
+              prop="samePeriod"
+              :label="tableLabelTb.wz.samePeriod"
+              align="center"
+              width="70"
+            />
+            <el-table-column prop="sales" :label="tableLabelTb.wz.sales" align="center" width="70" />
+            <el-table-column :label="tableLabelTb.wz.yearOnYear" align="center">
               <template slot-scope="{row}">
                 <el-progress
                   :text-inside="true"
                   :stroke-width="strokeWidth"
                   :color="readerPropress"
-                  :percentage="row.reach"
+                  :percentage="row.yearOnYear"
                 />
               </template>
             </el-table-column>
@@ -69,8 +144,9 @@
 </template>
 
 <script>
+
 export default {
-  name: 'Kucunyuan',
+  name: 'Achievement',
   data() {
     return {
       loading: false,
@@ -85,7 +161,15 @@ export default {
       }, {
         value: '2',
         label: '同比'
-      }]
+      }],
+      tableLabelDc: {
+        'jx': { 'rn': '排序', 'name': '江西达成', 'target': '目标', 'sales': '销售', 'reach': '达成' },
+        'wz': { 'rn': '排序', 'name': '温州达成', 'target': '目标', 'sales': '销售', 'reach': '达成' }
+      },
+      tableLabelTb: {
+        'jx': { 'rn': '排序', 'name': '江西同比', 'samePeriod': '同期', 'sales': '本期', 'yearOnYear': '同比' },
+        'wz': { 'rn': '排序', 'name': '温州同比', 'samePeriod': '同期', 'sales': '本期', 'yearOnYear': '同比' }
+      }
     }
   },
   watch: {
@@ -97,9 +181,37 @@ export default {
     }
   },
   created() {
-    this.init()
+    this.getAnalysis()
   },
   methods: {
+    // 查询
+    getAnalysis(data) {
+      this.loading = true
+      this.$store.dispatch('baseApi/yjdctbfx', { yearmonth: this.$moment().add(-1, 'd').format('YYYYMM') })
+        .then(() => {
+          this.tableData = this.$store.getters.yjdctbfx
+          // 将数据拆分成两部分
+          this.tableData.forEach(element => {
+            if (element.area === '江西区域') {
+              this.tableDataJx.push(element)
+            } else if (element.area === '温州区域') {
+              this.tableDataWz.push(element)
+            }
+          })
+
+          if (this.value === '1') {
+            console.log('达成')
+          } else if (this.value === '2') {
+            console.log('同比')
+          }
+
+          this.loading = false
+        })
+        .catch(error => {
+          console.log(error)
+          this.loading = false
+        })
+    },
     readerPropress(percentage) {
       if (percentage >= 100) {
         return '#67C23A'
@@ -112,42 +224,20 @@ export default {
       }
       return '#f56c6c'
     },
-    init() {
-      this.loading = true
-      setTimeout(() => {
-        this.tableDataJx = [
-          { rnJx: '1', nameJx: '江西南昌红谷滩万达店', targetJx: '150000', salesJx: '45482', reach: 0 },
-          { rnJx: '2', nameJx: '江西南昌红谷滩万达店', targetJx: '150000', salesJx: '45482', reach: 10 },
-          { rnJx: '3', nameJx: '江西南昌红谷滩万达店', targetJx: '150000', salesJx: '45482', reach: 30 },
-          { rnJx: '4', nameJx: '江西南昌红谷滩万达店', targetJx: '150000', salesJx: '45482', reach: 50 },
-          { rnJx: '5', nameJx: '江西南昌红谷滩万达店', targetJx: '150000', salesJx: '45482', reach: 90 },
-          { rnJx: '5', nameJx: '江西南昌红谷滩万达店', targetJx: '150000', salesJx: '45482', reach: 100 }
-        ]
-        this.tableDataWz = [
-          { rnWz: '1', nameWz: '新温州泉州中闽百汇店', targetWz: '50000', salesWz: '22270', reach: 1 },
-          { rnWz: '2', nameWz: '新温州泉州中闽百汇店', targetWz: '50000', salesWz: '22270', reach: 10 },
-          { rnWz: '3', nameWz: '新温州泉州中闽百汇店', targetWz: '50000', salesWz: '22270', reach: 55 },
-          { rnWz: '4', nameWz: '新温州泉州中闽百汇店', targetWz: '50000', salesWz: '22270', reach: 75 }
-        ]
-        this.loading = false
-      }, 100)
+    _format(value) {
+      return () => {
+        return value + '%'
+      }
     }
-    // selectChange(data) {
-    //   if (data === '1') {
-    //     console.log('达成率')
-    //   } else if (data === '2') {
-    //     console.log('同比')
-    //   }
-    // }
   }
 }
 </script>
 
 <style  lang="scss" scoped>
-.kucunyuan {
+.achievement {
   margin: 10px;
 }
-.kucunyuan-table {
+.achievement-table {
   margin: 0 auto;
 }
 // 深度设定样式
