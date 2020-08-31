@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-12-07 10:55:15
  * @LastEditors: anan
- * @LastEditTime: 2019-12-07 15:31:47
+ * @LastEditTime: 2020-08-30 16:48:18
  -->
 <template>
   <el-dialog
@@ -16,7 +16,7 @@
     <span slot="title" v-html="title" />
 
     <el-card v-if="page" shadow="hover" body-style="{ margin-bottom: '10px'}" class="block">
-      <el-table v-loading="loading" :data="table.tableData" width="100%" border>
+      <el-table v-loading="loading" :data="table.tableData" width="100%" border fit stripe>
         <!-- 父组件传表头循环生成 -->
         <el-table-column
           v-for="item in tableHeader"
