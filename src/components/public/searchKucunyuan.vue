@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion:
+ * @version:
+ * @Author: anan
+ * @Date: 2020-08-19 11:16:46
+ * @LastEditors: anan
+ * @LastEditTime: 2020-09-03 16:04:52
+-->
 <template>
   <div class="seach-length">
     <el-row :gutter="10">
@@ -9,9 +17,9 @@
               v-model="listQuery.billdate"
               style="width: 100%; margin-bottom: 5px; font-size:12px;"
               type="date"
+              format="yyyy年MM月dd日"
               value-format="yyyyMMdd"
               placeholder="开始日期"
-              format="yyyyMMdd"
             />
           </el-col>
         </el-row>
@@ -27,6 +35,18 @@
           :disabled="loading"
           @click="handleFilter"
         >搜索</el-button>
+      </el-col>
+
+      <!-- 导出 -->
+      <el-col :md="3" :sm="5" :xs="5">
+        <el-button
+          class="filter-item"
+          type="primary"
+          icon="el-icon-search"
+          :loading="loading"
+          :disabled="loading"
+          @click="handleDownload"
+        >导出</el-button>
       </el-col>
     </el-row>
 
@@ -64,9 +84,7 @@ export default {
     return {
       showAllLevels: false,
       listQuery: {
-        billdate: this.$moment().add('-1', 'days').format('YYYYMMDD'),
-        storeIds: [],
-        loading: false
+        billdate: this.$moment().add('-1', 'days').format('YYYYMMDD')
       },
       storeOptions: [],
       restaurants: [],
@@ -77,59 +95,17 @@ export default {
     // 搜索栏回车事件
     handleFilter() {
       var data = Object.assign({}, this.listQuery)
-      this.handle(data)
       this.$emit('getAnalysis', data)
     },
-    handle(data) {
-      if (data.year.length > 0) data.year = data.year.join(',') // 年份数组转字符串
-      if (data.season.length > 0) data.season = data.season.join(',') // 季节数组转字符串
-      // 时间转换
-      if (!data.beginDate) {
-        if (data.endDate) {
-          data.jzDate = data.endDate
-          data.endDate = null
-        }
-      }
-      if (!data.endDate) {
-        if (data.beginDate) {
-          data.qsDate = data.beginDate
-          data.beginDate = null
-        }
-      }
-      if (!data.beginDate && !data.endDate) {
-        data.beginDate = 20180101
-        data.endDate = this.$moment().add('-1', 'days').format('YYYYMMDD')
-      }
-      // 店仓转换
-      if (data.storeIds.length > 0) {
-        var arr = []
-        data.storeIds.forEach(element => {
-          arr.push(element[1])
-        })
-        data.storeIds = arr.join(',')
-      }
-    },
-    // // 刷新事件
-    // refresh() {
-    //   console.log('刷新')
-    // },
-    // querySearch(queryString, cb) {
-    //   var restaurants = this.restaurants
-    //   var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
-    //   // 调用 callback 返回建议列表的数据
-    //   cb(results)
-    // },
-    // createFilter(queryString) {
-    //   return (restaurant) => {
-    //     return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
-    //   }
-    // },
     handleClose(done) {
       this.$confirm('确认关闭？')
         .then(_ => {
           done()
         })
         .catch(_ => { })
+    },
+    handleDownload() {
+      this.$emit('handleDownload')
     }
   }
 }
