@@ -1,3 +1,11 @@
+/*
+ * @Descripttion:
+ * @version:
+ * @Author: anan
+ * @Date: 2019-09-27 16:04:08
+ * @LastEditors: anan
+ * @LastEditTime: 2020-09-05 14:01:38
+ */
 import request from '@/utils/request'
 
 var url = process.env.NODE_ENV === 'development' ? 'http://10.10.1.41:443' : ''
@@ -8,7 +16,7 @@ var url = process.env.NODE_ENV === 'development' ? 'http://10.10.1.41:443' : ''
 
 export function getTop30(params) {
   return request({
-    url: url + '/Q/r.do?o=qgrxTOP30',
+    url: url + '/Q/r.do?o=xqgrxTOP30',
     method: 'get',
     params
   })
