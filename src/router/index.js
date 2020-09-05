@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2020-09-03 17:56:54
+ * @LastEditTime: 2020-09-04 15:04:48
  */
 
 import Vue from 'vue'
@@ -67,6 +67,31 @@ export const constantRoutes = [
   //   }]
   // },
   /* --------------------人力独立使用 end -----------------------  */
+
+  /* -------------------- 江西业绩 begin -----------------------  */
+
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/index',
+    name: '江西业绩分析',
+    meta: {
+      title: '江西业绩分析', icon: 'shoes'
+    },
+    children: [{
+      path: 'index',
+      name: 'Kucunyuan',
+      component: () => import('@/views/kucunyuan/index'),
+      meta: { title: '库存源', icon: 'shoes' }
+    }, {
+      path: 'achievement',
+      name: 'Achievement',
+      component: () => import('@/views/kucunyuan/achievement'),
+      meta: { title: '业绩', icon: 'shoes' }
+    }]
+  },
+
+  /* -------------------- 江西业绩 end -----------------------  */
 
   /* -------------------销售分析独立 begin ------------------------*/
 
@@ -169,31 +194,6 @@ export const constantRoutes = [
   // },
 
   /* -------------------- 零售分析独立 end -----------------------  */
-
-  /* -------------------- 江西业绩 begin -----------------------  */
-
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/kucunyuan/index',
-    name: '江西业绩分析',
-    meta: {
-      title: '江西业绩分析', icon: 'shoes'
-    },
-    children: [{
-      path: 'index',
-      name: 'Kucunyuan',
-      component: () => import('@/views/kucunyuan/index'),
-      meta: { title: '库存源', icon: 'shoes' }
-    }, {
-      path: 'achievement',
-      name: 'Achievement',
-      component: () => import('@/views/kucunyuan/achievement'),
-      meta: { title: '业绩', icon: 'shoes' }
-    }]
-  },
-
-  /* -------------------- 江西业绩 end -----------------------  */
 
   // {
   //   path: '/',
