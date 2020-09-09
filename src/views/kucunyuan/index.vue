@@ -58,10 +58,7 @@ export default {
       title: '库存源',
       tHeader: ['江西&温州', '进货', '售馨', '余货', '仓库库存', '店铺库存', '江西数量', '江西金额', '温州数量', '温州金额', '批发', '零售'],
       tableData: [],
-      yesterdayRetails: {
-        jiangxi: '江西',
-        wenzhou: '温州'
-      }
+      yesterdayRetails: { jiangxi: '江西', wenzhou: '温州' }
     }
   },
   created() {
