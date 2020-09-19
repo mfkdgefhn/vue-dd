@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2019-11-13 17:27:02
+ * @LastEditTime: 2020-09-18 10:02:54
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -14,6 +14,7 @@ import user from './modules/user'
 import baseApi from './modules/baseApi'
 import table from './modules/table'
 import dd from './modules/dd'
+import gic from './modules/gic'
 
 Vue.use(Vuex)
 
@@ -24,7 +25,8 @@ const store = new Vuex.Store({
     user,
     baseApi,
     table,
-    dd
+    dd,
+    gic
   },
   getters
 })

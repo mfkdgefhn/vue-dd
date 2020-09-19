@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2020-09-05 14:02:11
+ * @LastEditTime: 2020-09-19 17:38:52
  */
 
 import Vue from 'vue'
@@ -94,44 +94,71 @@ export const constantRoutes = [
   /* -------------------- 江西业绩 end -----------------------  */
 
   /* -------------------销售分析独立 begin ------------------------*/
-
   {
     path: '/',
     component: Layout,
-    name: '销售分析',
+    name: 'GIC取数报表',
     meta: {
-      title: '销售分析', icon: 'shoes'
+      title: 'GIC取数报表', icon: 'shoes'
     },
-    redirect: '/top30',
+    redirect: '/gic',
     children: [
       {
-        path: 'top30',
-        name: '全国日销TOP30',
-        component: () => import('@/views/sales/top30/index'),
-        meta: { title: '全国日销TOP30', icon: 'shoes' }
-      }, {
-        path: 'storeDayAvg',
-        name: '系统客户日均单店',
-        component: () => import('@/views/sales/storeDayAvg/index'),
-        meta: { title: '系统客户日均单店', icon: 'shoes' }
-      }, {
-        path: 'retailShare',
-        name: '零售占比',
-        component: () => import('@/views/sales/retailShare/index'),
-        meta: { title: '零售占比', icon: 'shoes' }
-      }, {
-        path: 'inSaleStorage',
-        name: '进销存',
-        component: () => import('@/views/sales/inSaleStorage/index'),
-        meta: { title: '进销存', icon: 'shoes' }
-      }, {
-        path: 'layoutStructure',
-        name: '版面结构',
-        component: () => import('@/views/sales/layoutStructure/index'),
-        meta: { title: '版面结构', icon: 'shoes' }
+        path: 'gic',
+        name: 'GIC',
+        component: () => import('@/views/gic/index'),
+        meta: { title: 'GIC', icon: 'shoes' }
+      },
+      {
+        path: 'gic-analysis',
+        name: 'GIC',
+        component: () => import('@/views/gic/index'),
+        meta: { title: 'GIC卡券分析', icon: 'shoes' }
       }
     ]
   },
+
+  /* -------------------销售分析独立 end ------------------------*/
+
+  /* -------------------销售分析独立 begin ------------------------*/
+
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   name: '销售分析',
+  //   meta: {
+  //     title: '销售分析', icon: 'shoes'
+  //   },
+  //   redirect: '/top30',
+  //   children: [
+  //     {
+  //       path: 'top30',
+  //       name: '全国日销TOP30',
+  //       component: () => import('@/views/sales/top30/index'),
+  //       meta: { title: '全国日销TOP30', icon: 'shoes' }
+  //     }, {
+  //       path: 'storeDayAvg',
+  //       name: '系统客户日均单店',
+  //       component: () => import('@/views/sales/storeDayAvg/index'),
+  //       meta: { title: '系统客户日均单店', icon: 'shoes' }
+  //     }, {
+  //       path: 'retailShare',
+  //       name: '零售占比',
+  //       component: () => import('@/views/sales/retailShare/index'),
+  //       meta: { title: '零售占比', icon: 'shoes' }
+  //     }, {
+  //       path: 'inSaleStorage',
+  //       name: '进销存',
+  //       component: () => import('@/views/sales/inSaleStorage/index'),
+  //       meta: { title: '进销存', icon: 'shoes' }
+  //     }, {
+  //       path: 'layoutStructure',
+  //       name: '版面结构',
+  //       component: () => import('@/views/sales/layoutStructure/index'),
+  //       meta: { title: '版面结构', icon: 'shoes' }
+  //     }
+  //   ]
+  // },
 
   /* --------------------销售分析独立 end -----------------------  */
 
