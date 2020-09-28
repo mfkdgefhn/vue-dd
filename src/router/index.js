@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2020-09-19 17:38:52
+ * @LastEditTime: 2020-09-28 10:04:37
  */
 
 import Vue from 'vue'
@@ -70,30 +70,32 @@ export const constantRoutes = [
 
   /* -------------------- 江西业绩 begin -----------------------  */
 
-  // {
-  //   path: '/',
-  //   component: Layout,
-  //   redirect: '/index',
-  //   name: '江西业绩分析',
-  //   meta: {
-  //     title: '江西业绩分析', icon: 'shoes'
-  //   },
-  //   children: [{
-  //     path: 'index',
-  //     name: 'Kucunyuan',
-  //     component: () => import('@/views/kucunyuan/index'),
-  //     meta: { title: '库存源', icon: 'shoes' }
-  //   }, {
-  //     path: 'achievement',
-  //     name: 'Achievement',
-  //     component: () => import('@/views/kucunyuan/achievement'),
-  //     meta: { title: '业绩', icon: 'shoes' }
-  //   }]
-  // },
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/index',
+    name: '江西业绩分析',
+    meta: {
+      title: '江西业绩分析', icon: 'shoes'
+    },
+    children: [{
+      path: 'index',
+      name: 'Kucunyuan',
+      component: () => import('@/views/kucunyuan/index'),
+      meta: { title: '库存源', icon: 'shoes' }
+    }, {
+      path: 'achievement',
+      name: 'Achievement',
+      component: () => import('@/views/kucunyuan/achievement'),
+      meta: { title: '业绩', icon: 'shoes' }
+    }]
+  },
 
   /* -------------------- 江西业绩 end -----------------------  */
 
   /* -------------------销售分析独立 begin ------------------------*/
+
+  /*
   {
     path: '/',
     component: Layout,
@@ -101,7 +103,7 @@ export const constantRoutes = [
     meta: {
       title: 'GIC取数报表', icon: 'shoes'
     },
-    redirect: '/gic',
+    redirect: '/gic-analysis',
     children: [
       {
         path: 'gic',
@@ -111,12 +113,13 @@ export const constantRoutes = [
       },
       {
         path: 'gic-analysis',
-        name: 'GIC',
-        component: () => import('@/views/gic/index'),
+        name: 'GICANALYSIS',
+        component: () => import('@/views/gic/gic-analysis'),
         meta: { title: 'GIC卡券分析', icon: 'shoes' }
       }
     ]
   },
+  */
 
   /* -------------------销售分析独立 end ------------------------*/
 

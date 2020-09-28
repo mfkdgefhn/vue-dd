@@ -218,8 +218,10 @@ export default {
           // 将数据拆分成两部分
           this.tableData.forEach(element => {
             if (element.area === '江西区域') {
+              element.yearOnYear = element.yearOnYear + '%'
               this.tableDataJx.push(element)
             } else if (element.area === '温州区域') {
+              element.yearOnYear = element.yearOnYear + '%'
               this.tableDataWz.push(element)
             }
           })

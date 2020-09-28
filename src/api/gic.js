@@ -4,7 +4,7 @@
  * @Author: anan
  * @Date: 2020-09-18 09:46:25
  * @LastEditors: anan
- * @LastEditTime: 2020-09-18 16:12:19
+ * @LastEditTime: 2020-09-20 09:19:31
  */
 
 import request from '@/utils/request'
@@ -15,6 +15,15 @@ var url = process.env.NODE_ENV === 'development' ? 'http://10.10.1.41:443' : ''
 export function getGicCoupon(params) {
   return request({
     url: url + '/Q/r.do?o=kqsyqk',
+    method: 'get',
+    params
+  })
+}
+
+//
+export function getGicAnalysis(params) {
+  return request({
+    url: url + '/Q/r.do?o=kqfx',
     method: 'get',
     params
   })

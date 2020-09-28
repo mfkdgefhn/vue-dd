@@ -4,7 +4,7 @@
  * @Author: anan
  * @Date: 2020-09-17 15:46:54
  * @LastEditors: anan
- * @LastEditTime: 2020-09-19 16:58:01
+ * @LastEditTime: 2020-09-20 10:26:37
 -->
 <template>
   <div>
@@ -13,6 +13,7 @@
       resizable
       height="730"
       :loading="loading"
+      keep-source
       :seq-config="{startIndex: (tablePage.currentPage - 1) * tablePage.pageSize}"
       :pager-config="tablePage"
       :columns="tableColumn"
@@ -177,7 +178,7 @@ export default {
       },
       // 表内容列信息
       tableColumn: [
-        { type: 'checkbox', title: 'ID' },
+        { type: 'seq', title: '序号' },
         {
           field: 'area', title: '区域', sortable: true, editRender: { name: 'input' }
         },
@@ -248,7 +249,6 @@ export default {
       // 模拟后台接口
       this.loading = true
       const queryParams = Object.assign({}, this.tableForm.data)
-
       this.$store.dispatch('gic/getGicCoupon', queryParams).then(() => {
         this.tablePage.total = this.$store.getters.gicCoupon.length
         if (this.tablePage.total <= 500) {

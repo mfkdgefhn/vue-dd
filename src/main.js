@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2020-09-19 10:59:14
+ * @LastEditTime: 2020-09-20 11:11:13
  */
 import Vue from 'vue'
 
@@ -39,7 +39,7 @@ import BaiduMap from 'vue-baidu-map' // 百度地图
 
 import AMap from 'vue-amap' // 高德地图
 
-import 'xe-utils'
+import XEUtils from 'xe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 import 'vxe-table/lib/style.css'
@@ -109,7 +109,7 @@ VXETable.setup({
     FORM_UNFOLDING: 'vxe-icon--arrow-top'
   }
 })
-Vue.use(VXETable)
+Vue.use(VXETable, XEUtils)
 
 // 滚动条
 import scroll from 'vue-seamless-scroll'
