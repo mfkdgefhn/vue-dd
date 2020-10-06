@@ -4,130 +4,63 @@
     <el-card shadow="hover" class="crad">
       <div slot="header" class="clearfix">
         <!-- 月份 -->
-        <el-date-picker
-          v-model="value2"
-          type="month"
-          format="yyyy年MM月"
-          value-format="yyyyMM"
-          placeholder="选择月"
-        />
+        <el-date-picker v-model="value2" type="month" format="yyyy年MM月" value-format="yyyyMM" placeholder="选择月" />
         <!-- 查询 -->
         <el-button style="margin-right:5px" @click="getAnalysis">查询</el-button>
 
         <el-select v-model="value" placeholder="请选择" style="float: right;margin-right:5px">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
+          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
 
         <el-button style="float: right;margin-right:5px" @click="handleDownload">导出</el-button>
       </div>
       <!-- 达成 -->
-      <el-row v-show="value==='1'" :gutter="10" class="text item">
-        <el-col :span="12">
-          <el-table
-            v-loading="loading"
-            border
-            :data="tableDataJx"
-            class="achievement-table"
-            :row-style="rowStyle"
-          >
+      <el-row v-show="value === '1'" :gutter="10" class="text item">
+        <el-col :md="12" :sm="24" :xs="24">
+          <el-table v-loading="loading" border :data="tableDataJx" class="achievement-table" :row-style="rowStyle">
             <el-table-column prop="rn" :label="tableLabelDc.jx.rn" align="center" width="60" />
             <el-table-column prop="name" :label="tableLabelDc.jx.name" align="center" width="170" />
-            <el-table-column
-              prop="target"
-              :label="tableLabelDc.jx.target"
-              align="center"
-              width="70"
-            />
+            <el-table-column prop="target" :label="tableLabelDc.jx.target" align="center" width="70" />
             <el-table-column prop="sales" :label="tableLabelDc.jx.sales" align="center" width="70" />
             <el-table-column :label="tableLabelDc.jx.reach" align="center">
-              <template slot-scope="{row}">
-                <el-progress
-                  :text-inside="true"
-                  :stroke-width="strokeWidth"
-                  :color="readerPropress"
-                  :percentage="row.reach > 100 ? 100: parseInt(row.reach)"
-                  :format="_format(row.reach)"
-                />
+              <template slot-scope="{ row }">
+                <el-progress :text-inside="true" :stroke-width="strokeWidth" :color="readerPropress" :percentage="row.reach > 100 ? 100 : parseInt(row.reach)" :format="_format(row.reach)" />
               </template>
             </el-table-column>
           </el-table>
         </el-col>
 
-        <el-col :span="12">
-          <el-table
-            v-loading="loading"
-            border
-            :data="tableDataWz"
-            class="achievement-table"
-            :row-style="rowStyle"
-          >
+        <el-col :md="12" :sm="24" :xs="24">
+          <el-table v-loading="loading" border :data="tableDataWz" class="achievement-table" :row-style="rowStyle">
             <el-table-column prop="rn" :label="tableLabelDc.wz.rn" align="center" width="60" />
             <el-table-column prop="name" :label="tableLabelDc.wz.name" align="center" width="170" />
-            <el-table-column
-              prop="target"
-              :label="tableLabelDc.wz.target"
-              align="center"
-              width="70"
-            />
+            <el-table-column prop="target" :label="tableLabelDc.wz.target" align="center" width="70" />
             <el-table-column prop="sales" :label="tableLabelDc.wz.sales" align="center" width="70" />
             <el-table-column :label="tableLabelDc.wz.reach" align="center">
-              <template slot-scope="{row}">
-                <el-progress
-                  :text-inside="true"
-                  :stroke-width="strokeWidth"
-                  :color="readerPropress"
-                  :percentage="row.reach > 100 ? 100: parseInt(row.reach)"
-                  :format="_format(row.reach)"
-                />
+              <template slot-scope="{ row }">
+                <el-progress :text-inside="true" :stroke-width="strokeWidth" :color="readerPropress" :percentage="row.reach > 100 ? 100 : parseInt(row.reach)" :format="_format(row.reach)" />
               </template>
             </el-table-column>
           </el-table>
         </el-col>
       </el-row>
       <!-- 同比 -->
-      <el-row v-show="value==='2'" :gutter="10" class="text item">
-        <el-col :span="12">
-          <el-table
-            v-loading="loading"
-            border
-            :data="tableDataJx"
-            class="achievement-table"
-            :row-style="rowStyle"
-          >
+      <el-row v-show="value === '2'" :gutter="10" class="text item">
+        <el-col :md="12" :sm="24" :xs="24">
+          <el-table v-loading="loading" border :data="tableDataJx" class="achievement-table" :row-style="rowStyle">
             <el-table-column prop="rn" :label="tableLabelTb.jx.rn" align="center" width="60" />
             <el-table-column prop="name" :label="tableLabelTb.jx.name" align="center" width="170" />
-            <el-table-column
-              prop="samePeriod"
-              :label="tableLabelTb.jx.samePeriod"
-              align="center"
-              width="70"
-            />
+            <el-table-column prop="samePeriod" :label="tableLabelTb.jx.samePeriod" align="center" width="70" />
             <el-table-column prop="sales" :label="tableLabelTb.jx.sales" align="center" width="70" />
             <el-table-column prop="yearOnYear" :label="tableLabelTb.jx.yearOnYear" align="center" />
           </el-table>
         </el-col>
 
-        <el-col :span="12">
-          <el-table
-            v-loading="loading"
-            border
-            :data="tableDataWz"
-            class="kucunyuan-table"
-            :row-style="rowStyle"
-          >
+        <el-col :md="12" :sm="24" :xs="24">
+          <el-table v-loading="loading" border :data="tableDataWz" class="kucunyuan-table" :row-style="rowStyle">
             <el-table-column prop="rn" :label="tableLabelTb.wz.rn" align="center" width="60" />
             <el-table-column prop="name" :label="tableLabelTb.wz.name" align="center" width="170" />
-            <el-table-column
-              prop="samePeriod"
-              :label="tableLabelTb.wz.samePeriod"
-              align="center"
-              width="70"
-            />
+            <el-table-column prop="samePeriod" :label="tableLabelTb.wz.samePeriod" align="center" width="70" />
             <el-table-column prop="sales" :label="tableLabelTb.wz.sales" align="center" width="70" />
             <el-table-column prop="yearOnYear" :label="tableLabelTb.wz.yearOnYear" align="center" />
           </el-table>
@@ -155,21 +88,26 @@ export default {
       color: '#409eff',
       strokeWidth: 16,
       value: '1',
-      value2: this.$moment().add('-1', 'day').format('YYYYMM'),
-      options: [{
-        value: '1',
-        label: '达成率'
-      }, {
-        value: '2',
-        label: '同比'
-      }],
+      value2: this.$moment()
+        .add('-1', 'day')
+        .format('YYYYMM'),
+      options: [
+        {
+          value: '1',
+          label: '达成率'
+        },
+        {
+          value: '2',
+          label: '同比'
+        }
+      ],
       tableLabelDc: {
-        'jx': { 'rn': '排序', 'name': '江西达成', 'target': '目标', 'sales': '销售', 'reach': '达成' },
-        'wz': { 'rn': '排序', 'name': '温州达成', 'target': '目标', 'sales': '销售', 'reach': '达成' }
+        jx: { rn: '排序', name: '江西达成', target: '目标', sales: '销售', reach: '达成' },
+        wz: { rn: '排序', name: '温州达成', target: '目标', sales: '销售', reach: '达成' }
       },
       tableLabelTb: {
-        'jx': { 'rn': '排序', 'name': '江西同比', 'samePeriod': '同期', 'sales': '本期', 'yearOnYear': '同比' },
-        'wz': { 'rn': '排序', 'name': '温州同比', 'samePeriod': '同期', 'sales': '本期', 'yearOnYear': '同比' }
+        jx: { rn: '排序', name: '江西同比', samePeriod: '同期', sales: '本期', yearOnYear: '同比' },
+        wz: { rn: '排序', name: '温州同比', samePeriod: '同期', sales: '本期', yearOnYear: '同比' }
       }
     }
   },
@@ -177,21 +115,21 @@ export default {
     table() {
       if (this.value === '1') {
         return {
-          'title': '库存源',
-          'header': {
-            'jx': ['排序', '江西达成', '目标', '销售', '达成'],
-            'wz': ['排序', '温州达成', '目标', '销售', '达成']
+          title: '库存源',
+          header: {
+            jx: ['排序', '江西达成', '目标', '销售', '达成'],
+            wz: ['排序', '温州达成', '目标', '销售', '达成']
           },
-          'column': ['rn', 'name', 'target', 'sales', 'reach']
+          column: ['rn', 'name', 'target', 'sales', 'reach']
         }
       } else {
         return {
-          'title': '业绩',
-          'header': {
-            'jx': ['排序', '江西同比', '同期', '本期', '同比'],
-            'wz': ['排序', '温州同比', '同期', '本期', '同比']
+          title: '业绩',
+          header: {
+            jx: ['排序', '江西同比', '同期', '本期', '同比'],
+            wz: ['排序', '温州同比', '同期', '本期', '同比']
           },
-          'column': ['rn', 'name', 'samePeriod', 'sales', 'yearOnYear']
+          column: ['rn', 'name', 'samePeriod', 'sales', 'yearOnYear']
         }
       }
     }
@@ -212,7 +150,8 @@ export default {
       this.tableData = []
       this.loading = true
       const data = { yearmonth: this.value2 }
-      this.$store.dispatch('baseApi/yjdctbfx', data)
+      this.$store
+        .dispatch('baseApi/yjdctbfx', data)
         .then(() => {
           this.tableData = this.$store.getters.yjdctbfx
           // 将数据拆分成两部分
@@ -298,20 +237,22 @@ export default {
     // 将tableDate值转换成json值，非map
     formatJson(filterVal, str) {
       var data = str
-      return data.map(v => filterVal.map(j => {
-        // 判断是否是时间字段
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
+      return data.map(v =>
+        filterVal.map(j => {
+          // 判断是否是时间字段
+          if (j === 'timestamp') {
+            return parseTime(v[j])
+          } else {
+            return v[j]
+          }
+        })
+      )
     }
   }
 }
 </script>
 
-<style  lang="scss" scoped>
+<style lang="scss" scoped>
 .achievement {
   margin: 10px;
 }

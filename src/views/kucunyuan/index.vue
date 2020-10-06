@@ -2,24 +2,13 @@
   <div class="kucunyuan">
     <!-- 搜索 -->
     <el-card shadow="hover" class="crad">
-      <search-kucunyuan
-        :loading="loading"
-        @getAnalysis="getAnalysis"
-        @handleDownload="handleDownload"
-      />
+      <search-kucunyuan :loading="loading" @getAnalysis="getAnalysis" @handleDownload="handleDownload" />
     </el-card>
 
     <!-- show-summary -->
     <el-card shadow="hover" class="crad">
-      <el-table
-        v-loading="loading"
-        stripe
-        border
-        :data="tableData"
-        class="kucunyuan-table"
-        :row-style="rowStyle"
-      >
-        <el-table-column prop="yearSeason" label="江西$温州" align="center" width="100" />
+      <el-table v-loading="loading" stripe border :data="tableData" class="kucunyuan-table" :row-style="rowStyle" :cell-style="cellStyle">
+        <el-table-column prop="yearSeason" label="江西$温州" align="center" width="100" fixed />
         <el-table-column prop="purchase" label="进货" align="center" />
         <el-table-column prop="sellOut" label="售罄" align="center" />
         <el-table-column prop="surplusGoods" label="余货" align="center" />
@@ -69,7 +58,8 @@ export default {
     getAnalysis(data) {
       this.tableData = []
       this.loading = true
-      this.$store.dispatch('baseApi/xnclsfx', data)
+      this.$store
+        .dispatch('baseApi/xnclsfx', data)
         .then(() => {
           this.yesterdayRetails.jiangxi = '江西-' + this.$moment(data.billdate).format('M.D')
           this.yesterdayRetails.wenzhou = '温州-' + this.$moment(data.billdate).format('M.D')
@@ -87,6 +77,12 @@ export default {
         return 'background:#ffc000;'
       }
     },
+    // 渲染单元格
+    cellStyle({ row, column, rowIndex, columnIndex }) {
+      if (row.yearSeason !== '合计' || row.yearSeason !== '包包') {
+        return 'padding:0 0;'
+      }
+    },
     // 导出excel
     handleDownload(str) {
       this.loading = true
@@ -100,8 +96,7 @@ export default {
     // 导出excel
     export2excel(str) {
       import('@/vendor/Export2Excel').then(excel => {
-        const filterVal = ['yearSeason', 'purchase', 'sellOut', 'surplusGoods', 'storehouse', 'store',
-          'qtyJx', 'amountJx', 'qtyWz', 'amountWz', 'sale', 'retail']
+        const filterVal = ['yearSeason', 'purchase', 'sellOut', 'surplusGoods', 'storehouse', 'store', 'qtyJx', 'amountJx', 'qtyWz', 'amountWz', 'sale', 'retail']
         const data = this.formatJson(filterVal, str)
         excel.export_json_to_excel({
           // 设置Excel的表格第一行的标题
@@ -114,14 +109,16 @@ export default {
     // 将tableDate值转换成json值，非map
     formatJson(filterVal, str) {
       var data = this.tableData
-      return data.map(v => filterVal.map(j => {
-        // 判断是否是时间字段
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
+      return data.map(v =>
+        filterVal.map(j => {
+          // 判断是否是时间字段
+          if (j === 'timestamp') {
+            return parseTime(v[j])
+          } else {
+            return v[j]
+          }
+        })
+      )
     },
     // 导出zip
     export2zip() {
@@ -137,7 +134,7 @@ export default {
 }
 </script>
 
-<style  lang="scss" scoped>
+<style lang="scss" scoped>
 .kucunyuan {
   margin: 10px;
 }
