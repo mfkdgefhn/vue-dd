@@ -21,7 +21,7 @@
             <el-table-column prop="rn" :label="tableLabelDc.jx.rn" align="center" width="60" />
             <el-table-column prop="name" :label="tableLabelDc.jx.name" align="center" width="170" />
             <el-table-column prop="target" :label="tableLabelDc.jx.target" align="center" width="70" />
-            <el-table-column prop="sales" :label="tableLabelDc.jx.sales" align="center" width="70" />
+            <el-table-column prop="totAmtAccNow" :label="tableLabelDc.jx.totAmtAccNow" align="center" width="70" />
             <el-table-column :label="tableLabelDc.jx.reach" align="center">
               <template slot-scope="{ row }">
                 <el-progress :text-inside="true" :stroke-width="strokeWidth" :color="readerPropress" :percentage="row.reach > 100 ? 100 : parseInt(row.reach)" :format="_format(row.reach)" />
@@ -35,7 +35,7 @@
             <el-table-column prop="rn" :label="tableLabelDc.wz.rn" align="center" width="60" />
             <el-table-column prop="name" :label="tableLabelDc.wz.name" align="center" width="170" />
             <el-table-column prop="target" :label="tableLabelDc.wz.target" align="center" width="70" />
-            <el-table-column prop="sales" :label="tableLabelDc.wz.sales" align="center" width="70" />
+            <el-table-column prop="totAmtAccNow" :label="tableLabelDc.wz.totAmtAccNow" align="center" width="70" />
             <el-table-column :label="tableLabelDc.wz.reach" align="center">
               <template slot-scope="{ row }">
                 <el-progress :text-inside="true" :stroke-width="strokeWidth" :color="readerPropress" :percentage="row.reach > 100 ? 100 : parseInt(row.reach)" :format="_format(row.reach)" />
@@ -102,8 +102,8 @@ export default {
         }
       ],
       tableLabelDc: {
-        jx: { rn: '排序', name: '江西达成', target: '目标', sales: '销售', reach: '达成' },
-        wz: { rn: '排序', name: '温州达成', target: '目标', sales: '销售', reach: '达成' }
+        jx: { rn: '排序', name: '江西达成', target: '目标', totAmtAccNow: '销售', reach: '达成' },
+        wz: { rn: '排序', name: '温州达成', target: '目标', totAmtAccNow: '销售', reach: '达成' }
       },
       tableLabelTb: {
         jx: { rn: '排序', name: '江西同比', samePeriod: '同期', sales: '本期', yearOnYear: '同比' },
@@ -120,7 +120,7 @@ export default {
             jx: ['排序', '江西达成', '目标', '销售', '达成'],
             wz: ['排序', '温州达成', '目标', '销售', '达成']
           },
-          column: ['rn', 'name', 'target', 'sales', 'reach']
+          column: ['rn', 'name', 'target', 'totAmtAccNow', 'reach']
         }
       } else {
         return {
