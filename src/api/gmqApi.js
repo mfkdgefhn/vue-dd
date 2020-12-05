@@ -3,14 +3,14 @@
  * @Author: anan
  * @Date: 2019-10-15 10:00:39
  * @LastEditors: anan
- * @LastEditTime: 2020-10-06 12:22:36
+ * @LastEditTime: 2020-12-02 11:53:45
  */
 import request from '@/utils/request'
 
 // var url = 'http://10.10.1.41:443' // 测试环境
 // var url = '' // 生产环境
 
-var url = process.env.NODE_ENV === 'development' ? 'http://10.10.1.41' : ''
+var url = process.env.NODE_ENV === 'development' ? 'http://10.10.1.41:443' : ''
 
 // 'http://10.10.1.41/Q/p.do?o=zjxs'
 
@@ -474,6 +474,15 @@ export function xnclsfx(params) {
 export function yjdctbfx(params) {
   return request({
     url: url + '/Q/r.do?o=yjdctbfx',
+    method: 'get',
+    params
+  })
+}
+
+// 经销商套餐分析
+export function getSetmeal(params) {
+  return request({
+    url: url + '/Q/r.do?o=setmeal',
     method: 'get',
     params
   })

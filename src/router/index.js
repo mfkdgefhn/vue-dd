@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2020-09-28 10:04:37
+ * @LastEditTime: 2020-12-03 11:24:13
  */
 
 import Vue from 'vue'
@@ -70,56 +70,54 @@ export const constantRoutes = [
 
   /* -------------------- 江西业绩 begin -----------------------  */
 
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/index',
-    name: '江西业绩分析',
-    meta: {
-      title: '江西业绩分析', icon: 'shoes'
-    },
-    children: [{
-      path: 'index',
-      name: 'Kucunyuan',
-      component: () => import('@/views/kucunyuan/index'),
-      meta: { title: '库存源', icon: 'shoes' }
-    }, {
-      path: 'achievement',
-      name: 'Achievement',
-      component: () => import('@/views/kucunyuan/achievement'),
-      meta: { title: '业绩', icon: 'shoes' }
-    }]
-  },
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   redirect: '/index',
+  //   name: '江西业绩分析',
+  //   meta: {
+  //     title: '江西业绩分析', icon: 'shoes'
+  //   },
+  //   children: [{
+  //     path: 'index',
+  //     name: 'Kucunyuan',
+  //     component: () => import('@/views/kucunyuan/index'),
+  //     meta: { title: '库存源', icon: 'shoes' }
+  //   }, {
+  //     path: 'achievement',
+  //     name: 'Achievement',
+  //     component: () => import('@/views/kucunyuan/achievement'),
+  //     meta: { title: '业绩', icon: 'shoes' }
+  //   }]
+  // },
 
   /* -------------------- 江西业绩 end -----------------------  */
 
   /* -------------------销售分析独立 begin ------------------------*/
 
-  /*
-  {
-    path: '/',
-    component: Layout,
-    name: 'GIC取数报表',
-    meta: {
-      title: 'GIC取数报表', icon: 'shoes'
-    },
-    redirect: '/gic-analysis',
-    children: [
-      {
-        path: 'gic',
-        name: 'GIC',
-        component: () => import('@/views/gic/index'),
-        meta: { title: 'GIC', icon: 'shoes' }
-      },
-      {
-        path: 'gic-analysis',
-        name: 'GICANALYSIS',
-        component: () => import('@/views/gic/gic-analysis'),
-        meta: { title: 'GIC卡券分析', icon: 'shoes' }
-      }
-    ]
-  },
-  */
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   name: 'GIC取数报表',
+  //   meta: {
+  //     title: 'GIC取数报表', icon: 'shoes'
+  //   },
+  //   redirect: '/gic-analysis',
+  //   children: [
+  //     {
+  //       path: 'gic',
+  //       name: 'GIC',
+  //       component: () => import('@/views/gic/index'),
+  //       meta: { title: 'GIC', icon: 'shoes' }
+  //     },
+  //     {
+  //       path: 'gic-analysis',
+  //       name: 'GICANALYSIS',
+  //       component: () => import('@/views/gic/gic-analysis'),
+  //       meta: { title: 'GIC卡券分析', icon: 'shoes' }
+  //     }
+  //   ]
+  // },
 
   /* -------------------销售分析独立 end ------------------------*/
 
@@ -164,6 +162,21 @@ export const constantRoutes = [
   // },
 
   /* --------------------销售分析独立 end -----------------------  */
+
+  /* -------------------- 经销商套餐分析独立 end -----------------------  */
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/index',
+    children: [{
+      path: 'index',
+      name: '经销商套餐分析',
+      component: () => import('@/views/analysis/setmeal/index'),
+      meta: { title: '经销商套餐分析', icon: 'shoes' }
+    }]
+  },
+
+  /* -------------------- 经销商套餐分析独立 end -----------------------  */
 
   /* -------------------  零售分析独立 begin ------------------------*/
 
@@ -220,6 +233,18 @@ export const constantRoutes = [
   //     name: '会员挖掘',
   //     component: () => import('@/views/vip/index'),
   //     meta: { title: '会员挖掘', icon: 'shoes' }
+  //   }]
+  // },
+
+  // {
+  //   path: '/setmeal',
+  //   component: Layout,
+  //   redirect: '/setmeal/index',
+  //   children: [{
+  //     path: 'index',
+  //     name: '经销商套餐分析',
+  //     component: () => import('@/views/analysis/setmeal/index'),
+  //     meta: { title: '经销商套餐分析', icon: 'shoes' }
   //   }]
   // },
 

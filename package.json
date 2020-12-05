@@ -41,9 +41,10 @@
     "vue-seamless-scroll": "^1.1.17",
     "vuedraggable": "^2.23.2",
     "vuex": "3.1.0",
-    "vxe-table": "^2.9.22",
+    "vxe-table": "^3.0.3",
+    "vxe-table-plugin-element": "^1.10.1",
     "wordcloud": "^1.1.0",
-    "xe-utils": "^2.7.11",
+    "xe-utils": "^3.0.3",
     "xlsx": "^0.15.6"
   },
   "devDependencies": {
