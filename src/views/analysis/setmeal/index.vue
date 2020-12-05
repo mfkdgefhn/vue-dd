@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-15 10:23:32
  * @LastEditors: anan
- * @LastEditTime: 2020-12-05 17:20:26
+ * @LastEditTime: 2020-12-05 17:57:30
  -->
 <template>
   <div class="retail-analysis">
@@ -29,8 +29,8 @@
       :toolbar-config="toolbarConfig"
       :pager-config="pagerConfig"
       @form-submit="findList"
-      @toolbar-button-click="toolbarButtonClickEvent"
     />
+
   </div>
 </template>
 
@@ -98,7 +98,7 @@ export default {
         pageSizes: [5, 10, 15, 20, 50, 100, 200, 500, 1000]
       },
       toolbarConfig: {
-        refresh: true,
+        refresh: { query: this.findList },
         export: true,
         print: true,
         zoom: true,
@@ -117,8 +117,8 @@ export default {
   methods: {
     init() {
     },
-    findList(data) {
-      console.log(data)
+    findList() {
+      console.log(123456)
     },
     getAnalysis(data) {
       debugger
