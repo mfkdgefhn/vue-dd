@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-15 10:23:32
  * @LastEditors: anan
- * @LastEditTime: 2020-12-05 17:57:30
+ * @LastEditTime: 2020-12-18 11:36:58
  -->
 <template>
   <div class="retail-analysis">
@@ -28,9 +28,11 @@
       :columns="columns"
       :toolbar-config="toolbarConfig"
       :pager-config="pagerConfig"
+      @cell-click="cellClick"
       @form-submit="findList"
     />
 
+    <vxe-grid-tool v-if="value" :data="data" :customer-id="customerId" @hideWindows="hideWindows" />
   </div>
 </template>
 
@@ -38,14 +40,15 @@
 
 import Search from '@/components/public/search'
 import { getSetmeal } from '@/api/gmqApi'
+import vxeGridTool from './vxe-grid-tool'
 
 export default {
   name: 'RetailAnalysis',
-  components: {
-    Search
-  },
+  components: { Search, vxeGridTool },
   data() {
     return {
+      customerId: '',
+      value: false,
       height: 700,
       loading: false,
       columns: [
@@ -57,40 +60,17 @@ export default {
         { field: 'setmealProportion', title: '套餐占比' },
         { field: 'setmealStoreSum', title: '套餐关联店数' },
         { field: 'vousSum', visible: false, title: '卡券数量' },
-        { field: 'vousJoint', visible: false, title: '连带量' },
-        { field: 'vousJointReat', title: '连带率' },
+        { field: 'vousJoint', visible: false, title: '套餐连带量' },
+        { field: 'vousJointReat', title: '套餐连带率' },
         { field: 'vousRepurchas', visible: false, title: '复购量' },
         { field: 'vousRepurchasReat', title: '复购率' },
+        { field: 'vousRepurchasProportion', visible: false, title: '复购占比' },
         { field: 'notVipSum', visible: false, title: '非会员单量' },
         { field: 'notVipAmtActual', visible: false, title: '非会员销售总额' },
         { field: 'notVipAmtActualProportion', title: '非会员销售占比' }
       ],
       tableData: [],
-      // formConfig: {
-      //   data: { beginDate: '', endDate: '', store: '', year: '', season: '' },
-      //   titleWidth: 100,
-      //   titleAlign: 'right',
-      //   items: [
-      //     { field: 'beginDate', title: '开始时间', span: 8,
-      //       itemRender: { name: 'ElDatePicker', props: { placeholder: '请输入开始时间' }}
-      //     },
-      //     { field: 'endDate', title: '结束时间', span: 8,
-      //       itemRender: { name: 'ElDatePicker', props: { placeholder: '请输入结束时间' }}
-      //     },
-      //     { field: 'store', title: '店仓', span: 8, itemRender: { name: 'ElCascader', props: { placeholder: '请输入店仓' }}},
-      //     { field: 'year', title: '年份', span: 8, folding: true, itemRender: { name: 'ElInput', props: { placeholder: '请输入年份' }}},
-      //     { field: 'season', title: '季节', span: 8, folding: true,
-      //       itemRender: { name: 'ElSelect', props: { placeholder: '请输入季节' },
-      //         options: [{ value: '37', label: '春季' }, { value: '38', label: '夏季' }, { value: '39', label: '秋季' }, { value: '40', label: '冬季' }] }
-      //     },
-      //     { span: 24, align: 'center', collapseNode: true,
-      //       itemRender: { name: '$buttons',
-      //         children: [{ props: { type: 'submit', content: '查询', status: 'primary' }},
-      //           { props: { type: 'reset', content: '重置' }}]
-      //       }
-      //     }
-      //   ]
-      // },
+      data: {},
       pagerConfig: {
         align: 'center',
         currentPage: 1,
@@ -107,7 +87,6 @@ export default {
     }
   },
   watch: {
-
   },
   created() {
   },
@@ -115,12 +94,16 @@ export default {
     // this.init()
   },
   methods: {
+    onClick() {
+      this.value = !this.value
+    },
     init() {
     },
     findList() {
       console.log(123456)
     },
     getAnalysis(data) {
+      this.data = Object.assign({}, data)
       debugger
       this.tableData = []
       this.loading = true
@@ -135,7 +118,7 @@ export default {
       if (property === 'vousJoint' && type === 'body') {
         return row[property] ? '当日开卡会员第二次购物券量：' + row[property] : ''
       } else if (property === 'vousJointReat' && type === 'body') {
-        return row[property] ? '连带量/套餐量：' + row[property] : ''
+        return row[property] ? '套餐连带量/套餐量：' + row[property] : ''
       }
       return null
     },
@@ -155,6 +138,19 @@ export default {
     // 工具栏按钮事件
     toolbarButtonClickEvent(method) {
       console.log(method)
+    },
+    // 隐藏弹出窗口
+    hideWindows() {
+      this.value = false
+    },
+    // 点击单元格触发事件
+    // cellClick({ row }) {
+    cellClick({ row, $columnIndex }) {
+      if ($columnIndex === 0) {
+        this.data.customerId = row.customerId
+        this.customerId = row.customerId
+        this.value = true
+      }
     }
   }
 }
