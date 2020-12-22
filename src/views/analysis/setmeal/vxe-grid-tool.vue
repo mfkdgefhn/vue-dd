@@ -4,7 +4,7 @@
  * @Author: anan
  * @Date: 2020-12-17 09:06:41
  * @LastEditors: anan
- * @LastEditTime: 2020-12-18 11:37:12
+ * @LastEditTime: 2020-12-22 14:11:18
 -->
 <template>
   <div>
@@ -37,6 +37,7 @@
           :loading="loading"
           :data="tableData"
           :pager-config="pagerConfig"
+          :sort-config="sortConfig"
           :columns="columns"
           :toolbar-config="toolbarConfig"
         >
@@ -47,19 +48,23 @@
               <!-- <vxe-form-item :item-render="{ name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] }" /> -->
             </vxe-form>
           </template>
+          <template v-slot:setmealProportion="{ row }">
+            <span>{{ row.setmealProportion }}%</span>
+          </template>
+          <template v-slot:vousJointReat="{ row }">
+            <span>{{ row.vousJointReat }}%</span>
+          </template>
+          <template v-slot:vousRepurchasReat="{ row }">
+            <span>{{ row.vousRepurchasReat }}%</span>
+          </template>
+          <template v-slot:vousRepurchasProportion="{ row }">
+            <span>{{ row.vousRepurchasProportion }}%</span>
+          </template>
+          <template v-slot:notVipAmtActualProportion="{ row }">
+            <span>{{ row.notVipAmtActualProportion }}%</span>
+          </template>
         </vxe-grid>
 
-        <!-- <vxe-grid
-          border
-          resizable
-          show-overflow
-          auto-resize
-          height="auto"
-          :pager-config="pagerConfig"
-          :columns="columns"
-          :toolbar-config="toolbarConfig"
-        /> -->
-      <!-- :proxy-config="tableProxy" -->
       </template>
     </vxe-modal>
   </div>
@@ -67,6 +72,7 @@
 
 <script>
 
+import { transNumber } from '@/utils/array'
 import { getSetmeal } from '@/api/gmqApi'
 
 export default {
@@ -89,6 +95,9 @@ export default {
       loading: false,
       tableData: [],
       width: 1000,
+      sortConfig: {
+        trigger: 'cell'
+      },
       pagerConfig: {
         align: 'center',
         currentPage: 1,
@@ -98,21 +107,21 @@ export default {
       columns: [
         { field: 'customer', title: '区域' },
         { field: 'store', title: '店仓' },
-        { field: 'salesSum', visible: false, title: '销量' },
-        { field: 'totAmtActual', visible: false, title: '销售总额' },
-        { field: 'setmealSum', visible: false, title: '套餐单量' },
-        { field: 'setmealAmtActual', title: '套餐总额' },
-        { field: 'setmealProportion', title: '套餐占比' },
-        { field: 'setmealStoreSum', title: '套餐关联店数' },
-        { field: 'vousSum', visible: false, title: '卡券数量' },
-        { field: 'vousJoint', visible: false, title: '套餐连带量' },
-        { field: 'vousJointReat', title: '套餐连带率' },
-        { field: 'vousRepurchas', visible: false, title: '复购量' },
-        { field: 'vousRepurchasReat', title: '复购率' },
-        { field: 'vousRepurchasProportion', visible: false, title: '复购占比' },
-        { field: 'notVipSum', visible: false, title: '非会员单量' },
-        { field: 'notVipAmtActual', visible: false, title: '非会员销售总额' },
-        { field: 'notVipAmtActualProportion', title: '非会员销售占比' }
+        { field: 'salesSum', visible: false, title: '销量', sortable: true },
+        { field: 'totAmtActual', visible: false, title: '销售总额', sortable: true },
+        { field: 'setmealSum', visible: false, title: '套餐单量', sortable: true },
+        { field: 'setmealAmtActual', title: '套餐总额', sortable: true },
+        { field: 'setmealProportion', title: '套餐占比', slots: { default: 'setmealProportion' }},
+        { field: 'setmealStoreSum', title: '套餐关联店数', sortable: true },
+        { field: 'vousSum', visible: false, title: '卡券数量', sortable: true },
+        { field: 'vousJoint', visible: false, title: '套餐连带量', sortable: true },
+        { field: 'vousJointReat', title: '套餐连带率', slots: { default: 'vousJointReat' }},
+        { field: 'vousRepurchas', visible: false, title: '复购量', sortable: true },
+        { field: 'vousRepurchasReat', title: '复购率', slots: { default: 'vousRepurchasReat' }},
+        { field: 'vousRepurchasProportion', visible: false, title: '复购占比', slots: { default: 'vousRepurchasProportion' }},
+        { field: 'notVipSum', visible: false, title: '非会员单量', sortable: true },
+        { field: 'notVipAmtActual', visible: false, title: '非会员销售总额', sortable: true },
+        { field: 'notVipAmtActualProportion', title: '非会员销售占比', slots: { default: 'notVipAmtActualProportion' }}
       ],
       toolbarConfig: {
         refresh: { query: this.findList },
@@ -143,7 +152,9 @@ export default {
       this.loading = true
       // 件数
       getSetmeal(data).then(response => {
-        this.tableData = response
+        const data = transNumber(response, ['salesSum', 'totAmtActual', 'setmealSum', 'setmealAmtActual', 'setmealStoreSum', 'vousSum', 'vousJoint',
+          'vousRepurchas', 'notVipSum', 'notVipAmtActual'])
+        this.tableData = data
         this.loading = false
       })
     }

@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-15 10:23:32
  * @LastEditors: anan
- * @LastEditTime: 2020-12-18 11:36:58
+ * @LastEditTime: 2020-12-22 14:13:00
  -->
 <template>
   <div class="retail-analysis">
@@ -28,9 +28,27 @@
       :columns="columns"
       :toolbar-config="toolbarConfig"
       :pager-config="pagerConfig"
+      :sort-config="sortConfig"
       @cell-click="cellClick"
       @form-submit="findList"
-    />
+    >
+
+      <template v-slot:setmealProportion="{ row }">
+        <span>{{ row.setmealProportion }}%</span>
+      </template>
+      <template v-slot:vousJointReat="{ row }">
+        <span>{{ row.vousJointReat }}%</span>
+      </template>
+      <template v-slot:vousRepurchasReat="{ row }">
+        <span>{{ row.vousRepurchasReat }}%</span>
+      </template>
+      <template v-slot:vousRepurchasProportion="{ row }">
+        <span>{{ row.vousRepurchasProportion }}%</span>
+      </template>
+      <template v-slot:notVipAmtActualProportion="{ row }">
+        <span>{{ row.notVipAmtActualProportion }}%</span>
+      </template>
+    </vxe-grid>
 
     <vxe-grid-tool v-if="value" :data="data" :customer-id="customerId" @hideWindows="hideWindows" />
   </div>
@@ -38,6 +56,7 @@
 
 <script>
 
+import { transNumber } from '@/utils/array'
 import Search from '@/components/public/search'
 import { getSetmeal } from '@/api/gmqApi'
 import vxeGridTool from './vxe-grid-tool'
@@ -53,24 +72,27 @@ export default {
       loading: false,
       columns: [
         { field: 'customer', title: '区域' },
-        { field: 'salesSum', visible: false, title: '销量' },
-        { field: 'totAmtActual', visible: false, title: '销售总额' },
-        { field: 'setmealSum', visible: false, title: '套餐单量' },
-        { field: 'setmealAmtActual', title: '套餐总额' },
-        { field: 'setmealProportion', title: '套餐占比' },
-        { field: 'setmealStoreSum', title: '套餐关联店数' },
-        { field: 'vousSum', visible: false, title: '卡券数量' },
-        { field: 'vousJoint', visible: false, title: '套餐连带量' },
-        { field: 'vousJointReat', title: '套餐连带率' },
-        { field: 'vousRepurchas', visible: false, title: '复购量' },
-        { field: 'vousRepurchasReat', title: '复购率' },
-        { field: 'vousRepurchasProportion', visible: false, title: '复购占比' },
-        { field: 'notVipSum', visible: false, title: '非会员单量' },
-        { field: 'notVipAmtActual', visible: false, title: '非会员销售总额' },
-        { field: 'notVipAmtActualProportion', title: '非会员销售占比' }
+        { field: 'salesSum', visible: false, title: '销量', sortable: true },
+        { field: 'totAmtActual', visible: false, title: '销售总额', sortable: true },
+        { field: 'setmealSum', visible: false, title: '套餐单量', sortable: true },
+        { field: 'setmealAmtActual', title: '套餐总额', sortable: true },
+        { field: 'setmealProportion', title: '套餐占比', slots: { default: 'setmealProportion' }},
+        { field: 'setmealStoreSum', title: '套餐关联店数', sortable: true },
+        { field: 'vousSum', visible: false, title: '卡券数量', sortable: true },
+        { field: 'vousJoint', visible: false, title: '套餐连带量', sortable: true },
+        { field: 'vousJointReat', title: '套餐连带率', slots: { default: 'vousJointReat' }},
+        { field: 'vousRepurchas', visible: false, title: '复购量', sortable: true },
+        { field: 'vousRepurchasReat', title: '复购率', slots: { default: 'vousRepurchasReat' }},
+        { field: 'vousRepurchasProportion', visible: false, title: '复购占比', slots: { default: 'vousRepurchasProportion' }},
+        { field: 'notVipSum', visible: false, title: '非会员单量', sortable: true },
+        { field: 'notVipAmtActual', visible: false, title: '非会员销售总额', sortable: true },
+        { field: 'notVipAmtActualProportion', title: '非会员销售占比', slots: { default: 'notVipAmtActualProportion' }}
       ],
       tableData: [],
       data: {},
+      sortConfig: {
+        trigger: 'cell'
+      },
       pagerConfig: {
         align: 'center',
         currentPage: 1,
@@ -104,12 +126,13 @@ export default {
     },
     getAnalysis(data) {
       this.data = Object.assign({}, data)
-      debugger
       this.tableData = []
       this.loading = true
       // 件数
       getSetmeal(data).then(response => {
-        this.tableData = response
+        const data = transNumber(response, ['salesSum', 'totAmtActual', 'setmealSum', 'setmealAmtActual', 'setmealStoreSum', 'vousSum', 'vousJoint',
+          'vousRepurchas', 'notVipSum', 'notVipAmtActual'])
+        this.tableData = data
         this.loading = false
       })
     },
