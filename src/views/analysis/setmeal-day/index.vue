@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-15 10:23:32
  * @LastEditors: anan
- * @LastEditTime: 2020-12-23 17:25:42
+ * @LastEditTime: 2020-12-23 17:25:23
  -->
 <template>
   <div class="retail-analysis">
@@ -57,8 +57,8 @@
 <script>
 
 import { transNumber } from '@/utils/array'
-import Search from '@/components/public/searchSetmeal'
-import { getSetmeal } from '@/api/gmqApi'
+import Search from '@/components/public/searchSetmealDay'
+import { getSetmealDay } from '@/api/gmqApi'
 import vxeGridTool from './vxe-grid-tool'
 
 export default {
@@ -90,7 +90,6 @@ export default {
       ],
       tableData: [],
       data: {},
-      // 排序配置
       sortConfig: {
         trigger: 'cell'
       },
@@ -122,7 +121,6 @@ export default {
     },
     init() {
     },
-    // 再次查询一次
     findList() {
       console.log(123456)
     },
@@ -131,7 +129,7 @@ export default {
       this.tableData = []
       this.loading = true
       // 件数
-      getSetmeal(data).then(response => {
+      getSetmealDay(data).then(response => {
         const data = transNumber(response, ['salesSum', 'totAmtActual', 'setmealSum', 'setmealAmtActual', 'setmealStoreSum', 'vousSum', 'vousJoint',
           'vousRepurchas', 'notVipSum', 'notVipAmtActual'])
         this.tableData = data

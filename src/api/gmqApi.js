@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-15 10:00:39
  * @LastEditors: anan
- * @LastEditTime: 2020-12-02 11:53:45
+ * @LastEditTime: 2020-12-23 16:26:45
  */
 import request from '@/utils/request'
 
@@ -483,6 +483,15 @@ export function yjdctbfx(params) {
 export function getSetmeal(params) {
   return request({
     url: url + '/Q/r.do?o=setmeal',
+    method: 'get',
+    params
+  })
+}
+
+// 经销商套餐分析
+export function getSetmealDay(params) {
+  return request({
+    url: url + '/Q/r.do?o=setmeal-day',
     method: 'get',
     params
   })

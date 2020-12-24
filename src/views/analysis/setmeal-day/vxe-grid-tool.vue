@@ -4,7 +4,7 @@
  * @Author: anan
  * @Date: 2020-12-17 09:06:41
  * @LastEditors: anan
- * @LastEditTime: 2020-12-24 10:49:17
+ * @LastEditTime: 2020-12-24 10:49:38
 -->
 <template>
   <div>
@@ -81,7 +81,7 @@
 <script>
 
 import { transNumber } from '@/utils/array'
-import { getSetmeal } from '@/api/gmqApi'
+import { getSetmealDay } from '@/api/gmqApi'
 
 export default {
   props: {
@@ -97,7 +97,9 @@ export default {
   data() {
     return {
       storeName: '',
-      formData: { store: '' },
+      formData: {
+        store: ''
+      },
       value: true,
       loading: false,
       tableData: [],
@@ -151,9 +153,8 @@ export default {
     }
   },
   methods: {
-    // 再次查询一次
     findList() {
-      console.log(123456)
+      console.log(1)
     },
     hideWindows() {
       this.$emit('hideWindows')
@@ -162,19 +163,19 @@ export default {
       this.tableData = []
       this.loading = true
       // 件数
-      getSetmeal(data).then(response => {
+      getSetmealDay(data).then(response => {
         const data = transNumber(response, ['salesSum', 'totAmtActual', 'setmealSum', 'setmealAmtActual', 'setmealStoreSum', 'vousSum', 'vousJoint',
           'vousRepurchas', 'notVipSum', 'notVipAmtActual'])
         this.tableData = data
         // 存入到状态管理器中
-        this.$store.commit('setmeal/SET_STORELIST', data)
+        this.$store.commit('setmeal/SET_STORELIST_DAY', data)
         this.loading = false
       })
     },
     // 店仓搜索
     searchStore() {
       if (this.storeName.trim() !== '') {
-        const storeLists = this.$store.getters.storeList
+        const storeLists = this.$store.getters.storeListDay
         const storeList = []
         storeLists.forEach(element => {
           if (element.store.includes(this.storeName.trim())) {
@@ -183,7 +184,7 @@ export default {
         })
         this.tableData = storeList
       } else {
-        this.tableData = this.$store.getters.storeList
+        this.tableData = this.$store.getters.storeListDay
       }
     }
   }
