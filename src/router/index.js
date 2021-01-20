@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2020-12-23 10:45:12
+ * @LastEditTime: 2021-01-14 10:36:16
  */
 
 import Vue from 'vue'
@@ -182,8 +182,19 @@ export const constantRoutes = [
     children: [{
       path: 'index',
       name: '当日经销商套餐分析',
-      component: () => import('@/views/analysis/setmeal-day/index'),
+      component: () => import('@/views/analysis/setmealDay/index'),
       meta: { title: '当日经销商套餐分析', icon: 'shoes' }
+    }]
+  },
+  {
+    path: '/unit-price-customer',
+    component: Layout,
+    redirect: '/index',
+    children: [{
+      path: 'index',
+      name: '客单价分析',
+      component: () => import('@/views/analysis/unitPriceCustomer/index'),
+      meta: { title: '客单价分析', icon: 'shoes' }
     }]
   },
 

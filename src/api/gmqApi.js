@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-15 10:00:39
  * @LastEditors: anan
- * @LastEditTime: 2020-12-23 16:26:45
+ * @LastEditTime: 2021-01-19 13:07:43
  */
 import request from '@/utils/request'
 
@@ -492,6 +492,15 @@ export function getSetmeal(params) {
 export function getSetmealDay(params) {
   return request({
     url: url + '/Q/r.do?o=setmeal-day',
+    method: 'get',
+    params
+  })
+}
+
+// 经销商套餐分析
+export function getUnitPriceCustomer(params) {
+  return request({
+    url: url + '/Q/r.do?o=unitPriceCustomer',
     method: 'get',
     params
   })
