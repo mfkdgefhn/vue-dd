@@ -4,7 +4,7 @@
  * @Author: anan
  * @Date: 2020-12-17 09:06:41
  * @LastEditors: anan
- * @LastEditTime: 2021-01-20 11:00:50
+ * @LastEditTime: 2021-01-20 13:45:40
 -->
 <template>
   <div>
@@ -168,6 +168,8 @@ export default {
         const data = transNumber(response, ['qty', 'totAmtActual'])
         this.page.totalResult = data.length
         this.tableData = data
+        data.length > 1000 ? this.page.pageSizes = [5, 10, 15, 20, 50, 100, 200, 500, 1000, data.length]
+          : this.page.pageSizes = [5, 10, 15, 20, 50, 100, 200, 500, 1000]
         // 存入到状态管理器中
         this.$store.commit('unitPriceCustomer/SET_UNITPRICESTORE', data)
         this.tableData = pagination(this.page.currentPage, this.page.pageSize, data)

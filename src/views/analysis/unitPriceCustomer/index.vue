@@ -4,7 +4,7 @@
  * @Author: anan
  * @Date: 2021-01-14 10:36:11
  * @LastEditors: anan
- * @LastEditTime: 2021-01-19 15:17:02
+ * @LastEditTime: 2021-01-20 13:45:02
 -->
 <template>
   <div class="unit-price-customer">
@@ -112,6 +112,8 @@ export default {
       getUnitPriceCustomer(data).then(response => {
         const data = transNumber(response, ['qty', 'totAmtActual'])
         this.page.totalResult = data.length
+        data.length > 1000 ? this.page.pageSizes = [5, 10, 15, 20, 50, 100, 200, 500, 1000, data.length]
+          : this.page.pageSizes = [5, 10, 15, 20, 50, 100, 200, 500, 1000]
         // 存入到状态管理器中
         this.$store.commit('unitPriceCustomer/SET_UNITPRICECUSTOMER', data)
         this.tableData = pagination(this.page.currentPage, this.page.pageSize, data)
