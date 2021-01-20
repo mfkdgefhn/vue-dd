@@ -4,12 +4,12 @@
  * @Author: anan
  * @Date: 2021-01-14 10:36:11
  * @LastEditors: anan
- * @LastEditTime: 2021-01-20 14:24:40
+ * @LastEditTime: 2021-01-20 14:54:38
 -->
 <template>
   <div class="unit-price-customer">
     <!-- 搜索 -->
-    <el-card v-if="vshow" shadow="hover" class="crad">
+    <el-card v-show="vshow" shadow="hover" class="crad">
       <search :loading="loading" @getAnalysis="getAnalysis" />
     </el-card>
 
@@ -36,6 +36,7 @@
         <vxe-button class="button-icon" @click="showhide">
           <i :class="vIcon" />
         </vxe-button>
+        <!-- <vxe-button v-if="!vshow" class="button-icon" @click="getAnalysis">搜索</vxe-button> -->
       </template>
     </vxe-grid>
     <vxe-pager
@@ -76,12 +77,13 @@ export default {
       },
       loading: false,
       columns: [
-        { field: 'customerName', title: '区域' },
+        { field: 'customerName', title: '区域', sortable: true },
         // { field: 'storeName', visible: true, title: '店仓', sortable: true },
         { field: 'season', visible: true, title: '季节', sortable: true },
         { field: 'productName', visible: true, title: '款号N', sortable: true },
         { field: 'totAmtActual', title: '总额', sortable: true },
-        { field: 'qty', title: '数量', sortable: true }
+        { field: 'qty', title: '数量', sortable: true },
+        { field: 'kdj', title: '客单价', sortable: true }
       ],
       pagerConfig: {
         align: 'center',
@@ -119,7 +121,6 @@ export default {
       this.loading = true
       // 件数
       getUnitPriceCustomer(data).then(response => {
-        debugger
         const data = transNumber(response, ['qty', 'totAmtActual'])
         this.page.totalResult = data.length
         data.length > 1000 ? this.page.pageSizes = [10, 20, 50, 100, 200, 500, 1000, data.length]

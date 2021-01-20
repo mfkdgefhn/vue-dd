@@ -4,7 +4,7 @@
  * @Author: anan
  * @Date: 2020-12-17 09:06:41
  * @LastEditors: anan
- * @LastEditTime: 2021-01-20 14:25:24
+ * @LastEditTime: 2021-01-20 14:54:00
 -->
 <template>
   <div>
@@ -120,13 +120,13 @@ export default {
         pageSizes: [10, 20, 50, 100, 200, 500, 1000]
       },
       columns: [
-        { field: 'customerName', title: '区域' },
+        { field: 'customerName', title: '区域', sortable: true },
         { field: 'storeName', visible: true, title: '店仓', sortable: true },
         { field: 'season', visible: true, title: '季节', sortable: true },
         { field: 'productName', visible: true, title: '款号N', sortable: true },
         { field: 'totAmtActual', title: '总额', sortable: true },
         { field: 'qty', title: '数量', sortable: true },
-        { field: 'kdj', title: '数量', sortable: true }
+        { field: 'kdj', title: '客单价', sortable: true }
       ],
       toolbarConfig: {
         refresh: { query: this.findList },
