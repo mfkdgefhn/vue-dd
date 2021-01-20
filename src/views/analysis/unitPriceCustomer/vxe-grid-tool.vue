@@ -4,7 +4,7 @@
  * @Author: anan
  * @Date: 2020-12-17 09:06:41
  * @LastEditors: anan
- * @LastEditTime: 2021-01-20 13:45:40
+ * @LastEditTime: 2021-01-20 14:25:24
 -->
 <template>
   <div>
@@ -68,6 +68,7 @@
           size="mini"
           :current-page.sync="page.currentPage"
           :page-size.sync="page.pageSize"
+          :page-sizes.sync="page.pageSizes"
           :total="page.totalResult"
           @page-change="pagerchange"
         />
@@ -116,7 +117,7 @@ export default {
         align: 'center',
         currentPage: 1,
         pageSize: 10,
-        pageSizes: [5, 10, 15, 20, 50, 100, 200, 500, 1000]
+        pageSizes: [10, 20, 50, 100, 200, 500, 1000]
       },
       columns: [
         { field: 'customerName', title: '区域' },
@@ -168,8 +169,8 @@ export default {
         const data = transNumber(response, ['qty', 'totAmtActual'])
         this.page.totalResult = data.length
         this.tableData = data
-        data.length > 1000 ? this.page.pageSizes = [5, 10, 15, 20, 50, 100, 200, 500, 1000, data.length]
-          : this.page.pageSizes = [5, 10, 15, 20, 50, 100, 200, 500, 1000]
+        data.length > 1000 ? this.page.pageSizes = [10, 20, 50, 100, 200, 500, 1000, data.length]
+          : this.page.pageSizes = [10, 20, 50, 100, 200, 500, 1000]
         // 存入到状态管理器中
         this.$store.commit('unitPriceCustomer/SET_UNITPRICESTORE', data)
         this.tableData = pagination(this.page.currentPage, this.page.pageSize, data)

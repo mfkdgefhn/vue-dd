@@ -4,12 +4,12 @@
  * @Author: anan
  * @Date: 2021-01-14 10:36:11
  * @LastEditors: anan
- * @LastEditTime: 2021-01-20 13:45:02
+ * @LastEditTime: 2021-01-20 14:24:40
 -->
 <template>
   <div class="unit-price-customer">
     <!-- 搜索 -->
-    <el-card shadow="hover" class="crad">
+    <el-card v-if="vshow" shadow="hover" class="crad">
       <search :loading="loading" @getAnalysis="getAnalysis" />
     </el-card>
 
@@ -31,13 +31,19 @@
       :sort-config="sortConfig"
       @cell-click="cellClick"
       @form-submit="findList"
-    />
-    <!-- :pager-config="pagerConfig" -->
+    >
+      <template v-slot:toolbar_buttons>
+        <vxe-button class="button-icon" @click="showhide">
+          <i :class="vIcon" />
+        </vxe-button>
+      </template>
+    </vxe-grid>
     <vxe-pager
       align="center"
       size="mini"
       :current-page.sync="page.currentPage"
       :page-size.sync="page.pageSize"
+      :page-sizes.sync="page.pageSizes"
       :total="page.totalResult"
       @page-change="pagerchange"
     />
@@ -60,6 +66,8 @@ export default {
       height: 600,
       value: false,
       customerId: '',
+      vIcon: 'vxe-icon--arrow-top',
+      vshow: true,
       data: {},
       page: {
         currentPage: 1,
@@ -80,7 +88,7 @@ export default {
         totalResult: 0,
         currentPage: 1,
         pageSize: 10,
-        pageSizes: [5, 10, 15, 20, 50, 100, 200, 500, 1000]
+        pageSizes: [10, 20, 50, 100, 200, 500, 1000]
       },
       sortConfig: {
         trigger: 'cell'
@@ -90,7 +98,8 @@ export default {
         export: true,
         print: true,
         zoom: true,
-        custom: true
+        custom: true,
+        slots: { buttons: 'toolbar_buttons' }
       }
     }
   },
@@ -110,15 +119,26 @@ export default {
       this.loading = true
       // 件数
       getUnitPriceCustomer(data).then(response => {
+        debugger
         const data = transNumber(response, ['qty', 'totAmtActual'])
         this.page.totalResult = data.length
-        data.length > 1000 ? this.page.pageSizes = [5, 10, 15, 20, 50, 100, 200, 500, 1000, data.length]
-          : this.page.pageSizes = [5, 10, 15, 20, 50, 100, 200, 500, 1000]
+        data.length > 1000 ? this.page.pageSizes = [10, 20, 50, 100, 200, 500, 1000, data.length]
+          : this.page.pageSizes = [10, 20, 50, 100, 200, 500, 1000]
         // 存入到状态管理器中
         this.$store.commit('unitPriceCustomer/SET_UNITPRICECUSTOMER', data)
         this.tableData = pagination(this.page.currentPage, this.page.pageSize, data)
         this.loading = false
       })
+    },
+    showhide() {
+      this.vshow = !this.vshow
+      if (this.vshow) {
+        this.vIcon = 'vxe-icon--arrow-top'
+        this.height = 600
+      } else {
+        this.vIcon = 'vxe-icon--arrow-bottom'
+        this.height = 700
+      }
     },
     // 隐藏弹出窗口
     hideWindows() {
@@ -143,3 +163,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.button-icon{
+  margin-left: 10px;
+}
+</style>
