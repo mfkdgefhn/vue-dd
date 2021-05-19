@@ -1,0 +1,191 @@
+<!--
+ * @Descripttion:
+ * @version:
+ * @Author: anan
+ * @Date: 2020-12-17 09:06:41
+ * @LastEditors: anan
+ * @LastEditTime: 2020-12-24 10:49:17
+-->
+<template>
+  <div>
+    <vxe-modal
+      id="myModal6"
+      v-model="value"
+      height="700"
+      min-width="460"
+      min-height="320"
+      resize
+      remember
+      storage
+      :z-index="99999"
+      :width="width"
+      @hide="hideWindows"
+    >
+      <template v-slot:title>
+        <span style="color: red;">套餐明细</span>
+      </template>
+      <template v-slot>
+
+        <vxe-grid
+          align="center"
+          border
+          height="600"
+          resizable
+          show-overflow
+          auto-resize
+          highlight-hover-row
+          :export-config="{}"
+          :loading="loading"
+          :data="tableData"
+          :pager-config="pagerConfig"
+          :sort-config="sortConfig"
+          :columns="columns"
+          :toolbar-config="toolbarConfig"
+        >
+          <template v-slot:toolbar_buttons>
+            <vxe-form>
+              <vxe-form-item>
+                <template v-slot>
+                  <vxe-input v-model="storeName" placeholder="搜索" />
+                </template>
+              </vxe-form-item>
+              <vxe-form-item>
+                <template v-slot>
+                  <vxe-button status="primary" @click="searchStore">查询</vxe-button>
+                </template>
+              </vxe-form-item>
+            </vxe-form>
+          </template>
+          <template v-slot:setmealProportion="{ row }">
+            <span>{{ row.setmealProportion }}%</span>
+          </template>
+          <template v-slot:vousJointReat="{ row }">
+            <span>{{ row.vousJointReat }}%</span>
+          </template>
+          <template v-slot:vousRepurchasReat="{ row }">
+            <span>{{ row.vousRepurchasReat }}%</span>
+          </template>
+          <template v-slot:vousRepurchasProportion="{ row }">
+            <span>{{ row.vousRepurchasProportion }}%</span>
+          </template>
+          <template v-slot:notVipAmtActualProportion="{ row }">
+            <span>{{ row.notVipAmtActualProportion }}%</span>
+          </template>
+        </vxe-grid>
+
+      </template>
+    </vxe-modal>
+  </div>
+</template>
+
+<script>
+
+import { transNumber } from '@/utils/array'
+import { getSetmeal } from '@/api/gmqApi'
+
+export default {
+  props: {
+    customerId: {
+      type: String,
+      default: ''
+    },
+    data: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  data() {
+    return {
+      storeName: '',
+      formData: { store: '' },
+      value: true,
+      loading: false,
+      tableData: [],
+      width: 1000,
+      sortConfig: {
+        trigger: 'cell'
+      },
+      pagerConfig: {
+        align: 'center',
+        currentPage: 1,
+        pageSize: 10,
+        pageSizes: [5, 10, 15, 20, 50, 100, 200, 500, 1000]
+      },
+      columns: [
+        { field: 'customer', title: '区域' },
+        { field: 'store', title: '店仓' },
+        { field: 'salesSum', visible: false, title: '销量', sortable: true },
+        { field: 'totAmtActual', visible: false, title: '销售总额', sortable: true },
+        { field: 'setmealSum', visible: false, title: '套餐单量', sortable: true },
+        { field: 'setmealAmtActual', title: '套餐总额', sortable: true },
+        { field: 'setmealProportion', title: '套餐占比', slots: { default: 'setmealProportion' }},
+        { field: 'setmealStoreSum', title: '套餐关联店数', sortable: true },
+        { field: 'vousSum', visible: false, title: '卡券数量', sortable: true },
+        { field: 'vousJoint', visible: false, title: '套餐连带量', sortable: true },
+        { field: 'vousJointReat', title: '套餐连带率', slots: { default: 'vousJointReat' }},
+        { field: 'vousRepurchas', visible: false, title: '复购量', sortable: true },
+        { field: 'vousRepurchasReat', title: '复购率', slots: { default: 'vousRepurchasReat' }},
+        { field: 'vousRepurchasProportion', visible: false, title: '复购占比', slots: { default: 'vousRepurchasProportion' }},
+        { field: 'notVipSum', visible: false, title: '非会员单量', sortable: true },
+        { field: 'notVipAmtActual', visible: false, title: '非会员销售总额', sortable: true },
+        { field: 'notVipAmtActualProportion', title: '非会员销售占比', slots: { default: 'notVipAmtActualProportion' }}
+      ],
+      toolbarConfig: {
+        refresh: { query: this.findList },
+        export: true,
+        print: true,
+        zoom: true,
+        custom: true,
+        slots: { buttons: 'toolbar_buttons' }
+      }
+    }
+  },
+  watch: {
+    customerId: {
+      handler(val) {
+        const data = Object.assign({}, this.data)
+        // this.width = window.innerWidth - 220 - 10
+        this.getAnalysis(data)
+      },
+      immediate: true
+    }
+  },
+  methods: {
+    // 再次查询一次
+    findList() {
+      console.log(123456)
+    },
+    hideWindows() {
+      this.$emit('hideWindows')
+    },
+    getAnalysis(data) {
+      this.tableData = []
+      this.loading = true
+      // 件数
+      getSetmeal(data).then(response => {
+        const data = transNumber(response, ['salesSum', 'totAmtActual', 'setmealSum', 'setmealAmtActual', 'setmealStoreSum', 'vousSum', 'vousJoint',
+          'vousRepurchas', 'notVipSum', 'notVipAmtActual'])
+        this.tableData = data
+        // 存入到状态管理器中
+        this.$store.commit('setmeal/SET_STORELIST', data)
+        this.loading = false
+      })
+    },
+    // 店仓搜索
+    searchStore() {
+      if (this.storeName.trim() !== '') {
+        const storeLists = this.$store.getters.storeList
+        const storeList = []
+        storeLists.forEach(element => {
+          if (element.store.includes(this.storeName.trim())) {
+            storeList.push(element)
+          }
+        })
+        this.tableData = storeList
+      } else {
+        this.tableData = this.$store.getters.storeList
+      }
+    }
+  }
+}
+</script>
