@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2021-05-19 14:38:13
+ * @LastEditTime: 2021-05-19 14:51:55
  */
 
 import Vue from 'vue'
@@ -79,21 +79,15 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/index',
+    redirect: '/erpproject/index',
     name: '生产入库报表',
-    meta: {
-      title: '生产入库报表', icon: 'shoes'
-    },
-    children: [
-      {
-        path: 'index',
-        name: '生产入库报表',
-        component: () => import('@/views/erpproject/index'),
-        meta: { title: '生产入库报表', icon: 'shoes' }
-      }
-    ]
+    children: [{
+      path: 'erpproject/index',
+      name: '生产入库报表',
+      component: () => import('@/views/erpproject/index'),
+      meta: { title: '生产入库报表', icon: 'shoes' }
+    }]
   },
-
   /* --------------------生产ERP报表 end -----------------------  */
 
   /* -------------------- 江西业绩 begin -----------------------  */

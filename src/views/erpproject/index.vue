@@ -3,12 +3,12 @@
  * @Author: anan
  * @Date: 2019-10-15 10:23:32
  * @LastEditors: anan
- * @LastEditTime: 2021-05-19 14:08:50
+ * @LastEditTime: 2021-05-19 14:58:59
  -->
 <template>
   <div class="retail-analysis">
     <!-- 搜索 -->
-    <el-card shadow="hover" class="crad">
+    <el-card :body-style="{ padding: '10px 10px 0px 10px' }" shadow="hover" class="crad">
       <search :search-column="searchColumn" :loading="loading" @getAnalysis="getAnalysis" />
     </el-card>
 
@@ -62,7 +62,7 @@ import { getKfnrkbb } from '@/api/gmqApi'
 // import vxeGridTool from './vxe-grid-tool'
 
 export default {
-  name: 'RetailAnalysis',
+  name: 'ErpProject',
   components: { Search
   // , vxeGridTool
   },
@@ -192,7 +192,7 @@ export default {
 }
 </script>
 
-<style >
+<style scoped>
 .el-row {
   margin-bottom: 10px;
 }
