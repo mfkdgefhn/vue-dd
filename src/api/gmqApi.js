@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-15 10:00:39
  * @LastEditors: anan
- * @LastEditTime: 2021-01-19 13:07:43
+ * @LastEditTime: 2021-05-19 10:01:05
  */
 import request from '@/utils/request'
 
@@ -474,6 +474,15 @@ export function xnclsfx(params) {
 export function yjdctbfx(params) {
   return request({
     url: url + '/Q/r.do?o=yjdctbfx',
+    method: 'get',
+    params
+  })
+}
+
+// 生产入库报表
+export function getErpInStorage(params) {
+  return request({
+    url: url + '/Q/r.do?o=kfnrkbb',
     method: 'get',
     params
   })
