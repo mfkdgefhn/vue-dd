@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-10-15 10:23:32
  * @LastEditors: anan
- * @LastEditTime: 2021-05-19 09:50:22
+ * @LastEditTime: 2021-05-19 14:08:50
  -->
 <template>
   <div class="retail-analysis">
@@ -58,7 +58,7 @@
 
 import { transNumber } from '@/utils/array'
 import Search from '@/components/public/searchErp'
-import { getSetmeal } from '@/api/gmqApi'
+import { getKfnrkbb } from '@/api/gmqApi'
 // import vxeGridTool from './vxe-grid-tool'
 
 export default {
@@ -68,34 +68,35 @@ export default {
   },
   data() {
     return {
-      searchColumn: [
-        { 'columnName': '开始时间', 'type': 'data', 'columnValue': 'beginDate' },
-        { 'columnName': '结束时间', 'type': 'data', 'columnValue': 'endDate' },
-        { 'columnName': '生产线组', 'type': 'input', 'columnValue': 'contactNum' },
-        { 'columnName': '品牌', 'type': 'input', 'columnValue': 'brand' },
-        { 'columnName': '工厂型号', 'type': 'input', 'columnValue': 'inventory_id' }
+      searchColumn: [{ columnName: '时间', type: 'date',
+        columnValue: [
+          { columnName: '开始时间', type: 'date', columnValue: 'beginDate' },
+          { columnName: '结束时间', type: 'date', columnValue: 'endDate' }
+        ] },
+      { columnName: '生产线组', type: 'input', columnValue: 'billsaver' },
+      { columnName: '品牌', type: 'input', columnValue: 'brand' },
+      { columnName: '工厂型号', type: 'input', columnValue: 'inventoryId' }
       ],
       customerId: '',
       value: false,
       height: 700,
       loading: false,
       columns: [
-        { field: 'customer', title: '区域' },
-        { field: 'salesSum', visible: false, title: '销量', sortable: true },
-        { field: 'totAmtActual', visible: false, title: '销售总额', sortable: true },
-        { field: 'setmealSum', visible: false, title: '套餐单量', sortable: true },
-        { field: 'setmealAmtActual', title: '套餐总额', sortable: true },
-        { field: 'setmealProportion', title: '套餐占比', slots: { default: 'setmealProportion' }},
-        { field: 'setmealStoreSum', title: '套餐关联店数', sortable: true },
-        { field: 'vousSum', visible: false, title: '卡券数量', sortable: true },
-        { field: 'vousJoint', visible: false, title: '套餐连带量', sortable: true },
-        { field: 'vousJointReat', title: '套餐连带率', slots: { default: 'vousJointReat' }},
-        { field: 'vousRepurchas', visible: false, title: '复购量', sortable: true },
-        { field: 'vousRepurchasReat', title: '复购率', slots: { default: 'vousRepurchasReat' }},
-        { field: 'vousRepurchasProportion', visible: false, title: '复购占比', slots: { default: 'vousRepurchasProportion' }},
-        { field: 'notVipSum', visible: false, title: '非会员单量', sortable: true },
-        { field: 'notVipAmtActual', visible: false, title: '非会员销售总额', sortable: true },
-        { field: 'notVipAmtActualProportion', title: '非会员销售占比', slots: { default: 'notVipAmtActualProportion' }}
+        { field: 'date', title: '日期', width: '100px', sortable: true },
+        { field: 'billsaver', title: '生产线组', width: '100px', sortable: true },
+        { field: 'brand', title: '品牌', sortable: true },
+        { field: 'inventoryId', title: '工厂型号', width: '100px', sortable: true },
+        { field: 'invecnpo', title: '客户型号', width: '100px', sortable: true },
+        { field: 'colorName', title: '颜色', width: '100px', sortable: true },
+        { field: 'size2', title: '33', sortable: true },
+        { field: 'size3', title: '34', sortable: true },
+        { field: 'size4', title: '35', sortable: true },
+        { field: 'size5', title: '36', sortable: true },
+        { field: 'size6', title: '37', sortable: true },
+        { field: 'size7', title: '38', sortable: true },
+        { field: 'size8', title: '39', sortable: true },
+        { field: 'size9', title: '40', sortable: true },
+        { field: 'qty', title: '40', sortable: true }
       ],
       tableData: [],
       data: {},
@@ -140,9 +141,10 @@ export default {
       this.tableData = []
       this.loading = true
       // 件数
-      getSetmeal(data).then(response => {
-        const data = transNumber(response, ['salesSum', 'totAmtActual', 'setmealSum', 'setmealAmtActual', 'setmealStoreSum', 'vousSum', 'vousJoint',
-          'vousRepurchas', 'notVipSum', 'notVipAmtActual'])
+      getKfnrkbb(data).then(response => {
+        const data = transNumber(response, ['brand', 'invecnpo', 'inventoryId', 'billsaver', 'colorName',
+          'date', 'qty', 'size9', 'size2', 'size3', 'size4', 'size5', 'size6', 'size7',
+          'size8', 'qty'])
         this.tableData = data
         this.loading = false
       })

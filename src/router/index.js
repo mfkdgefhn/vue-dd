@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2021-05-17 11:28:37
+ * @LastEditTime: 2021-05-19 14:38:13
  */
 
 import Vue from 'vue'
@@ -51,28 +51,50 @@ export const constantRoutes = [
     hidden: true
   },
   /* -------------------人力独立使用 begin ------------------------*/
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   redirect: '/index',
+  //   name: '人力看板',
+  //   meta: {
+  //     title: '人力看板', icon: 'shoes'
+  //   },
+  //   children: [{
+  //     path: 'index',
+  //     name: '人力(易天)',
+  //     component: () => import('@/views/human/index'),
+  //     meta: { title: '人力(易天)', icon: 'shoes' }
+  //   },
+  //   {
+  //     path: 'ERPproject',
+  //     name: '生产入库报表',
+  //     component: () => import('@/views/erpproject/index'),
+  //     meta: { title: '生产入库报表', icon: 'shoes' }
+  //   }]
+  // },
+  /* --------------------人力独立使用 end -----------------------  */
+
+  /* -------------------- 生产ERP报表 begin -----------------------  */
+
   {
     path: '/',
     component: Layout,
     redirect: '/index',
-    name: '人力看板',
+    name: '生产入库报表',
     meta: {
-      title: '人力看板', icon: 'shoes'
+      title: '生产入库报表', icon: 'shoes'
     },
-    children: [{
-      path: 'index',
-      name: '人力(易天)',
-      component: () => import('@/views/human/index'),
-      meta: { title: '人力(易天)', icon: 'shoes' }
-    },
-    {
-      path: 'ERPproject',
-      name: '生产入库报表',
-      component: () => import('@/views/erpproject/index'),
-      meta: { title: '生产入库报表', icon: 'shoes' }
-    }]
+    children: [
+      {
+        path: 'index',
+        name: '生产入库报表',
+        component: () => import('@/views/erpproject/index'),
+        meta: { title: '生产入库报表', icon: 'shoes' }
+      }
+    ]
   },
-  /* --------------------人力独立使用 end -----------------------  */
+
+  /* --------------------生产ERP报表 end -----------------------  */
 
   /* -------------------- 江西业绩 begin -----------------------  */
 

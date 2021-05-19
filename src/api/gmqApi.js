@@ -480,7 +480,7 @@ export function yjdctbfx(params) {
 }
 
 // 生产入库报表
-export function getErpInStorage(params) {
+export function getKfnrkbb(params) {
   return request({
     url: url + '/Q/r.do?o=kfnrkbb',
     method: 'get',

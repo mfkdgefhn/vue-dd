@@ -1,8 +1,8 @@
 
 <template>
   <div class="seach-length">
-    <el-row :gutter="10">
-      <!-- 时间查询 -->
+    
+    <!-- <el-row :gutter="10">
       <el-col :md="8" :sm="12" :xs="24">
           <el-col :span="11">
             <el-date-picker
@@ -32,7 +32,7 @@
       </el-col>
 
       <el-col :md="6" :sm="8" :xs="12">
-        <el-input v-model="listQuery.ContactNum" placeholder="生产线组"></el-input>
+        <el-input v-model="listQuery.billsaver" placeholder="生产线组"></el-input>
       </el-col>
 
       <el-col :md="6" :sm="8" :xs="12">
@@ -43,7 +43,6 @@
         <el-input v-model="listQuery.inventoryId" placeholder="工厂型号"></el-input>
       </el-col>
 
-      <!-- 搜索按钮 -->
       <el-col :md="3" :sm="5" :xs="5">
         <el-button
           class="filter-item"
@@ -54,17 +53,41 @@
           @click="handleFilter"
         >搜索</el-button>
       </el-col>
-
-    </el-row>
-
-    <!-- <el-row>
-      <el-col :span="3" v-for="(item,index) in searchColumn" :key="index" >
-        <el-input 
-          v-if="item.type==='input'"  
-          v-model="item.columnValue">
-        </el-input>
-      </el-col>
     </el-row> -->
+
+    <el-form :inline="true" :model="listQuery" class="demo-form-inline">
+      <el-form-item v-for="(items,index) in searchColumn" :key="index">
+        <el-input v-if="items.type==='input'" v-model="listQuery[items.columnValue]" :placeholder="items.columnName"></el-input>
+        <el-col :span="11">
+          <el-date-picker 
+              v-if="items.type==='date'"
+              type="date" 
+              value-format="yyyyMMdd"
+              format="yyyyMMdd"
+              :placeholder="items.columnValue[0].columnName" 
+              v-model="listQuery[items.columnValue[0].columnValue]" 
+              :picker-options="pickerOptions"
+              style="width: 100%;"
+            />
+        </el-col>
+        <el-col style="text-align:center;" v-if="items.type==='date'" class="line" :span="2">-</el-col>
+        <el-col :span="11">
+          <el-date-picker 
+            v-if="items.type==='date'"
+            type="date" 
+            value-format="yyyyMMdd"
+            format="yyyyMMdd"
+            :placeholder="items.columnValue[1].columnName" 
+            v-model="listQuery[items.columnValue[1].columnValue]" 
+            :picker-options="pickerOptions"
+            style="width: 100%;"
+          />
+        </el-col>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" :loading="loading" @click="handleFilter">查询</el-button>
+      </el-form-item>
+    </el-form>
 
     <!-- 提示信息弹窗 -->
     <el-dialog title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
@@ -96,15 +119,14 @@ export default {
     return {
       pickerOptions: {
         disabledDate(time) {
-          return time.getTime() > (new Date).getTime()-24*60*60*1000
+          return time.getTime() > (new Date).getTime()-60*60*1000
         }
       },
       listQuery: {
-        beginDate: this.getDateStr(-7),
-        endDate: this.getDateStr(-1),
-        storeIds: [],
+        beginDate: this.getDateStr(-6),
+        endDate: this.getDateStr(),
         loading: false,
-        ContactNum: null,
+        billsaver: null,
         brand: null,
         inventoryId: null
       },
@@ -117,9 +139,7 @@ export default {
   watch: {
     searchColumn: {
       handler(newObj, oldObj) {
-        console.log(newObj)
       },
-      // 代表在wacth里声明了firstName这个方法之后立即先去执行handler方法
       immediate: true,
       deep: true
     }
@@ -153,10 +173,20 @@ export default {
         data.beginDate = 20180101
         data.endDate = this.getDateStr(-1)
       }
+      if (!data.billsaver) {
+        delete data.billsaver
+      }else{
+        data.billsaver=data.billsaver.toUpperCase()
+      }
+      if (!data.brand) {
+        delete data.brand
+      }
+      if (!data.inventoryId) {
+        delete data.inventoryId
+      }
     },
     // 刷新事件
     refresh() {
-      console.log('刷新')
     },
     getDateStr(count=0) {
       var dd = new Date()
