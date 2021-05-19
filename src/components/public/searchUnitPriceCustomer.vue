@@ -101,7 +101,7 @@ export default {
         loading: false
       },
       restaurants: [],
-      dialogVisible: false
+      dialogVisible: false 
     }
   },
   computed: {
