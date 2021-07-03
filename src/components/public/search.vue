@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-19 17:57:19
  * @LastEditors: anan
- * @LastEditTime: 2020-12-11 17:20:21
+ * @LastEditTime: 2021-05-22 09:56:06
  :style="backgroundColor"
  -->
 <template>
@@ -38,19 +38,6 @@
         </el-row>
       </el-col>
 
-      <!-- 店仓 -->
-      <!-- <el-col :md="5" :sm="8" :xs="12">
-        <el-cascader
-          v-model="listQuery.storeId"
-          placeholder="店仓"
-          :options="options"
-          :show-all-levels="showAllLevels"
-          :props="props"
-          style="width:100%"
-          collapse-tags
-          clear-checked-nodes
-        />
-      </el-col>-->
       <!-- 经销商、店仓 -->
       <el-col :md="5" :sm="8" :xs="12">
         <el-cascader
@@ -114,10 +101,6 @@
         >搜索</el-button>
       </el-col>
 
-      <!-- 提示信息 -->
-      <!-- <el-col :md="1" :sm="1" :xs="1">
-        <el-button type="primary" icon="el-icon-message" circle @click="showMessage" />
-      </el-col>-->
     </el-row>
 
     <!-- 提示信息弹窗 -->
@@ -236,7 +219,7 @@ export default {
       // })
       // getYear().then(response => {
       //   this.yearOptions = response.result
-      // })
+      // })d
       // 季节
       // getSeason().then(response => {
       //   this.seasonOptions = response.result

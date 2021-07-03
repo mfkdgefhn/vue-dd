@@ -83,6 +83,7 @@ export default {
       columns: [
         { field: 'customerName', title: '区域', sortable: true },
         // { field: 'storeName', visible: true, title: '店仓', sortable: true },
+        { field: 'productYear', visible: true, title: '款号年份', sortable: true },
         { field: 'season', visible: true, title: '季节', sortable: true },
         { field: 'productName', visible: true, title: '款号N', sortable: true },
         { field: 'totAmtActual', title: '总额', sortable: true },
@@ -173,7 +174,6 @@ export default {
       }
     },
     findList() {
-      console.log(123456)
     },
     pagerchange() {
       const data = this.$store.getters.unitPriceCustomer

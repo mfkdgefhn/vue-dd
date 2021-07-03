@@ -4,11 +4,11 @@
     <el-row>
       <!-- 时间查询 -->
       <el-col >
-        <el-row style="margin-bottom:0px;">
-          <el-col :sm="6" :xs="8">
+        <el-row :gutter="16">
+          <el-col :sm="4" :xs="8">
             <el-date-picker
               v-model="listQuery.beginDate"
-              style="width: 100%; margin-bottom: 5px; font-size:12px;"
+              style="width: 100%; font-size:12px;"
               type="date"
               value-format="yyyyMMdd"
               placeholder="开始日期"
@@ -19,10 +19,10 @@
           <el-col :sm="1" :xs="2" style="text-align:center;">
             <span style="line-height:38px; color:#ccc;">至</span>
           </el-col>
-          <el-col :sm="6" :xs="8">
+          <el-col :sm="4" :xs="8">
             <el-date-picker
               v-model="listQuery.endDate"
-              style="width: 100%;margin-bottom: 5px;font-size:12px;"
+              style="width: 100%;font-size:12px;"
               type="date"
               value-format="yyyyMMdd"
               placeholder="结束日期"
@@ -30,28 +30,51 @@
               :picker-options="pickerOptions"
             />
           </el-col>
-          <el-col :sm="6" :xs="8">
-            <el-input style="margin-left: 10px;" v-model="listQuery.eName" placeholder="款号N"></el-input>
+          <el-col :sm="4" :xs="8">
+            <el-input v-model="listQuery.eName" placeholder="款号N"></el-input>
+          </el-col>
+          <el-col :sm="4" :xs="8">
+            <!-- <el-date-picker
+              v-model="listQuery.productYear"
+              type="year"
+              placeholder="款号年份">
+            </el-date-picker> --><!-- 经销商选择 -->
+            <el-select
+              v-model="listQuery.productYear"
+              class="price-class"
+              style="width: 200px;"
+              multiple
+              clearable
+              collapse-tags
+              placeholder="款号年份"
+            >
+              <el-option
+                v-for="item in productYearArray"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
           </el-col>
         </el-row>
+        
       </el-col>
       
-      <el-col :lg="4" :md="8" :sm="12" :xs="13">       
+      <el-col :lg="4" :md="6" :sm="8" :xs="12">       
         <el-input-number class="input-number" v-model="listQuery.spring" controls-position="right" @change="handleChange" placeholder="春" />
       </el-col>
-      <el-col :lg="4" :md="8" :sm="12" :xs="13">       
+      <el-col :lg="4" :md="6" :sm="8" :xs="12">       
         <el-input-number class="input-number" v-model="listQuery.summer" controls-position="right" @change="handleChange" placeholder="夏" />
       </el-col>
-      <el-col :lg="4" :md="8" :sm="12" :xs="13">       
+      <el-col :lg="4" :md="6" :sm="8" :xs="12">       
         <el-input-number class="input-number" v-model="listQuery.autumn" controls-position="right" @change="handleChange" placeholder="秋" />
       </el-col>
-      <el-col :lg="4" :md="8" :sm="12" :xs="13">       
+      <el-col :lg="4" :md="6" :sm="8" :xs="12">       
         <el-input-number class="input-number" v-model="listQuery.winter" controls-position="right" @change="handleChange" placeholder="冬" />
       </el-col>
-      <el-col :lg="4" :md="8" :sm="12" :xs="13">       
+      <el-col :lg="4" :md="6" :sm="8" :xs="12">       
         <el-input-number class="input-number" v-model="listQuery.other" controls-position="right" @change="handleChange" placeholder="其他" />
       </el-col>
-
 
       <!-- 搜索按钮 -->
       <el-col>
@@ -77,7 +100,7 @@
 </template>
 
 <script>
-import { getStore } from '@/api/gmqApi' // , getYear,getSeason,getCustomer,
+import { getProductYear } from '@/api/gmqApi' // , getYear,getSeason,getCustomer,
 
 export default {
   name: 'Search',
@@ -89,6 +112,7 @@ export default {
   },
   data() {
     return {
+      productYearArray: [],
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > (new Date).getTime()-24*60*60*1000
@@ -97,8 +121,8 @@ export default {
       listQuery: {
         beginDate: this.getDateStr(-7),
         endDate: this.getDateStr(-1),
-        storeIds: [],
-        loading: false
+        loading: false,
+        productYear: ''
       },
       restaurants: [],
       dialogVisible: false 
@@ -109,10 +133,17 @@ export default {
   watch: {
   },
   created() {
+    this.getProductYear()
   },
   mounted() {
   },
   methods: {
+    getProductYear(){
+      // 件数
+      getProductYear().then(response => {
+        this.productYearArray=response
+      })
+    },
     // 搜索栏回车事件
     handleFilter() {
       var data = Object.assign({}, this.listQuery)
@@ -120,7 +151,6 @@ export default {
       this.$emit('getAnalysis', data)
     },
       handleChange(value) {
-        console.log(value);
       },
     handle(data) {
       // 时间转换
@@ -140,10 +170,28 @@ export default {
         data.beginDate = 20180101
         data.endDate = this.getDateStr(-1)
       }
+      // 将过滤掉后的查询参数为数组的转换成字符串
+      for (const key in data) {
+        if (typeof data[key] === 'object') {
+          if (data[key].length > 0) {
+            data[key] = data[key].join(',')
+          } else {
+            delete data[key]
+          }
+        } else {
+          if (key === 'minPrice' || key === 'maxPrice' || key === 'integral' || key === 'double') {
+            data[key] = parseInt(data[key])
+          } else if (key === 'minDiscount' || key === 'maxDiscount') {
+            data[key] = parseFloat(data[key])
+          }
+        }
+        if (isNaN(data[key]) && typeof data[key] === 'string' && data[key].length === undefined) {
+          delete data[key]
+        }
+      }
     },
     // 刷新事件
     refresh() {
-      console.log('刷新')
     },
     getDateStr(count=0) {
       var dd = new Date()

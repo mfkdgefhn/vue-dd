@@ -281,22 +281,10 @@ export default {
       title: '会员挖掘',
       // 提示信息
       tipsData: [
-        {
-          name: '经销商',
-          description: '一级客户信息'
-        },
-        {
-          name: '开卡店仓',
-          description: '店仓'
-        },
-        {
-          name: '会员卡号',
-          description: '会员号'
-        },
-        {
-          name: '会员卡类别',
-          description: '会员所属类别'
-        }
+        {name: '经销商',description: '一级客户信息'},
+        {name: '开卡店仓',description: '店仓'},
+        {name: '会员卡号',description: '会员号'},
+        {name: '会员卡类别',description: '会员所属类别'}
       ],
       // 菜单属性
       menuProperty: {
@@ -521,7 +509,6 @@ export default {
       this.dialogVisible = !this.dialogVisible
     },
     showMessage(e) {
-      debugger
       this.menuProperty.options.forEach(element => {
         if (element.value === e) {
           if (element.id > 6) {

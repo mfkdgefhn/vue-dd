@@ -514,3 +514,12 @@ export function getUnitPriceCustomer(params) {
     params
   })
 }
+
+// 经销商套餐分析
+export function getProductYear(params) {
+  return request({
+    url: url + '/Q/r.do?o=biyear',
+    method: 'get',
+    params
+  })
+}

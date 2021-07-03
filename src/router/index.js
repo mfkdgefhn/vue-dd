@@ -3,7 +3,7 @@
  * @Author: anan
  * @Date: 2019-09-27 16:04:08
  * @LastEditors: anan
- * @LastEditTime: 2021-05-19 14:51:55
+ * @LastEditTime: 2021-05-22 14:40:36
  */
 
 import Vue from 'vue'
@@ -76,18 +76,21 @@ export const constantRoutes = [
 
   /* -------------------- 生产ERP报表 begin -----------------------  */
 
+  /**
   {
     path: '/',
     component: Layout,
-    redirect: '/erpproject/index',
+    redirect: '/index',
     name: '生产入库报表',
     children: [{
-      path: 'erpproject/index',
-      name: '生产入库报表',
+      path: 'index',
+      name: 'index',
       component: () => import('@/views/erpproject/index'),
       meta: { title: '生产入库报表', icon: 'shoes' }
     }]
   },
+  */
+
   /* --------------------生产ERP报表 end -----------------------  */
 
   /* -------------------- 江西业绩 begin -----------------------  */
@@ -186,39 +189,39 @@ export const constantRoutes = [
   /* --------------------销售分析独立 end -----------------------  */
 
   /* -------------------- 经销商套餐分析独立 end -----------------------  */
-  // {
-  //   path: '/',
-  //   component: Layout,
-  //   redirect: '/index',
-  //   children: [{
-  //     path: 'index',
-  //     name: '经销商套餐分析',
-  //     component: () => import('@/views/analysis/setmeal/index'),
-  //     meta: { title: '经销商套餐分析', icon: 'shoes' }
-  //   }]
-  // },
-  // {
-  //   path: '/setmeal-day',
-  //   component: Layout,
-  //   redirect: '/index',
-  //   children: [{
-  //     path: 'index',
-  //     name: '当日经销商套餐分析',
-  //     component: () => import('@/views/analysis/setmealDay/index'),
-  //     meta: { title: '当日经销商套餐分析', icon: 'shoes' }
-  //   }]
-  // },
-  // {
-  //   path: '/unit-price-customer',
-  //   component: Layout,
-  //   redirect: '/index',
-  //   children: [{
-  //     path: 'index',
-  //     name: '客单价分析',
-  //     component: () => import('@/views/analysis/unitPriceCustomer/index'),
-  //     meta: { title: '客单价分析', icon: 'shoes' }
-  //   }]
-  // },
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/index',
+    children: [{
+      path: 'index',
+      name: '经销商套餐分析',
+      component: () => import('@/views/analysis/setmeal/index'),
+      meta: { title: '经销商套餐分析', icon: 'shoes' }
+    }]
+  },
+  {
+    path: '/setmeal-day',
+    component: Layout,
+    redirect: '/index',
+    children: [{
+      path: 'index',
+      name: '当日经销商套餐分析',
+      component: () => import('@/views/analysis/setmealDay/index'),
+      meta: { title: '当日经销商套餐分析', icon: 'shoes' }
+    }]
+  },
+  {
+    path: '/unit-price-customer',
+    component: Layout,
+    redirect: '/index',
+    children: [{
+      path: 'index',
+      name: '客单价分析',
+      component: () => import('@/views/analysis/unitPriceCustomer/index'),
+      meta: { title: '客单价分析', icon: 'shoes' }
+    }]
+  },
 
   /* -------------------- 经销商套餐分析独立 end -----------------------  */
 

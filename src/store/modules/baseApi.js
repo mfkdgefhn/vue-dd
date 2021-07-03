@@ -206,6 +206,7 @@ const actions = {
   // 获取会员卡类型
   getVipType({ commit }, count) {
     return new Promise((resolve, reject) => {
+      debugger
       getVipType(count).then(response => {
         commit('SET_VIP_TYPE', response)
         resolve()
